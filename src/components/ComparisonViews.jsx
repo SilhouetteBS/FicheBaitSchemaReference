@@ -456,7 +456,9 @@ function DefinitionSnapshot({ title, definition, selectedChange, side }) {
         <div><dt>Indexes</dt><dd>{definition.indexes.length}</dd></div>
         <div><dt>Foreign keys</dt><dd>{definition.foreignKeys.length}</dd></div>
       </dl>
-      <div className="definition-column-list">
+      {/* The constrained list must be focusable so keyboard users can scroll it. */}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+      <div className="definition-column-list" role="region" tabIndex={0} aria-label={`${title} column definitions`}>
         {definition.columns.slice(0, 80).map((column) => {
           const status = getColumnChangeStatus(selectedChange, column.name, side);
           const details = getColumnChangeDetails(selectedChange, column.name);

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
+import AxeBuilder from '@axe-core/playwright';
 
 const appUrl = process.env.APP_URL ?? 'http://127.0.0.1:4177';
 const screenshotDir = process.env.ACCESSIBILITY_SCREENSHOT_DIR;
@@ -51,13 +52,27 @@ async function snapshot(page, label) {
   await page.screenshot({ path: path.join(screenshotDir, `${label}.png`), fullPage: true });
 }
 
+async function assertAxe(page, label) {
+  const results = await new AxeBuilder({ page }).analyze();
+  const violations = results.violations.map((violation) => ({
+    id: violation.id,
+    impact: violation.impact,
+    nodes: violation.nodes.length,
+    help: violation.help,
+    targets: violation.nodes.map((node) => node.target),
+    summaries: violation.nodes.map((node) => node.failureSummary),
+  }));
+  assert.deepEqual(violations, [], `${label} must have no automated accessibility violations`);
+}
+
 const browser = await chromium.launch({
   headless: true,
   ...(executablePath ? { executablePath } : {}),
 });
 
 try {
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const page = await context.newPage();
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(appUrl, { waitUntil: 'networkidle' });
 
@@ -82,6 +97,9 @@ try {
       .map((control) => control.outerHTML.slice(0, 180)),
   );
   assert.deepEqual(unlabeledInputs, [], 'Inputs and selects must have visible, implicit, or ARIA labels');
+
+  const nestedInteractiveControls = await page.locator('button button, button [role="button"], [role="button"] button').count();
+  assert.equal(nestedInteractiveControls, 0, 'Interactive controls must not be nested');
 
   await page.keyboard.press('Tab');
   const focusedControl = await page.evaluate(() => {
@@ -161,6 +179,16 @@ try {
   assert.deepEqual(reducedMotionViolations, [], 'Reduced-motion mode should disable transitions and animations');
 
   await snapshot(page, 'desktop-accessibility');
+  await assertAxe(page, 'Tables view');
+
+  for (const view of ['compare', 'diagram', 'objects', 'reporting']) {
+    const viewUrl = new URL(appUrl);
+    viewUrl.searchParams.set('view', view);
+    await page.goto(viewUrl.toString(), { waitUntil: 'networkidle' });
+    await assertAxe(page, `${view} view`);
+  }
+
+  await page.goto(appUrl, { waitUntil: 'networkidle' });
 
   const viewports = [
     ['tablet', { width: 900, height: 1100 }],
@@ -173,6 +201,7 @@ try {
     assert.equal(await page.locator('body').evaluate((body) => body.scrollWidth <= globalThis.innerWidth + 1), true);
     await snapshot(page, `${label}-accessibility`);
   }
+  await context.close();
 } finally {
   await browser.close();
 }

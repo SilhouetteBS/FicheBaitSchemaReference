@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Upload } from 'lucide-react';
+import { InfoTooltip } from './InfoTooltip.jsx';
 
 const confidenceLabels = {
   confirmed: 'Confirmed',
@@ -119,17 +120,10 @@ export function ManualNotesEditor({
         <label>
           <span>
             Confidence
-            <span
-              className="info-tooltip"
-              tabIndex={0}
-              aria-label="Confidence describes how strongly the table purpose and reporting guidance have been reviewed."
-            >
-              i
-              <span role="tooltip">
+            <InfoTooltip label="Confidence describes how strongly the table purpose and reporting guidance have been reviewed.">
                 Confirmed is reviewed against reliable source knowledge. Observed and inferred need additional review.
                 Unknown means manual documentation is still pending.
-              </span>
-            </span>
+            </InfoTooltip>
           </span>
           <select value={draft.confidence} onChange={(event) => updateDraft('confidence', event.target.value)}>
             {Object.entries(confidenceLabels).map(([value, label]) => (

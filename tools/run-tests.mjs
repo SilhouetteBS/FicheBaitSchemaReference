@@ -97,6 +97,10 @@ const forms12 = {
   schema: readJson('public/data/forms/12.0.2503.10378/schema.json'),
   notes: readJson('public/data/forms/12.0.2503.10378/notes.json'),
 };
+const forms12Later = {
+  schema: readJson('public/data/forms/12.0.2509.20409/schema.json'),
+  notes: readJson('public/data/forms/12.0.2509.20409/notes.json'),
+};
 const lfds12 = {
   schema: readJson('public/data/lfds/12.0.2506.370/schema.json'),
   notes: readJson('public/data/lfds/12.0.2506.370/notes.json'),
@@ -113,6 +117,25 @@ const comparison = compareVersions(product.versions[0], latestVersion);
 assert.ok(comparison.addedTables.length > 0);
 assert.ok(comparison.changedTables.length > 0);
 assert.match(comparisonToCsv(comparison), /^category,table,column_or_object,change/m);
+
+const forms12ComparisonProduct = buildSchemaProduct([forms12, forms12Later]);
+const forms12Comparison = compareVersions(...forms12ComparisonProduct.versions);
+assert.ok(
+  forms12Comparison.objectChanges.routines.changed.some((item) =>
+    item.details.some((detail) => detail.startsWith('definition:')),
+  ),
+  'Routine definition hash changes must be reported.',
+);
+const attachmentDataChange = forms12Comparison.changedTables.find(
+  (table) => table.key === 'dbo.cf_bp_attachment_data',
+);
+assert.ok(
+  attachmentDataChange?.changedForeignKeys.some((foreignKey) =>
+    foreignKey.name === 'FK_cf_bp_attachment_data_business_process'
+      && foreignKey.details.includes('delete action: NO_ACTION -> SET_NULL'),
+  ),
+  'Foreign key action changes must be reported.',
+);
 
 const reportingPaths = getReportingPaths('forms');
 assert.equal(reportingPaths.length, 4);
@@ -557,6 +580,25 @@ try {
 assert.equal(readJson(path.join(outputDir, 'schema.json')).productKey, 'fixture');
 assert.equal(readJson(path.join(publicOutputDir, 'schema.json')).tables.length, 2);
 assert.equal(readJson(path.join(tempRoot, 'public', 'data', 'products.json')).products[0].productKey, 'fixture');
+
+fs.writeFileSync(
+  path.join(inputDir, 'manifest.json'),
+  `${JSON.stringify([{ ...minimalExport.manifest[0], productKey: '../outside' }])}\n`,
+);
+process.argv = [
+  process.argv[0],
+  'tools/import-forms-metadata.mjs',
+  `--input-dir=${inputDir}`,
+  `--out=${path.join(tempRoot, 'malicious-data')}`,
+  `--public-out=${path.join(tempRoot, 'malicious-public')}`,
+  `--public-versions-out=${path.join(tempRoot, 'malicious-versions.json')}`,
+  `--public-products-out=${path.join(tempRoot, 'malicious-products.json')}`,
+];
+try {
+  assert.throws(() => runImport(), /productKey contains unsupported path characters/);
+} finally {
+  process.argv = originalArgv;
+}
 
 console.log(
   JSON.stringify(

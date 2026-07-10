@@ -29,7 +29,6 @@ export function DiagramCanvas({
   onEdgeMouseEnter,
   onEdgeMouseLeave,
   onNodeDoubleClick,
-  onNodeKeyDown,
   onNodeOpen,
   onNodeSelect,
   getDiagramEdgeGeometry,
@@ -56,10 +55,10 @@ export function DiagramCanvas({
     >
       <svg
         className="diagram-lines"
-        role="img"
+        role="group"
+        aria-label={`Database relationships for ${productName} ${version.version}`}
         viewBox={`0 0 ${diagram.width} ${diagram.height}`}
       >
-        <title>Database relationships for {productName} {version.version}</title>
         <defs>
           <marker id="diagram-arrow-fk" markerHeight="15" markerUnits="userSpaceOnUse" markerWidth="15" orient="auto" refX="11.5" refY="7.5" viewBox="0 0 15 15">
             <path d="M 0 2 L 14 7.5 L 0 13 z" />
@@ -99,7 +98,7 @@ export function DiagramCanvas({
                 tabIndex={0}
               />
               <path
-                aria-label={`${edge.type === 'foreignKey' ? 'Foreign key' : 'Dependency'} ${edge.label}: ${edge.columnSummary || `${edge.from} to ${edge.to}`}`}
+                aria-hidden="true"
                 className={`${getEdgeClassName(edge, 'diagram-edge')} ${
                   geometry.usesBundling ? 'diagram-edge-bundled' : ''
                 } ${geometry.sourceColumnHidden || geometry.targetColumnHidden ? 'diagram-edge-column-fallback' : ''}`}
@@ -179,21 +178,21 @@ export function DiagramCanvas({
             width: `${node.width * zoom}px`,
             height: `${node.height * zoom}px`,
           }}
-          aria-label={`Select diagram object ${node.key}`}
           data-node-key={node.key}
-          onClick={() => onNodeSelect(node)}
-          onDoubleClick={() => onNodeDoubleClick(node)}
-          onKeyDown={(event) => onNodeKeyDown(event, node)}
-          role="button"
-          tabIndex={0}
           title={node.key}
         >
-          <span className="diagram-box-title">
+          <button
+            aria-label={`Select diagram object ${node.key}`}
+            className="diagram-box-title"
+            onClick={() => onNodeSelect(node)}
+            onDoubleClick={() => onNodeDoubleClick(node)}
+            type="button"
+          >
             <span>{node.label}</span>
             <span className={`diagram-object-badge diagram-object-badge-${node.type}`}>
               {getObjectTypeLabel(node.type)}
             </span>
-          </span>
+          </button>
           <span className="diagram-box-actions">
             <button
               aria-label={`Copy object key ${node.key}`}
@@ -219,7 +218,10 @@ export function DiagramCanvas({
             </button>
           </span>
           {node.type === 'table' ? (
-            <span className="diagram-column-list">
+            <>
+              {/* The constrained list must be focusable so keyboard users can scroll it. */}
+              {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+              <span className="diagram-column-list" role="region" tabIndex={0} aria-label={`${node.key} columns`}>
               {(compactColumns ? node.columns.slice(0, 8) : node.columns).map((column) => (
                 <span className="diagram-column-row" data-column-name={column.name} key={column.name}>
                   <span className={column.isPrimaryKey ? 'diagram-key-marker visible' : 'diagram-key-marker'}>
@@ -232,7 +234,8 @@ export function DiagramCanvas({
               {compactColumns && node.columns.length > 8 && (
                 <span className="diagram-column-more">+{node.columns.length - 8} more</span>
               )}
-            </span>
+              </span>
+            </>
           ) : (
             <span className="diagram-object-kind">
               <span>{diagram.groupLabels[node.type] ?? node.type}</span>

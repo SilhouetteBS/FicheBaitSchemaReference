@@ -139,9 +139,7 @@ Database names are environment-specific and must not be used as product or versi
 
 ## Export SQL Metadata
 
-Use `docs/forms-schema-export.sql` for Forms exports.
-
-Use `docs/sql-server-schema-export.sql` for a product-neutral export script that can be used for LFDS, Repository, Workflow, or Forms databases.
+Use `docs/sql-server-schema-export.sql` for Forms, LFDS, Repository, and Workflow exports. It is the single canonical metadata export script; `docs/forms-schema-export.sql` remains only as a compatibility pointer for older links.
 
 The export script requires SQL Server 2016 or newer because it uses `FOR JSON`. It reads SQL Server catalog metadata only. It does not read Laserfiche business table rows and does not modify the database.
 

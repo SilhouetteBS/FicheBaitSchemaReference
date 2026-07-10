@@ -271,6 +271,30 @@ export function validateDataReport({ publicRoot = 'public' } = {}) {
       });
     });
 
+  if (path.resolve(publicRoot) === path.resolve('public')) {
+    const baselinePath = path.join(process.cwd(), 'tools', 'data-warning-baseline.json');
+    if (!fs.existsSync(baselinePath)) {
+      errors.push('Missing tools/data-warning-baseline.json.');
+    } else {
+      const baseline = readJson(baselinePath);
+      const baselineScopes = baseline.warningsByScope ?? {};
+      for (const [scope, scopeWarnings] of Object.entries(warningsByScope)) {
+        if (!(scope in baselineScopes)) {
+          errors.push(`${scope}: warning baseline is missing; review this new snapshot and update data-warning-baseline.json`);
+        } else if (scopeWarnings.length > baselineScopes[scope]) {
+          errors.push(
+            `${scope}: data warnings increased from ${baselineScopes[scope]} to ${scopeWarnings.length}; review the new warnings before updating the baseline`,
+          );
+        }
+      }
+      for (const scope of Object.keys(baselineScopes)) {
+        if (!(scope in warningsByScope)) {
+          errors.push(`${scope}: warning baseline is stale because the snapshot is no longer present`);
+        }
+      }
+    }
+  }
+
   return { errors, warnings, warningsByScope, dependencyStats };
 }
 

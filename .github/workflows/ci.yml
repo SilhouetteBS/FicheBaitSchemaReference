@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 24
           cache: npm
@@ -51,7 +51,7 @@ jobs:
 
       - name: Upload validation summaries
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: validation-summaries
           path: artifacts/validation/
@@ -62,10 +62,10 @@ jobs:
     needs: unit
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 24
           cache: npm
@@ -88,8 +88,8 @@ jobs:
       - name: Editing route guard
         run: npm run test:editing-guard
 
-      - name: Start app
-        run: npm run dev -- --port 5173 > /tmp/lfdd-vite.log 2>&1 &
+      - name: Start production preview
+        run: npm run preview -- --port 5173 --strictPort > /tmp/lfdd-vite.log 2>&1 &
 
       - name: Wait for app
         run: |
@@ -101,17 +101,17 @@ jobs:
           exit 1
 
       - name: Render smoke check
-        run: npm run render:check
+        run: npm run render:check -- http://127.0.0.1:5173
 
   e2e:
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 24
           cache: npm
@@ -123,35 +123,35 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Build static artifact
-        run: npm run build
+        run: VITE_BASE_PATH=/LaserficheDataDictionary/ npm run build
 
-      - name: Start app
-        run: npm run dev -- --port 4177 > /tmp/lfdd-vite.log 2>&1 &
+      - name: Start production preview
+        run: npm run preview -- --port 4177 --strictPort > /tmp/lfdd-vite.log 2>&1 &
 
       - name: Wait for app
         run: |
           for i in {1..30}; do
-            curl -fsS http://127.0.0.1:4177 >/dev/null && exit 0
+            curl -fsS http://127.0.0.1:4177/LaserficheDataDictionary/ >/dev/null && exit 0
             sleep 1
           done
           cat /tmp/lfdd-vite.log
           exit 1
 
       - name: Browser smoke test
-        run: E2E_SCREENSHOT_DIR=artifacts/e2e npm run test:e2e
+        run: APP_URL=http://127.0.0.1:4177/LaserficheDataDictionary/ E2E_SCREENSHOT_DIR=artifacts/e2e npm run test:e2e
 
       - name: Accessibility audit
-        run: ACCESSIBILITY_SCREENSHOT_DIR=artifacts/accessibility npm run audit:accessibility
+        run: APP_URL=http://127.0.0.1:4177/LaserficheDataDictionary/ ACCESSIBILITY_SCREENSHOT_DIR=artifacts/accessibility npm run audit:accessibility
 
       - name: Runtime performance budget
-        run: APP_URL=http://127.0.0.1:4177 npm run audit:performance
+        run: APP_URL=http://127.0.0.1:4177/LaserficheDataDictionary/ npm run audit:performance
 
       - name: Diagram visual screenshots
-        run: VISUAL_SCREENSHOT_DIR=artifacts/visual-regression npm run test:visual
+        run: APP_URL=http://127.0.0.1:4177/LaserficheDataDictionary/ VISUAL_SCREENSHOT_DIR=artifacts/visual-regression npm run test:visual
 
       - name: Upload failed e2e screenshots
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: e2e-failure-screenshots
           path: artifacts/e2e/
@@ -159,7 +159,7 @@ jobs:
 
       - name: Upload diagram visual screenshots
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: diagram-visual-regression-screenshots
           path: artifacts/visual-regression/
@@ -167,7 +167,7 @@ jobs:
 
       - name: Upload accessibility screenshots
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: accessibility-screenshots
           path: artifacts/accessibility/

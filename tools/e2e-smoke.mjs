@@ -167,8 +167,8 @@ assert.match(await page.locator('.reporting-answers-links').innerText(), /Forms 
 await page.getByRole('button', { name: 'Tables', exact: true }).click();
 await page.evaluate(() => {
   const target = [...globalThis.document.querySelectorAll('.table-item')]
-    .find((button) => [...button.querySelectorAll('span')].some((span) => span.textContent === 'dbo.cf_users'));
-  target?.click();
+    .find((item) => [...item.querySelectorAll('span')].some((span) => span.textContent === 'dbo.cf_users'));
+  target?.querySelector('.table-item-main')?.click();
 });
 await page.waitForTimeout(100);
 assert.equal(await page.getByRole('heading', { name: 'Manual documentation notes' }).count(), 0);

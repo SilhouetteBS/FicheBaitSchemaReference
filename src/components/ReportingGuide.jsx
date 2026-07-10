@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { exportCompatibilityNotes, glossaryTerms } from '../data/glossary.js';
+import { copyTextToClipboard } from '../data/clipboard.js';
 import {
   buildGeneratedReportingExamples,
   getCommunityReportingPatterns,
@@ -89,23 +90,6 @@ function getSqlHighlighter() {
 
 function getScriptKey(pattern) {
   return `script:${pattern.scriptPath}`;
-}
-
-function copyTextWithFallback(text) {
-  const textArea = document.createElement('textarea');
-  textArea.value = text;
-  textArea.setAttribute('readonly', '');
-  textArea.style.position = 'fixed';
-  textArea.style.top = '-9999px';
-  textArea.style.left = '-9999px';
-  document.body.appendChild(textArea);
-  textArea.select();
-  const copied = document.execCommand('copy');
-  document.body.removeChild(textArea);
-
-  if (!copied) {
-    throw new Error('Unable to copy text');
-  }
 }
 
 function NavButton({ item, selectedView, onSelect, meta, stackedMeta = false }) {
@@ -240,6 +224,7 @@ export function ReportingGuide({
   const [scriptContent, setScriptContent] = useState({ key: '', status: 'idle', text: '' });
   const [copyStatus, setCopyStatus] = useState('idle');
   const [generatedCommunityPatterns, setGeneratedCommunityPatterns] = useState([]);
+  const [generatedLoadState, setGeneratedLoadState] = useState({ status: 'loading', message: '' });
   const knownTables = useMemo(() => new Set(version.tables.map((table) => table.id)), [version.tables]);
   const reportingPaths = useMemo(() => getReportingPaths(version.source.productKey), [version.source.productKey]);
   const reportingQuestions = useMemo(
@@ -268,16 +253,22 @@ export function ReportingGuide({
   useEffect(() => {
     let canceled = false;
     setGeneratedCommunityPatterns([]);
+    setGeneratedLoadState({ status: 'loading', message: '' });
 
     loadGeneratedCommunityReportingPatterns(version.source.productKey)
       .then((patterns) => {
         if (!canceled) {
           setGeneratedCommunityPatterns(patterns);
+          setGeneratedLoadState({ status: 'ready', message: '' });
         }
       })
-      .catch(() => {
+      .catch((error) => {
         if (!canceled) {
           setGeneratedCommunityPatterns([]);
+          setGeneratedLoadState({
+            status: 'error',
+            message: `Schema-matched candidates could not be loaded: ${error.message}`,
+          });
         }
       });
 
@@ -287,6 +278,9 @@ export function ReportingGuide({
   }, [version.source.productKey]);
 
   useEffect(() => {
+    if (generatedLoadState.status === 'loading') {
+      return;
+    }
     const validViews = new Set([
       'overview',
       ...guidanceItems.map((item) => item.key),
@@ -297,7 +291,7 @@ export function ReportingGuide({
     if (!validViews.has(selectedView)) {
       onSelectedViewChange('overview');
     }
-  }, [communityPatterns, onSelectedViewChange, selectedView]);
+  }, [communityPatterns, generatedLoadState.status, onSelectedViewChange, selectedView]);
 
   useEffect(() => {
     if (!selectedScript || scriptTab === 'answers') {
@@ -350,16 +344,12 @@ export function ReportingGuide({
     }
 
     try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(scriptContent.text);
-      } else {
-        copyTextWithFallback(scriptContent.text);
-      }
+      await copyTextToClipboard(scriptContent.text);
       setCopyStatus('copied');
       window.setTimeout(() => setCopyStatus('idle'), 1800);
     } catch {
       try {
-        copyTextWithFallback(scriptContent.text);
+        await copyTextToClipboard(scriptContent.text);
         setCopyStatus('copied');
         window.setTimeout(() => setCopyStatus('idle'), 1800);
       } catch {
@@ -712,6 +702,14 @@ export function ReportingGuide({
   }
 
   function renderSelectedView() {
+    if (generatedLoadState.status === 'error' && selectedView.startsWith('script:') && !selectedScript) {
+      return (
+        <div className="reporting-load-warning" role="alert">
+          <strong>Unable to load this reporting candidate</strong>
+          <p>{generatedLoadState.message}</p>
+        </div>
+      );
+    }
     if (selectedView === 'overview') {
       return renderOverview();
     }
@@ -795,7 +793,11 @@ export function ReportingGuide({
               <span>Schema-matched candidates</span>
               <em>{generatedCandidateCount}</em>
             </strong>
-            {generatedCommunityPatterns.length > 0 ? (
+            {generatedLoadState.status === 'loading' ? (
+              <p>Loading candidates...</p>
+            ) : generatedLoadState.status === 'error' ? (
+              <p role="alert">Candidates unavailable.</p>
+            ) : generatedCommunityPatterns.length > 0 ? (
               generatedCommunityPatterns.map((pattern) => (
                 <NavButton
                   key={pattern.scriptPath}

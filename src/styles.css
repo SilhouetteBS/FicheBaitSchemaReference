@@ -325,6 +325,18 @@ button {
   align-items: center;
   text-align: left;
   border-radius: 7px;
+  cursor: pointer;
+}
+
+.table-item-main {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
 }
 
 .table-item-name {
@@ -337,7 +349,6 @@ button {
 }
 
 .table-item-badges {
-  grid-column: 2;
   display: inline-flex;
   gap: 5px;
   align-items: center;
@@ -585,7 +596,6 @@ button {
 
 .object-tabs span {
   color: inherit;
-  opacity: 0.78;
 }
 
 .diagram-preset-bar {
@@ -995,8 +1005,8 @@ button {
 
 .comparison-filter-row button.selected {
   color: #ffffff;
-  border-color: var(--accent);
-  background: var(--accent);
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
 }
 
 .comparison-filter-row button.selected span {
@@ -1156,9 +1166,17 @@ button {
 }
 
 .table-browser-panel .table-item:hover,
-.table-browser-panel .table-item:focus-visible {
+.table-browser-panel .table-item:has(.table-item-main:focus-visible) {
   border-color: var(--brand-blue);
   background: #f7fbfb;
+}
+
+.table-browser-panel .table-item:has(.table-item-main:focus-visible) {
+  box-shadow: 0 0 0 3px rgba(28, 115, 254, 0.16);
+}
+
+.table-item-main:focus-visible {
+  outline: none;
 }
 
 .table-browser-panel .table-item.selected {
@@ -1221,8 +1239,8 @@ button {
 
 .table-detail-tabs button.selected {
   color: #ffffff;
-  border-color: var(--accent);
-  background: var(--accent);
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
 }
 
 .table-detail-tabs span {
@@ -1846,7 +1864,7 @@ button {
 }
 
 .snapshot-kicker {
-  color: var(--accent);
+  color: var(--accent-dark);
   font-size: 12px;
   font-weight: 850;
   text-transform: uppercase;
@@ -2432,16 +2450,22 @@ button {
   box-shadow: 0 0 0 2px rgba(11, 111, 114, 0.1);
 }
 
-.object-item[role="button"] {
-  cursor: pointer;
-}
-
-.object-item[role="button"]:hover,
-.object-item[role="button"]:focus-visible {
+.object-item:has(.object-item-open:hover),
+.object-item:has(.object-item-open:focus-visible) {
   border-color: var(--brand-blue);
   background: #f1fbfa;
-  outline: none;
   box-shadow: 0 0 0 3px rgba(11, 111, 114, 0.13);
+}
+
+.object-item-open {
+  display: block;
+  width: 100%;
+  margin: 0 !important;
+  text-align: left;
+}
+
+.object-item-open:focus-visible {
+  outline: none;
 }
 
 .diff-list button,
@@ -4951,6 +4975,11 @@ button {
   justify-content: space-between;
   gap: 8px;
   align-items: center;
+  width: 100%;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
   color: var(--text-muted);
   font-size: 10px;
   font-weight: 900;
@@ -5916,103 +5945,6 @@ button {
   font-size: 12px;
   font-weight: 750;
   text-transform: uppercase;
-}
-
-.command-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  display: grid;
-  place-items: start center;
-  padding: 8vh 20px 20px;
-  background: rgba(9, 30, 45, 0.42);
-}
-
-.command-palette,
-.shortcut-help {
-  width: min(720px, 100%);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 22px 60px rgba(16, 42, 67, 0.24);
-}
-
-.command-palette .search-box {
-  margin: 0;
-  border: 0;
-  border-bottom: 1px solid var(--line);
-  border-radius: 8px 8px 0 0;
-}
-
-.command-results {
-  display: grid;
-  max-height: 54vh;
-  overflow: auto;
-}
-
-.command-results button {
-  display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
-  gap: 10px;
-  align-items: center;
-  border: 0;
-  border-bottom: 1px solid var(--line);
-  padding: 10px 14px;
-  color: var(--navy);
-  background: #ffffff;
-  text-align: left;
-}
-
-.command-results button:hover {
-  background: #f4fafb;
-}
-
-.command-results span {
-  color: var(--accent);
-  font-size: 11px;
-  font-weight: 850;
-  text-transform: uppercase;
-}
-
-.command-results strong {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.shortcut-help {
-  position: relative;
-  padding: 18px;
-}
-
-.shortcut-help > button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.shortcut-help h2 {
-  margin: 0 0 14px;
-}
-
-.shortcut-help dl {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-}
-
-.shortcut-help dl div {
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: 12px;
-}
-
-.shortcut-help dt {
-  font-weight: 850;
-}
-
-.shortcut-help dd {
-  margin: 0;
-  color: var(--text-muted);
 }
 
 code {

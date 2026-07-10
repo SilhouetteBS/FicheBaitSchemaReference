@@ -5,12 +5,14 @@ import {
 } from 'lucide-react';
 import { buildDatabaseDiagram } from '../data/diagram.js';
 import { getEdgeGeometry } from '../data/diagramGeometry.js';
+import { copyTextToClipboard } from '../data/clipboard.js';
 import { DiagramCanvas } from './DiagramCanvas.jsx';
 import { DiagramMiniMap } from './DiagramMiniMap.jsx';
 import { DiagramObjectDetailPanel } from './DiagramObjectDetailPanel.jsx';
 import { DiagramToolbar } from './DiagramToolbar.jsx';
 import { FocusedRelationshipPanel } from './FocusedRelationshipPanel.jsx';
 import { MetadataStat } from './MetadataStat.jsx';
+import { InfoTooltip } from './InfoTooltip.jsx';
 
 function xmlEscape(value) {
   return String(value ?? '')
@@ -258,6 +260,8 @@ export function DatabaseDiagram({
     if (mode === 'focused' && focusedNode) {
       globalThis.requestAnimationFrame(() => centerBounds(getNodeBounds([focusedNode.key])));
     }
+    // Centering should run only when the focused object changes, not when helper identities change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusKey, focusedNode, mode]);
 
   function updateDiagramViewport() {
@@ -335,35 +339,17 @@ export function DatabaseDiagram({
     }
   }
 
-  function handleDiagramNodeKeyDown(event, node) {
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return;
-    }
-
-    event.preventDefault();
-    selectDiagramNode(node);
-  }
-
   async function copyText(label, text) {
     if (!text) {
       return;
     }
 
     try {
-      await navigator.clipboard.writeText(text);
+      await copyTextToClipboard(text);
+      setCopiedLabel(label);
     } catch {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.setAttribute('readonly', '');
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.append(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      textarea.remove();
+      setCopiedLabel('Copy failed');
     }
-
-    setCopiedLabel(label);
     globalThis.setTimeout(() => setCopiedLabel(''), 1600);
   }
 
@@ -979,14 +965,11 @@ export function DatabaseDiagram({
         <div className="diagram-status-row" role="note" aria-label="Diagram status warnings">
           <span className="diagram-status-pill">
             <strong>Unresolved dependencies</strong>
-            <span className="info-tooltip" tabIndex={0} aria-label="Unresolved dependencies: SQL Server reported dependency rows that could not be matched to exported tables, views, routines, or triggers. These are warnings for diagram completeness and do not necessarily mean the database is invalid.">
-              i
-              <span role="tooltip">
+            <InfoTooltip label="Unresolved dependencies: SQL Server reported dependency rows that could not be matched to exported tables, views, routines, or triggers. These are warnings for diagram completeness and do not necessarily mean the database is invalid.">
                 SQL Server reported dependency rows that could not be matched to exported tables, views, routines,
                 or triggers. These are warnings for diagram completeness and do not necessarily mean the database is
                 invalid.
-              </span>
-            </span>
+            </InfoTooltip>
             <b>{diagram.unresolvedDependencyCount}</b>
           </span>
         </div>
@@ -1073,7 +1056,6 @@ export function DatabaseDiagram({
               onEdgeMouseEnter={setHoveredEdgeId}
               onEdgeMouseLeave={() => setHoveredEdgeId('')}
               onNodeDoubleClick={(node) => node.type === 'table' && onSelectTable(node.key)}
-              onNodeKeyDown={handleDiagramNodeKeyDown}
               onNodeOpen={openDiagramObject}
               onNodeSelect={selectDiagramNode}
             />

@@ -216,6 +216,12 @@ function asMap(items, getKey) {
 function summarizeColumnChange(beforeColumn, afterColumn) {
   const changes = [];
   const details = [];
+  const addChange = (name, label, beforeValue, afterValue) => {
+    if (String(beforeValue ?? '') !== String(afterValue ?? '')) {
+      changes.push(name);
+      details.push(`${label}: ${beforeValue ?? '(none)'} -> ${afterValue ?? '(none)'}`);
+    }
+  };
   if ((beforeColumn.typeDefinition ?? beforeColumn.dataType) !== (afterColumn.typeDefinition ?? afterColumn.dataType)) {
     changes.push('type');
     details.push(`type: ${beforeColumn.typeDefinition ?? beforeColumn.dataType} -> ${afterColumn.typeDefinition ?? afterColumn.dataType}`);
@@ -228,13 +234,48 @@ function summarizeColumnChange(beforeColumn, afterColumn) {
     changes.push('default');
     details.push(`default: ${beforeColumn.defaultDefinition || '(none)'} -> ${afterColumn.defaultDefinition || '(none)'}`);
   }
+  addChange('ordinal', 'ordinal', beforeColumn.ordinal, afterColumn.ordinal);
+  addChange('identity', 'identity', beforeColumn.isIdentity, afterColumn.isIdentity);
+  addChange('computed', 'computed', beforeColumn.isComputed, afterColumn.isComputed);
+  addChange('rowguid', 'rowguid', beforeColumn.isRowGuidColumn, afterColumn.isRowGuidColumn);
+  addChange('collation', 'collation', beforeColumn.collationName, afterColumn.collationName);
   return { changes, details };
 }
 
 function summarizeObjectChange(beforeObject, afterObject, fields) {
   return fields
     .filter(([, getValue]) => String(getValue(beforeObject) ?? '') !== String(getValue(afterObject) ?? ''))
-    .map(([label, getValue]) => `${label}: ${getValue(beforeObject) || '(none)'} -> ${getValue(afterObject) || '(none)'}`);
+    .map(([label, getValue]) => {
+      const beforeValue = getValue(beforeObject);
+      const afterValue = getValue(afterObject);
+      return `${label}: ${beforeValue === '' || beforeValue == null ? '(none)' : beforeValue} -> ${afterValue === '' || afterValue == null ? '(none)' : afterValue}`;
+    });
+}
+
+function describeColumns(columns = [], { includeIndexDetails = false } = {}) {
+  return columns.map((column) => {
+    const name = column.columnName;
+    if (!includeIndexDetails) {
+      return `${name}${column.isDescending ? ' DESC' : ''}`;
+    }
+    return [
+      name,
+      column.isIncludedColumn ? 'INCLUDE' : 'KEY',
+      column.isDescending ? 'DESC' : 'ASC',
+      column.keyOrdinal ?? column.ordinal ?? '',
+    ].join(':');
+  }).join(', ');
+}
+
+function describeRoutineParameters(parameters = []) {
+  return parameters.map((parameter) => [
+    parameter.parameterName || '(return)',
+    parameter.typeDefinition ?? parameter.dataType,
+    parameter.maxLength ?? '',
+    parameter.precision ?? '',
+    parameter.scale ?? '',
+    parameter.isOutput ? 'output' : 'input',
+  ].join(':')).join(', ');
 }
 
 function getObjectChangeKey(object) {
@@ -258,6 +299,8 @@ function compareSchemaObjects(beforeObjects = [], afterObjects = [], objectType)
         ['parent object', (object) => object.parentObjectKey],
         ['disabled', (object) => object.isDisabled],
         ['instead of trigger', (object) => object.isInsteadOfTrigger],
+        ['definition', (object) => object.definitionSha256],
+        ['parameters', (object) => describeRoutineParameters(object.parameters)],
       ]);
       return details.length > 0 ? { key, objectType, details } : null;
     })
@@ -329,7 +372,8 @@ function compareTables(beforeTable, afterTable) {
       }
       const details = summarizeObjectChange(beforeKey, afterKey, [
         ['type', (key) => key.typeDescription ?? key.type],
-        ['columns', (key) => (key.columns ?? []).map((column) => column.columnName).join(', ')],
+        ['backing index', (key) => key.backingIndexName],
+        ['columns', (key) => describeColumns(key.columns)],
       ]);
       return details.length > 0 ? { name: afterKey.name, details } : null;
     })
@@ -348,7 +392,12 @@ function compareTables(beforeTable, afterTable) {
       }
       const details = summarizeObjectChange(beforeIndex, afterIndex, [
         ['type', (index) => index.typeDescription ?? index.type],
-        ['columns', (index) => (index.columns ?? []).map((column) => column.columnName).join(', ')],
+        ['unique', (index) => index.isUnique],
+        ['primary key', (index) => index.isPrimaryKey],
+        ['unique constraint', (index) => index.isUniqueConstraint],
+        ['filtered', (index) => index.hasFilter],
+        ['filter', (index) => index.filterDefinition],
+        ['columns', (index) => describeColumns(index.columns, { includeIndexDetails: true })],
       ]);
       return details.length > 0 ? { name: afterIndex.name, details } : null;
     })
@@ -367,9 +416,13 @@ function compareTables(beforeTable, afterTable) {
       }
       const details = summarizeObjectChange(beforeForeignKey, afterForeignKey, [
         ['target table', (foreignKey) => foreignKey.referencedTableKey],
+        ['delete action', (foreignKey) => foreignKey.deleteAction],
+        ['update action', (foreignKey) => foreignKey.updateAction],
+        ['disabled', (foreignKey) => foreignKey.isDisabled],
+        ['not trusted', (foreignKey) => foreignKey.isNotTrusted],
         ['columns', (foreignKey) =>
           (foreignKey.columns ?? [])
-            .map((column) => `${column.sourceColumnName ?? column.parentColumnName} -> ${column.referencedColumnName}`)
+            .map((column) => `${column.ordinal ?? ''}:${column.sourceColumnName ?? column.parentColumnName} -> ${column.referencedColumnName}`)
             .join(', ')],
       ]);
       return details.length > 0 ? { name: afterForeignKey.name, details } : null;

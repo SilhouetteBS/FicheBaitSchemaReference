@@ -46,13 +46,6 @@ export function ObjectExplorer({
     });
   }
 
-  function handleObjectCardKeyDown(event, objectKey) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      openObjectDetails(objectKey);
-    }
-  }
-
   return (
     <section className="detail-surface">
       <div className="detail-heading">
@@ -138,13 +131,19 @@ export function ObjectExplorer({
                 <article
                   className={selectedObject === item ? 'object-item selected' : 'object-item'}
                   key={`${objectType}-${objectKey}`}
-                  onClick={() => openObjectDetails(objectKey)}
-                  onKeyDown={(event) => handleObjectCardKeyDown(event, objectKey)}
-                  role={objectType === 'dependencies' ? undefined : 'button'}
-                  tabIndex={objectType === 'dependencies' ? undefined : 0}
                 >
-                  <strong>{objectKey}</strong>
-                  <p>{item.typeDescription ?? item.parentObjectTypeDescription ?? item.referencingObjectTypeDescription}</p>
+                  {objectType === 'dependencies' ? (
+                    <>
+                      <strong>{objectKey}</strong>
+                      <p>{item.typeDescription ?? item.parentObjectTypeDescription ?? item.referencingObjectTypeDescription}</p>
+                    </>
+                  ) : (
+                    <button className="object-item-open" type="button" onClick={() => openObjectDetails(objectKey)}>
+                      <strong>{objectKey}</strong>
+                      <p>{item.typeDescription ?? item.parentObjectTypeDescription ?? item.referencingObjectTypeDescription}</p>
+                      {item.referencedObjectKey && <code>{item.referencedObjectKey}</code>}
+                    </button>
+                  )}
                   {item.parentObjectKey && (
                     <button
                       type="button"
@@ -156,7 +155,7 @@ export function ObjectExplorer({
                       {item.parentObjectKey}
                     </button>
                   )}
-                  {item.referencedObjectKey && <code>{item.referencedObjectKey}</code>}
+                  {objectType === 'dependencies' && item.referencedObjectKey && <code>{item.referencedObjectKey}</code>}
                 </article>
               );
             })

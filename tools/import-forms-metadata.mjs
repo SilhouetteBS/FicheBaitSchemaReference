@@ -3,6 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
+import { validateSchemaSnapshot } from '../src/data/schemaDictionary.js';
 
 const defaultInputDir = path.join(os.homedir(), 'Downloads');
 const defaultInputs = {
@@ -68,6 +69,39 @@ function getOption(name, fallback) {
   const prefix = `--${name}=`;
   const match = process.argv.find((arg) => arg.startsWith(prefix));
   return match ? match.slice(prefix.length) : fallback;
+}
+
+function hasOption(name) {
+  return process.argv.some((arg) => arg.startsWith(`--${name}=`));
+}
+
+function validatePathSegment(value, label, pattern) {
+  if (typeof value !== 'string' || !pattern.test(value)) {
+    throw new Error(`${label} contains unsupported path characters: ${JSON.stringify(value)}`);
+  }
+}
+
+function resolveInside(root, ...segments) {
+  const resolvedRoot = path.resolve(root);
+  const resolvedPath = path.resolve(resolvedRoot, ...segments);
+  if (resolvedPath !== resolvedRoot && !resolvedPath.startsWith(`${resolvedRoot}${path.sep}`)) {
+    throw new Error(`Resolved output path escapes ${resolvedRoot}: ${resolvedPath}`);
+  }
+  return resolvedPath;
+}
+
+function writeJsonAtomic(filePath, value) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  const temporaryPath = path.join(
+    path.dirname(filePath),
+    `.${path.basename(filePath)}.${process.pid}.${Date.now()}.tmp`,
+  );
+  try {
+    fs.writeFileSync(temporaryPath, `${JSON.stringify(value, null, 2)}\n`);
+    fs.renameSync(temporaryPath, filePath);
+  } finally {
+    fs.rmSync(temporaryPath, { force: true });
+  }
 }
 
 function byName(left, right) {
@@ -335,42 +369,35 @@ export function runImport() {
     triggers,
     dependencies,
   });
-  const outputDir = getOption(
-    'out',
-    path.join('data', schema.productKey, schema.productVersion),
-  );
+  validatePathSegment(schema.productKey, 'productKey', /^[a-z0-9][a-z0-9-]*$/);
+  validatePathSegment(schema.productVersion, 'productVersion', /^[A-Za-z0-9][A-Za-z0-9._-]*$/);
+  const schemaErrors = validateSchemaSnapshot(schema);
+  if (schemaErrors.length > 0) {
+    throw new Error(`Normalized schema failed validation: ${schemaErrors.join(' ')}`);
+  }
+
+  const outputDir = hasOption('out')
+    ? getOption('out', '')
+    : resolveInside('data', schema.productKey, schema.productVersion);
   const outputPath = path.join(outputDir, 'schema.json');
-  const publicOutputDir = getOption(
-    'public-out',
-    path.join('public', 'data', schema.productKey, schema.productVersion),
-  );
+  const publicOutputDir = hasOption('public-out')
+    ? getOption('public-out', '')
+    : resolveInside(path.join('public', 'data'), schema.productKey, schema.productVersion);
   const publicOutputPath = path.join(publicOutputDir, 'schema.json');
   const notesPath = path.join(outputDir, 'notes.json');
   const publicNotesPath = path.join(publicOutputDir, 'notes.json');
-  const publicVersionsPath = getOption(
-    'public-versions-out',
-    path.join('public', 'data', schema.productKey, 'versions.json'),
-  );
-  const publicProductsPath = getOption('public-products-out', path.join('public', 'data', 'products.json'));
-
-  fs.mkdirSync(outputDir, { recursive: true });
-  fs.writeFileSync(outputPath, `${JSON.stringify(schema, null, 2)}\n`);
-  fs.mkdirSync(publicOutputDir, { recursive: true });
-  fs.writeFileSync(publicOutputPath, `${JSON.stringify(schema, null, 2)}\n`);
+  const publicVersionsPath = hasOption('public-versions-out')
+    ? getOption('public-versions-out', '')
+    : resolveInside(path.join('public', 'data'), schema.productKey, 'versions.json');
+  const publicProductsPath = hasOption('public-products-out')
+    ? getOption('public-products-out', '')
+    : resolveInside(path.join('public', 'data'), 'products.json');
 
   const emptyNotes = {
     productKey: schema.productKey,
     productVersion: schema.productVersion,
     tables: {},
   };
-
-  if (!fs.existsSync(notesPath)) {
-    fs.writeFileSync(notesPath, `${JSON.stringify(emptyNotes, null, 2)}\n`);
-  }
-
-  if (!fs.existsSync(publicNotesPath)) {
-    fs.writeFileSync(publicNotesPath, `${JSON.stringify(emptyNotes, null, 2)}\n`);
-  }
 
   const existingVersions = fs.existsSync(publicVersionsPath)
     ? JSON.parse(fs.readFileSync(publicVersionsPath, 'utf8'))
@@ -390,22 +417,6 @@ export function runImport() {
     ...existingVersions.versions.filter((version) => version.version !== schema.productVersion),
     versionEntry,
   ].sort((left, right) => left.version.localeCompare(right.version, undefined, { numeric: true }));
-  fs.mkdirSync(path.dirname(publicVersionsPath), { recursive: true });
-  fs.writeFileSync(
-    publicVersionsPath,
-    `${JSON.stringify(
-      {
-        ...existingVersions,
-        productKey: schema.productKey,
-        productName: schema.productName,
-        defaultVersion: nextVersions.at(-1)?.version ?? schema.productVersion,
-        versions: nextVersions,
-      },
-      null,
-      2,
-    )}\n`,
-  );
-
   const existingProducts = fs.existsSync(publicProductsPath)
     ? JSON.parse(fs.readFileSync(publicProductsPath, 'utf8'))
     : {
@@ -422,19 +433,27 @@ export function runImport() {
     ...existingProducts.products.filter((product) => product.productKey !== schema.productKey),
     productEntry,
   ].sort((left, right) => left.productName.localeCompare(right.productName, undefined, { sensitivity: 'base' }));
-  fs.mkdirSync(path.dirname(publicProductsPath), { recursive: true });
-  fs.writeFileSync(
-    publicProductsPath,
-    `${JSON.stringify(
-      {
-        ...existingProducts,
-        defaultProduct: existingProducts.defaultProduct ?? schema.productKey,
-        products: nextProducts,
-      },
-      null,
-      2,
-    )}\n`,
-  );
+
+  writeJsonAtomic(outputPath, schema);
+  writeJsonAtomic(publicOutputPath, schema);
+  if (!fs.existsSync(notesPath)) {
+    writeJsonAtomic(notesPath, emptyNotes);
+  }
+  if (!fs.existsSync(publicNotesPath)) {
+    writeJsonAtomic(publicNotesPath, emptyNotes);
+  }
+  writeJsonAtomic(publicVersionsPath, {
+    ...existingVersions,
+    productKey: schema.productKey,
+    productName: schema.productName,
+    defaultVersion: nextVersions.at(-1)?.version ?? schema.productVersion,
+    versions: nextVersions,
+  });
+  writeJsonAtomic(publicProductsPath, {
+    ...existingProducts,
+    defaultProduct: existingProducts.defaultProduct ?? schema.productKey,
+    products: nextProducts,
+  });
 
   console.log(`Imported ${schema.productName} ${schema.productVersion}`);
   console.log(`Schemas: ${schema.schemas.length}`);

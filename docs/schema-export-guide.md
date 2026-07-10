@@ -1,6 +1,6 @@
 # Schema Export Guide
 
-Use `docs/forms-schema-export.sql` for Forms exports, or `docs/sql-server-schema-export.sql` for a product-neutral export script that can be used for LFDS, Repository, Workflow, or Forms databases.
+Use `docs/sql-server-schema-export.sql` for Forms, LFDS, Repository, and Workflow exports. It is the single canonical executable metadata export script. `docs/forms-schema-export.sql` remains only as a compatibility pointer for older links.
 
 ## Before Running
 

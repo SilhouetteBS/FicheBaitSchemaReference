@@ -1137,6 +1137,16 @@ export function getReportingScriptsForTable(productKey, tableKey) {
   );
 }
 
+export async function loadReportingScriptsForTable(productKey, tableKey) {
+  const normalizedTableKey = tableKey.toLowerCase();
+  const generatedPatterns = await loadGeneratedCommunityReportingPatterns(productKey);
+  return [
+    ...getReportingScriptsForTable(productKey, tableKey),
+    ...generatedPatterns.filter((pattern) =>
+      pattern.tables.some((table) => table.toLowerCase() === normalizedTableKey)),
+  ];
+}
+
 export function getReportingPaths(productKey) {
   return productReportingPaths[productKey] ?? [];
 }

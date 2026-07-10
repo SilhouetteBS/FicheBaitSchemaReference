@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import {
   AlertTriangle,
   Download,
@@ -15,7 +15,7 @@ import {
   getTableStability,
   getTableVersionTrend,
 } from '../data/projectInsights.js';
-import { getReportingScriptsForTable } from '../data/reporting.js';
+import { getReportingScriptsForTable, loadReportingScriptsForTable } from '../data/reporting.js';
 import { ConfidenceBadge } from './ConfidenceBadge.jsx';
 
 const ManualNotesEditor = appConfig.editingEnabled
@@ -77,10 +77,22 @@ export function TableWorkspace({
   const relatedObjects = useMemo(() => getRelatedObjectItems(version, selectedTable.id), [selectedTable.id, version]);
   const tableStability = useMemo(() => getTableStability(version, selectedTable.id), [selectedTable.id, version]);
   const tableVersionTrend = useMemo(() => getTableVersionTrend(version, selectedTable.id), [selectedTable.id, version]);
-  const tableReportingScripts = useMemo(
-    () => getReportingScriptsForTable(version.source.productKey, selectedTable.id),
-    [selectedTable.id, version],
-  );
+  const [tableReportingScripts, setTableReportingScripts] = useState(() =>
+    getReportingScriptsForTable(version.source.productKey, selectedTable.id));
+  useEffect(() => {
+    let canceled = false;
+    setTableReportingScripts(getReportingScriptsForTable(version.source.productKey, selectedTable.id));
+    loadReportingScriptsForTable(version.source.productKey, selectedTable.id).then((scripts) => {
+      if (!canceled) {
+        setTableReportingScripts(scripts);
+      }
+    }).catch(() => {
+      // Curated scripts remain available when generated candidates cannot be loaded.
+    });
+    return () => {
+      canceled = true;
+    };
+  }, [selectedTable.id, version.source.productKey]);
   const columnLifecycleItems = useMemo(
     () => getColumnLifecycleItems(version, selectedTable.id),
     [selectedTable.id, version],
@@ -188,38 +200,27 @@ export function TableWorkspace({
           {filteredTables.length === 0 ? (
             <p className="empty-state">No tables match the current filters.</p>
           ) : filteredTables.map((table) => (
-            <button
+            <div
               className={table.id === selectedTable.id ? 'table-item selected' : 'table-item'}
               key={table.id}
-              type="button"
-              onClick={() => onSelectTable(table.id)}
             >
-              <span
+              <button
                 aria-label={`${favoriteObjects.includes(table.id) ? 'Unpin' : 'Pin'} ${table.id}`}
                 className="favorite-toggle"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onToggleFavoriteObject(table.id);
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    onToggleFavoriteObject(table.id);
-                  }
-                }}
-                role="button"
-                tabIndex={0}
+                onClick={() => onToggleFavoriteObject(table.id)}
                 title={favoriteObjects.includes(table.id) ? 'Unpin object' : 'Pin object'}
+                type="button"
               >
                 <Star size={12} fill={favoriteObjects.includes(table.id) ? 'currentColor' : 'none'} />
-              </span>
-              <span className="table-item-name" title={table.name}>{table.name}</span>
-              <span className="table-item-badges">
-                {table.hasManualNotes && <span className="notes-dot" title="Manual notes present">Notes</span>}
-                <ConfidenceBadge value={table.confidence} />
-              </span>
-            </button>
+              </button>
+              <button className="table-item-main" type="button" onClick={() => onSelectTable(table.id)}>
+                <span className="table-item-name" title={table.name}>{table.name}</span>
+                <span className="table-item-badges">
+                  {table.hasManualNotes && <span className="notes-dot" title="Manual notes present">Notes</span>}
+                  <ConfidenceBadge value={table.confidence} />
+                </span>
+              </button>
+            </div>
           ))}
         </div>
       </aside>
@@ -475,18 +476,18 @@ export function TableWorkspace({
             </div>
             <div className={tableDensity === 'compact' ? 'columns-table columns-table-compact' : 'columns-table'} role="table" aria-label="Columns">
               <div className="table-row table-head" role="row">
-                <span>Column</span>
-                <span>Type</span>
-                <span>Nullable</span>
-                <span>Purpose</span>
-                <span>Seen</span>
-                <span>Status</span>
+                <span role="columnheader">Column</span>
+                <span role="columnheader">Type</span>
+                <span role="columnheader">Nullable</span>
+                <span role="columnheader">Purpose</span>
+                <span role="columnheader">Seen</span>
+                <span role="columnheader">Status</span>
               </div>
               {visibleColumns.map((column) => {
                 const lifecycle = columnLifecycleByName.get(column.name);
                 return (
                 <div className="table-row" role="row" key={column.name}>
-                  <strong>
+                  <strong role="cell">
                     {column.name}
                     <span className="column-badges">
                       {primaryKeyColumns.has(column.name) && <em>PK</em>}
@@ -496,12 +497,12 @@ export function TableWorkspace({
                       {column.source?.isComputed && <em>Computed</em>}
                     </span>
                   </strong>
-                  <code>{column.dataType}</code>
-                  <span>{column.nullable ? 'Yes' : 'No'}</span>
-                  <span>
+                  <code role="cell">{column.dataType}</code>
+                  <span role="cell">{column.nullable ? 'Yes' : 'No'}</span>
+                  <span role="cell">
                     {column.purpose}
                   </span>
-                  <span className="column-lifecycle-cell" title={lifecycle?.types ? `Types seen: ${lifecycle.types}` : ''}>
+                  <span role="cell" className="column-lifecycle-cell" title={lifecycle?.types ? `Types seen: ${lifecycle.types}` : ''}>
                     {lifecycle ? (
                       <>
                         <b>{lifecycle.stable ? 'Stable' : 'Changed'}</b>
@@ -511,7 +512,7 @@ export function TableWorkspace({
                       'Current'
                     )}
                   </span>
-                  <ConfidenceBadge value={column.confidence} />
+                  <span role="cell"><ConfidenceBadge value={column.confidence} /></span>
                 </div>
                 );
               })}

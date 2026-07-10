@@ -1,0 +1,123 @@
+.data-load-warning {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  border: 1px solid #e6b15d;
+  border-radius: 7px;
+  padding: 8px 12px;
+  color: #5c3b08;
+  background: #fff8e8;
+}
+
+.data-load-warning svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.data-load-warning p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.command-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: start center;
+  padding: 8vh 20px 20px;
+  background: rgba(9, 30, 45, 0.42);
+}
+
+.command-overlay > [role="dialog"] {
+  width: min(720px, 100%);
+  outline: none;
+}
+
+.command-palette,
+.shortcut-help {
+  width: min(720px, 100%);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 22px 60px rgba(16, 42, 67, 0.24);
+}
+
+.command-palette .search-box {
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 8px 8px 0 0;
+}
+
+.command-results {
+  display: grid;
+  max-height: 54vh;
+  overflow: auto;
+}
+
+.command-results button {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 10px 14px;
+  color: var(--navy);
+  background: #ffffff;
+  text-align: left;
+}
+
+.command-results button:hover {
+  background: #f4fafb;
+}
+
+.command-results span {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.command-results strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.shortcut-help {
+  position: relative;
+  padding: 18px;
+}
+
+.shortcut-help > button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.shortcut-help h2 {
+  margin: 0 0 14px;
+}
+
+.shortcut-help dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.shortcut-help dl div {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.shortcut-help dt {
+  font-weight: 850;
+}
+
+.shortcut-help dd {
+  margin: 0;
+  color: var(--text-muted);
+}
