@@ -30,7 +30,7 @@ assertFile(indexPath, 'dist/index.html must exist after npm run build');
 const indexHtml = readFileSync(indexPath, 'utf8');
 assert.match(indexHtml, /<div id="root"><\/div>/, 'index.html must contain the React root element');
 assert.match(indexHtml, /Content-Security-Policy/i, 'index.html must include the static CSP meta tag');
-assert.match(indexHtml, /Laserfiche Data Dictionary/i, 'index.html must include the app title');
+assert.match(indexHtml, /FicheBait Schema Reference/i, 'index.html must include the app title');
 
 const referencedAssets = [...indexHtml.matchAll(/(?:src|href)="([^"]+)"/g)]
   .map((match) => match[1])

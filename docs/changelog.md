@@ -1,9 +1,11 @@
 # Changelog
 
-This changelog tracks public data and application changes for Laserfiche Data Dictionary.
+This changelog tracks public data and application changes for FicheBait Schema Reference.
 
 ## Unreleased
 
+- Renamed the project to FicheBait Schema Reference to follow Laserfiche trademark and branding guidance.
+- Added descriptive trademark usage and a visible Laserfiche trademark acknowledgement.
 - Added public contribution documentation for schema exports.
 - Added a data privacy page that explains schema metadata boundaries.
 - Added GitHub issue templates for schema export submissions, documentation corrections, and bug reports.

@@ -1,6 +1,6 @@
 # Production Readiness
 
-Use this checklist before publishing the Laserfiche Data Dictionary to a public static host.
+Use this checklist before publishing the FicheBait Schema Reference to a public static host.
 
 ## Build Boundary
 
@@ -23,7 +23,7 @@ npm run verify:public-build
 For a hosted deployment, verify the deployed URL:
 
 ```powershell
-$env:SITE_URL='https://example.com/LaserficheDataDictionary/'
+$env:SITE_URL='https://example.com/FicheBaitSchemaReference/'
 npm run verify:deployed-site
 ```
 

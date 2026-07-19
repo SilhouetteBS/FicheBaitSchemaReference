@@ -1,4 +1,4 @@
-# Laserfiche Data Dictionary AI Assistant Instructions
+# FicheBait Schema Reference AI Assistant Instructions
 
 Use this file as the entry point before generating SQL, reviewing SQL, explaining schema objects, or designing reporting-database objects from the AI export package.
 

@@ -1,6 +1,6 @@
 # AI Export Package
 
-The AI export package is a generated, machine-readable version of the Laserfiche Data Dictionary. It is intended for AI-assisted read-only SQL generation, SQL review, schema navigation, and reporting-database design.
+The AI export package is a generated, machine-readable version of the FicheBait Schema Reference. It is intended for AI-assisted read-only SQL generation, SQL review, schema navigation, and reporting-database design.
 
 It does not contain row data. It contains exported schema metadata, documentation notes, relationship metadata, object dependencies, and product-specific query context.
 

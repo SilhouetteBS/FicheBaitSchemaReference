@@ -66,7 +66,7 @@ body:
     attributes:
       label: Current page link
       description: Link to the Data Dictionary view where the issue was found.
-      placeholder: "https://silhouettebs.github.io/LaserficheDataDictionary/..."
+      placeholder: "https://silhouettebs.github.io/FicheBaitSchemaReference/..."
   - type: textarea
     id: current_detail
     attributes:

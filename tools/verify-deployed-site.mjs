@@ -33,7 +33,7 @@ function assert(condition, message) {
 }
 
 const html = await fetchText('./');
-assert(/Laserfiche Data Dictionary/i.test(html), 'Home page must include the app title.');
+assert(/FicheBait Schema Reference/i.test(html), 'Home page must include the app title.');
 assert(/Content-Security-Policy/i.test(html), 'Home page must include static CSP metadata.');
 assert(!/Manual documentation notes|Import preview|Import locked|Drop export JSON files|Editing enabled/i.test(html),
   'Public HTML must not include editing or import UI strings.');

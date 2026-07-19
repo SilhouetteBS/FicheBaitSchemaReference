@@ -123,12 +123,12 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Build static artifact
-        run: VITE_BASE_PATH=/LaserficheDataDictionary/ npm run build
+        run: VITE_BASE_PATH=/FicheBaitSchemaReference/ npm run build
 
       - name: Mount Pages subpath
         run: |
-          mkdir -p /tmp/lfdd-preview/LaserficheDataDictionary
-          cp -R dist/. /tmp/lfdd-preview/LaserficheDataDictionary/
+          mkdir -p /tmp/lfdd-preview/FicheBaitSchemaReference
+          cp -R dist/. /tmp/lfdd-preview/FicheBaitSchemaReference/
 
       - name: Start production preview
         run: npm run preview -- --outDir /tmp/lfdd-preview --port 4177 --strictPort > /tmp/lfdd-vite.log 2>&1 &
@@ -136,23 +136,23 @@ jobs:
       - name: Wait for app
         run: |
           for i in {1..30}; do
-            curl -fsS http://127.0.0.1:4177/LaserficheDataDictionary/ >/dev/null && exit 0
+            curl -fsS http://127.0.0.1:4177/FicheBaitSchemaReference/ >/dev/null && exit 0
             sleep 1
           done
           cat /tmp/lfdd-vite.log
           exit 1
 
       - name: Browser smoke test
-        run: APP_URL=http://127.0.0.1:4177/LaserficheDataDictionary/ E2E_SCREENSHOT_DIR=artifacts/e2e npm run test:e2e
+        run: APP_URL=http://127.0.0.1:4177/FicheBaitSchemaReference/ E2E_SCREENSHOT_DIR=artifacts/e2e npm run test:e2e
 
       - name: Accessibility audit
-        run: APP_URL=http://127.0.0.1:4177/LaserficheDataDictionary/ ACCESSIBILITY_SCREENSHOT_DIR=artifacts/accessibility npm run audit:accessibility
+        run: APP_URL=http://127.0.0.1:4177/FicheBaitSchemaReference/ ACCESSIBILITY_SCREENSHOT_DIR=artifacts/accessibility npm run audit:accessibility
 
       - name: Runtime performance budget
-        run: APP_URL=http://127.0.0.1:4177/LaserficheDataDictionary/ npm run audit:performance
+        run: APP_URL=http://127.0.0.1:4177/FicheBaitSchemaReference/ npm run audit:performance
 
       - name: Diagram visual screenshots
-        run: APP_URL=http://127.0.0.1:4177/LaserficheDataDictionary/ VISUAL_SCREENSHOT_DIR=artifacts/visual-regression npm run test:visual
+        run: APP_URL=http://127.0.0.1:4177/FicheBaitSchemaReference/ VISUAL_SCREENSHOT_DIR=artifacts/visual-regression npm run test:visual
 
       - name: Upload failed e2e screenshots
         if: failure()

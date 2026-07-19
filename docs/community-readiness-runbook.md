@@ -1,6 +1,6 @@
 # Community Readiness Runbook
 
-Use this runbook to keep the public FicheBait Laserfiche Data Dictionary useful, safe, and maintainable.
+Use this runbook to keep the public FicheBait Schema Reference useful, safe, and maintainable.
 
 ## Community Intake
 
@@ -56,7 +56,7 @@ npm run verify:public-build
 After deployment:
 
 ```powershell
-$env:SITE_URL='https://silhouettebs.github.io/LaserficheDataDictionary/'
+$env:SITE_URL='https://silhouettebs.github.io/FicheBaitSchemaReference/'
 npm run verify:deployed-site
 ```
 

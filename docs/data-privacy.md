@@ -1,6 +1,6 @@
 # Data Privacy
 
-Laserfiche Data Dictionary is intended to collect and publish schema metadata only.
+FicheBait Schema Reference is intended to collect and publish schema metadata only.
 
 ## Collected Metadata
 

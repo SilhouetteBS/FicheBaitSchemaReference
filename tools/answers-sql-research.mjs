@@ -84,7 +84,7 @@ async function fetchText(url) {
   const response = await fetch(url, {
     signal: controller.signal,
     headers: {
-      'user-agent': 'Mozilla/5.0 LaserficheDataDictionaryResearch/1.0',
+      'user-agent': 'Mozilla/5.0 FicheBaitSchemaReferenceResearch/1.0',
       accept: 'text/html,application/xhtml+xml',
     },
   }).finally(() => clearTimeout(timeout));

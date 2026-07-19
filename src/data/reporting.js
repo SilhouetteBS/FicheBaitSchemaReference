@@ -169,7 +169,7 @@ export const productReportingPaths = {
   ],
 };
 
-const repoBlobBaseUrl = 'https://github.com/SilhouetteBS/LaserficheDataDictionary/blob/main';
+const repoBlobBaseUrl = 'https://github.com/SilhouetteBS/FicheBaitSchemaReference/blob/main';
 
 function buildGeneratedCandidateSql(pattern) {
   const objectList = pattern.tables.length ? pattern.tables.map((table) => `--   ${table}`).join('\n') : '--   None captured';

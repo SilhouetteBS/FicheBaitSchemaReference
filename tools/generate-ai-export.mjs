@@ -382,7 +382,7 @@ function assistantInstructionsMarkdown(catalog) {
   );
 
   const lines = [
-    '# Laserfiche Data Dictionary AI Assistant Instructions',
+    '# FicheBait Schema Reference AI Assistant Instructions',
     '',
     'Use this file as the entry point before generating SQL, reviewing SQL, explaining schema objects, or designing reporting-database objects from the AI export package.',
     '',
@@ -437,7 +437,7 @@ function generate() {
   const catalog = {
     exportFormatVersion: '1.0',
     sourceSnapshotMaxExportedAtUtc: '',
-    purpose: 'Machine-readable Laserfiche Data Dictionary export for AI-assisted read-only SQL generation and review.',
+    purpose: 'Machine-readable FicheBait Schema Reference export for AI-assisted read-only SQL generation and review.',
     supportWarning,
     aiRules,
     assistantStartupInstructions,

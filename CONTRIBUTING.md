@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for helping review the FicheBait Laserfiche Data Dictionary.
+Thank you for helping review the FicheBait Schema Reference.
 
 This project accepts community feedback and metadata-only schema exports for
 read-only reporting, troubleshooting, and education. Do not submit row data,
@@ -91,7 +91,7 @@ npm run verify:public-build
 For deployed-site verification:
 
 ```powershell
-$env:SITE_URL='https://silhouettebs.github.io/LaserficheDataDictionary/'
+$env:SITE_URL='https://silhouettebs.github.io/FicheBaitSchemaReference/'
 npm run verify:deployed-site
 ```
 

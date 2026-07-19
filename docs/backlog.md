@@ -1,6 +1,6 @@
-# Laserfiche Data Dictionary Backlog
+# FicheBait Schema Reference Backlog
 
-This backlog tracks functional, design, coding, performance, security, and production-readiness improvements for the public read-only Laserfiche Data Dictionary.
+This backlog tracks functional, design, coding, performance, security, and production-readiness improvements for the public read-only FicheBait Schema Reference.
 
 This is a public product backlog. Do not add private research notes, customer-specific details, database names, server names, credentials, screenshots of records, or sensitive submission review notes here.
 

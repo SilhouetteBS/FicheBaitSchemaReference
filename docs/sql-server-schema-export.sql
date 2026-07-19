@@ -2,7 +2,7 @@
   Laserfiche product SQL Server metadata export
 
   Purpose:
-    Export schema metadata for the static Laserfiche Data Dictionary site.
+    Export schema metadata for the static FicheBait Schema Reference site.
 
   Safety:
     - Reads SQL Server catalog metadata only.

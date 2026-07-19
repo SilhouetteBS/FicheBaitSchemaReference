@@ -1,6 +1,6 @@
 # Contribute Schema Exports
 
-Laserfiche Data Dictionary uses SQL Server schema metadata to document product databases for read-only reporting, troubleshooting, and education.
+FicheBait Schema Reference uses SQL Server schema metadata to document product databases for read-only reporting, troubleshooting, and education.
 
 Schema exports must not include table row data, customer data, document metadata values, database names, server names, credentials, or screenshots of production records.
 

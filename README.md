@@ -1,8 +1,10 @@
-# Laserfiche Data Dictionary
+# FicheBait Schema Reference
 
-Interactive static web app for documenting Laserfiche product databases for read-only reporting, troubleshooting, and education.
+Interactive static web app for documenting Laserfiche® product databases for read-only reporting, troubleshooting, and education.
 
-This is an unofficial FicheBait community research aid. It is not affiliated with or endorsed by Laserfiche, is not Laserfiche support documentation, and does not make direct writes to Laserfiche product databases supported. Validate fixes in a test or maintenance window before changing production systems.
+This is an unofficial FicheBait community research aid. It is not affiliated with or endorsed by Laserfiche, and it is not Laserfiche support documentation. It supports read-only research only; validate changes in a test environment.
+
+Laserfiche is a registered trademark of Laserfiche in the United States and other countries.
 
 ## Scope
 

@@ -665,7 +665,7 @@ export function ReportingGuide({
             <p>
               The public-safe queue files are indexed in{' '}
               <a
-                href="https://github.com/SilhouetteBS/LaserficheDataDictionary/blob/main/docs/answers-sql-processed-index.md"
+                href="https://github.com/SilhouetteBS/FicheBaitSchemaReference/blob/main/docs/answers-sql-processed-index.md"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -673,7 +673,7 @@ export function ReportingGuide({
               </a>
               . The current schema-verification report is stored in{' '}
               <a
-                href="https://github.com/SilhouetteBS/LaserficheDataDictionary/blob/main/docs/answers-sql-schema-verification-2026-07-01.md"
+                href="https://github.com/SilhouetteBS/FicheBaitSchemaReference/blob/main/docs/answers-sql-schema-verification-2026-07-01.md"
                 target="_blank"
                 rel="noreferrer"
               >

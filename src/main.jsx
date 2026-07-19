@@ -72,7 +72,7 @@ const EditingCapabilityGuard = editingBuildEnabled
   : null;
 
 function buildCorrectionIssueUrl({ productKey, productName, version, view, objectLabel, currentUrl }) {
-  const issueUrl = new URL('https://github.com/SilhouetteBS/LaserficheDataDictionary/issues/new');
+  const issueUrl = new URL('https://github.com/SilhouetteBS/FicheBaitSchemaReference/issues/new');
   const productLabel = productName || productKey || '';
   const productFieldValue = ['Forms', 'LFDS', 'Repository', 'Workflow'].includes(productLabel) ? productLabel : 'Other or unsure';
   const areaOptions = new Set([
@@ -1223,7 +1223,7 @@ function App() {
     return (
       <main className="loading-state">
         <Database size={26} />
-        <h1>Laserfiche Data Dictionary</h1>
+        <h1>FicheBait Schema Reference</h1>
         <p>Loading schema snapshots...</p>
       </main>
     );
@@ -1250,7 +1250,7 @@ function App() {
         <div className="brand">
           <img className="brand-logo" src="fichebait-logo.png" alt="FicheBait" />
           <div>
-            <h1>Laserfiche Data Dictionary</h1>
+            <h1>FicheBait Schema Reference</h1>
             <p>Schema, relationships, and reporting</p>
           </div>
         </div>
@@ -1299,6 +1299,9 @@ function App() {
             ))}
           </nav>
         </section>
+        <p className="sidebar-trademark">
+          Laserfiche is a registered trademark of Laserfiche in the United States and other countries.
+        </p>
       </aside>
 
       <section className="workspace">
@@ -1313,14 +1316,15 @@ function App() {
           <div className="warning-banner topbar-warning" role="note">
             <ShieldAlert size={20} />
             <p>
-              This community research aid is for read-only reporting, troubleshooting, and education.
-              It is not affiliated with or endorsed by Laserfiche. Manually modifying Laserfiche
+              This community research aid documents Laserfiche&reg; product databases for read-only
+              reporting, troubleshooting, and education. It is not affiliated with or endorsed by
+              Laserfiche. Manually modifying Laserfiche
               databases is unsupported and violates your support plan; validate changes in a test
               environment.
               {' '}
               <a
                 className="warning-link"
-                href="https://github.com/SilhouetteBS/LaserficheDataDictionary/blob/main/docs/known-limitations.md"
+                href="https://github.com/SilhouetteBS/FicheBaitSchemaReference/blob/main/docs/known-limitations.md"
                 rel="noreferrer"
                 target="_blank"
               >

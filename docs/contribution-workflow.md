@@ -1,6 +1,6 @@
 # Contribution Workflow
 
-Laserfiche Data Dictionary contributions should be reviewed before they are copied into the published static data files.
+FicheBait Schema Reference contributions should be reviewed before they are copied into the published static data files.
 
 ## Documentation Notes
 
