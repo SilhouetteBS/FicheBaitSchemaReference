@@ -120,7 +120,7 @@
         "dbo.cf_roles"
       ],
       "available": true,
-      "sql": "SELECT TOP (100)\n  u.[username],\n  u.[displayname],\n  u.[email],\n  u.[sid],\n  u.[password]\nFROM [dbo].[cf_users] AS u\nORDER BY 1;",
+      "sql": "SELECT TOP (100)\n  u.[username],\n  u.[displayname],\n  u.[email],\n  u.[sid],\n  u.[user_type]\nFROM [dbo].[cf_users] AS u\nORDER BY 1;",
       "note": "User table exists; inspect exported foreign keys before adding group or role joins."
     }
   ]

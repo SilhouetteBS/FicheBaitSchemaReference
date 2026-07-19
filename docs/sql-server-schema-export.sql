@@ -17,7 +17,7 @@
     1. Connect to the target Laserfiche product database.
     2. Set @ProductKey, @ProductName, @ProductVersion, and @DatabaseRole below.
     3. Run the script.
-    4. Save each JSON result set for import.
+    4. Save each sanitized JSON result set for private intake and review.
 
   Compatibility:
     Requires SQL Server 2016 or newer for FOR JSON output.
@@ -33,10 +33,6 @@ DECLARE @ProductName nvarchar(100) = N'REPLACE_WITH_PRODUCT_NAME';
 DECLARE @ProductVersion nvarchar(50) = N'REPLACE_WITH_PRODUCT_VERSION';
 DECLARE @DatabaseRole nvarchar(50) = N'REPLACE_WITH_DATABASE_ROLE';
 DECLARE @ExportedAtUtc datetime2(0) = SYSUTCDATETIME();
-
--- Definitions can expose implementation details. Keep off unless needed for
--- dependency analysis or internal documentation.
-DECLARE @IncludeModuleDefinitions bit = 0;
 
 /* Result set 1: export manifest */
 SELECT
@@ -63,9 +59,7 @@ FOR JSON PATH, WITHOUT_ARRAY_WRAPPER;
 
 /* Result set 2: schemas */
 SELECT
-  s.name AS schemaName,
-  s.schema_id AS sourceSchemaId,
-  USER_NAME(s.principal_id) AS ownerName
+  s.name AS schemaName
 FROM sys.schemas s
 WHERE s.name NOT IN (N'sys', N'INFORMATION_SCHEMA')
 ORDER BY s.name
@@ -76,28 +70,11 @@ SELECT
   s.name AS schemaName,
   t.name AS tableName,
   CONCAT(s.name, N'.', t.name) AS tableKey,
-  t.object_id AS sourceObjectId,
-  t.create_date AS createdAt,
-  t.modify_date AS modifiedAt,
-  ISNULL(rowCounts.rowCountEstimate, 0) AS rowCountEstimate,
   CAST(t.is_memory_optimized AS bit) AS isMemoryOptimized,
   CAST(t.temporal_type AS int) AS temporalType,
-  t.temporal_type_desc AS temporalTypeDescription,
-  ep.value AS description
+  t.temporal_type_desc AS temporalTypeDescription
 FROM sys.tables t
 JOIN sys.schemas s ON s.schema_id = t.schema_id
-LEFT JOIN (
-  SELECT
-    p.object_id,
-    SUM(p.rows) AS rowCountEstimate
-  FROM sys.partitions p
-  WHERE p.index_id IN (0, 1)
-  GROUP BY p.object_id
-) rowCounts ON rowCounts.object_id = t.object_id
-LEFT JOIN sys.extended_properties ep
-  ON ep.major_id = t.object_id
-  AND ep.minor_id = 0
-  AND ep.name = N'MS_Description'
 WHERE t.is_ms_shipped = 0
   AND NOT (s.name = N'dbo' AND t.name = N'sysdiagrams')
 ORDER BY s.name, t.name
@@ -137,8 +114,7 @@ SELECT
   CAST(c.is_rowguidcol AS bit) AS isRowGuidColumn,
   dc.name AS defaultConstraintName,
   dc.definition AS defaultDefinition,
-  cc.definition AS computedDefinition,
-  ep.value AS description
+  cc.definition AS computedDefinition
 FROM sys.columns c
 JOIN sys.tables t ON t.object_id = c.object_id
 JOIN sys.schemas s ON s.schema_id = t.schema_id
@@ -149,10 +125,6 @@ LEFT JOIN sys.default_constraints dc
 LEFT JOIN sys.computed_columns cc
   ON cc.object_id = c.object_id
   AND cc.column_id = c.column_id
-LEFT JOIN sys.extended_properties ep
-  ON ep.major_id = c.object_id
-  AND ep.minor_id = c.column_id
-  AND ep.name = N'MS_Description'
 WHERE t.is_ms_shipped = 0
   AND NOT (s.name = N'dbo' AND t.name = N'sysdiagrams')
 ORDER BY s.name, t.name, c.column_id
@@ -240,7 +212,6 @@ SELECT
   t.name AS tableName,
   CONCAT(s.name, N'.', t.name) AS tableKey,
   i.name AS indexName,
-  i.index_id AS sourceIndexId,
   i.type_desc AS indexTypeDescription,
   CAST(i.is_unique AS bit) AS isUnique,
   CAST(i.is_primary_key AS bit) AS isPrimaryKey,
@@ -278,19 +249,10 @@ SELECT
   s.name AS schemaName,
   v.name AS viewName,
   CONCAT(s.name, N'.', v.name) AS viewKey,
-  v.object_id AS sourceObjectId,
-  v.create_date AS createdAt,
-  v.modify_date AS modifiedAt,
   CAST(v.is_ms_shipped AS bit) AS isMsShipped,
-  CONVERT(varchar(64), HASHBYTES('SHA2_256', CONVERT(varbinary(max), OBJECT_DEFINITION(v.object_id))), 2) AS definitionSha256,
-  CASE WHEN @IncludeModuleDefinitions = 1 THEN OBJECT_DEFINITION(v.object_id) ELSE NULL END AS definition,
-  ep.value AS description
+  CONVERT(varchar(64), HASHBYTES('SHA2_256', CONVERT(varbinary(max), OBJECT_DEFINITION(v.object_id))), 2) AS definitionSha256
 FROM sys.views v
 JOIN sys.schemas s ON s.schema_id = v.schema_id
-LEFT JOIN sys.extended_properties ep
-  ON ep.major_id = v.object_id
-  AND ep.minor_id = 0
-  AND ep.name = N'MS_Description'
 WHERE v.is_ms_shipped = 0
 ORDER BY s.name, v.name
 FOR JSON PATH;
@@ -300,14 +262,9 @@ SELECT
   s.name AS schemaName,
   o.name AS routineName,
   CONCAT(s.name, N'.', o.name) AS routineKey,
-  o.object_id AS sourceObjectId,
   o.type AS routineType,
   o.type_desc AS routineTypeDescription,
-  o.create_date AS createdAt,
-  o.modify_date AS modifiedAt,
   CONVERT(varchar(64), HASHBYTES('SHA2_256', CONVERT(varbinary(max), OBJECT_DEFINITION(o.object_id))), 2) AS definitionSha256,
-  CASE WHEN @IncludeModuleDefinitions = 1 THEN OBJECT_DEFINITION(o.object_id) ELSE NULL END AS definition,
-  ep.value AS description,
   JSON_QUERY((
     SELECT
       p.name AS parameterName,
@@ -330,10 +287,6 @@ SELECT
   )) AS parameters
 FROM sys.objects o
 JOIN sys.schemas s ON s.schema_id = o.schema_id
-LEFT JOIN sys.extended_properties ep
-  ON ep.major_id = o.object_id
-  AND ep.minor_id = 0
-  AND ep.name = N'MS_Description'
 WHERE o.is_ms_shipped = 0
   AND o.type IN (N'P', N'FN', N'IF', N'TF', N'FS', N'FT')
 ORDER BY s.name, o.type, o.name
@@ -347,13 +300,9 @@ SELECT
   parentObject.name AS parentObjectName,
   CONCAT(parentSchema.name, N'.', parentObject.name) AS parentObjectKey,
   parentObject.type_desc AS parentObjectTypeDescription,
-  tr.object_id AS sourceObjectId,
-  tr.create_date AS createdAt,
-  tr.modify_date AS modifiedAt,
   CAST(tr.is_disabled AS bit) AS isDisabled,
   CAST(tr.is_instead_of_trigger AS bit) AS isInsteadOfTrigger,
-  CONVERT(varchar(64), HASHBYTES('SHA2_256', CONVERT(varbinary(max), OBJECT_DEFINITION(tr.object_id))), 2) AS definitionSha256,
-  CASE WHEN @IncludeModuleDefinitions = 1 THEN OBJECT_DEFINITION(tr.object_id) ELSE NULL END AS definition
+  CONVERT(varchar(64), HASHBYTES('SHA2_256', CONVERT(varbinary(max), OBJECT_DEFINITION(tr.object_id))), 2) AS definitionSha256
 FROM sys.triggers tr
 JOIN sys.objects triggerObject ON triggerObject.object_id = tr.object_id
 JOIN sys.objects parentObject ON parentObject.object_id = tr.parent_id

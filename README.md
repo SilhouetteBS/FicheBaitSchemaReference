@@ -19,7 +19,7 @@ Laserfiche is a registered trademark of Laserfiche in the United States and othe
 
 ## Support Warning
 
-This project is intended for read-only reporting, troubleshooting, and educational use. Manually writing to or modifying Laserfiche product databases, tables, etc. will violate your Laserfiche Support plan and is not supported.
+This project supports read-only reporting, troubleshooting, and educational use. Direct modification of Laserfiche product databases is unsupported; consult your applicable license and support agreements. Validate changes in a test environment.
 
 ## Community Use
 
@@ -145,7 +145,7 @@ Use `docs/sql-server-schema-export.sql` for Forms, LFDS, Repository, and Workflo
 
 The export script requires SQL Server 2016 or newer because it uses `FOR JSON`. It reads SQL Server catalog metadata only. It does not read Laserfiche business table rows and does not modify the database.
 
-This documentation is for read-only reporting, troubleshooting, and education. Manually writing to or modifying Laserfiche product databases, tables, etc. will violate your Laserfiche Support plan and is not supported.
+This documentation supports read-only reporting, troubleshooting, and education. Direct modification of Laserfiche product databases is unsupported; consult your applicable license and support agreements. Validate changes in a test environment.
 
 Foreign keys in the app come from exported SQL constraints. Dependencies come from SQL Server expression dependency metadata for views, routines, and triggers; they are useful for impact analysis, but unresolved dependency rows can be aliases, pseudo tables, caller-dependent references, or helper objects that were not exported as standalone objects.
 

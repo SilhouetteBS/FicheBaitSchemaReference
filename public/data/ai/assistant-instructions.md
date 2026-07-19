@@ -20,7 +20,7 @@ Use this file as the entry point before generating SQL, reviewing SQL, explainin
 
 ## Safety boundary
 
-This documentation is for read-only reporting, troubleshooting, and education. Manually writing to or modifying Laserfiche product databases, tables, etc. will violate your Laserfiche Support plan and is not supported.
+This documentation supports read-only reporting, troubleshooting, and education. Direct modification of Laserfiche product databases is unsupported; consult your applicable license and support agreements. Validate changes in a test environment.
 
 ## AI rules
 

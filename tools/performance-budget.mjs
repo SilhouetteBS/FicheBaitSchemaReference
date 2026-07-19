@@ -53,6 +53,24 @@ if (appUrl) {
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     await page.goto(appUrl, { waitUntil: 'networkidle' });
+    const startupMetrics = await page.evaluate(() => {
+      const resources = performance.getEntriesByType('resource');
+      const schemaRequests = resources.filter((entry) => /\/schema\.json(?:\?|$)/.test(entry.name));
+      const jsonRequests = resources.filter((entry) => /\.json(?:\?|$)/.test(entry.name));
+      const firstContentfulPaint = performance
+        .getEntriesByName('first-contentful-paint')
+        .at(0)?.startTime ?? 0;
+      return {
+        firstContentfulPaint,
+        jsonRequests: jsonRequests.length,
+        schemaRequests: schemaRequests.length,
+        transferredBytes: resources.reduce((total, entry) => total + (entry.transferSize || 0), 0),
+      };
+    });
+    assert.ok(startupMetrics.schemaRequests <= 1, `Startup loaded too many schema snapshots: ${startupMetrics.schemaRequests}`);
+    assert.ok(startupMetrics.jsonRequests <= 6, `Startup made too many JSON requests: ${startupMetrics.jsonRequests}`);
+    assert.ok(startupMetrics.firstContentfulPaint <= 2500, `First contentful paint exceeded budget: ${startupMetrics.firstContentfulPaint}ms`);
+    result.startup = startupMetrics;
     const tableMetrics = await page.locator('.table-list').evaluate((list) => ({
       renderedRows: list.querySelectorAll('.table-item').length,
       scrollHeight: list.scrollHeight,

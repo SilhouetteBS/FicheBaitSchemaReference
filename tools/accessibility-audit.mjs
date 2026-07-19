@@ -166,11 +166,11 @@ try {
       .map((element) => {
         const style = globalThis.getComputedStyle(element);
         return {
+          element: `${element.tagName.toLowerCase()}${element.id ? `#${element.id}` : ''}${element.classList.length > 0 ? `.${[...element.classList].join('.')}` : ''}`,
           animationDuration: style.animationDuration,
           transitionDuration: style.transitionDuration,
         };
-      })
-      .slice(0, 10),
+      }),
   );
   const reducedMotionViolations = reducedMotionDurations.filter((style) =>
     !isEffectivelyZeroDuration(style.animationDuration) ||
@@ -181,14 +181,63 @@ try {
   await snapshot(page, 'desktop-accessibility');
   await assertAxe(page, 'Tables view');
 
-  for (const view of ['compare', 'diagram', 'objects', 'reporting']) {
+  const selectedTableButton = page.locator('.table-item-main[aria-current="page"]');
+  assert.equal(await selectedTableButton.count(), 1, 'The selected table must expose aria-current="page"');
+
+  const tableTabs = page.getByRole('tab');
+  assert.equal(await tableTabs.count(), 6, 'Table details must expose six tabs');
+  assert.equal(await tableTabs.nth(0).getAttribute('aria-selected'), 'true');
+  assert.equal(await tableTabs.nth(0).getAttribute('tabindex'), '0');
+  assert.equal(await tableTabs.nth(1).getAttribute('tabindex'), '-1');
+  await tableTabs.nth(0).focus();
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await tableTabs.nth(1).getAttribute('aria-selected'), 'true', 'ArrowRight must select the next tab');
+  assert.equal(await tableTabs.nth(1).evaluate((element) => element === globalThis.document.activeElement), true);
+  const activePanel = page.getByRole('tabpanel');
+  assert.equal(await activePanel.count(), 1, 'Exactly one table detail panel must be active');
+  assert.equal(await activePanel.getAttribute('aria-labelledby'), await tableTabs.nth(1).getAttribute('id'));
+  await page.keyboard.press('Home');
+  assert.equal(await tableTabs.nth(0).getAttribute('aria-selected'), 'true', 'Home must select the first tab');
+
+  await page.getByRole('button', { name: 'Metadata details' }).click();
+  const infoTooltip = page.locator('.info-tooltip').first();
+  await infoTooltip.waitFor();
+  const tooltipId = await infoTooltip.getAttribute('aria-describedby');
+  assert.ok(tooltipId, 'Information buttons must reference their tooltip text');
+  const tooltipText = page.locator(`[id="${tooltipId}"]`);
+  assert.equal(await infoTooltip.getAttribute('aria-expanded'), 'false');
+  assert.equal(await tooltipText.getAttribute('role'), 'tooltip');
+  await infoTooltip.focus();
+  assert.equal(await infoTooltip.getAttribute('aria-expanded'), 'true', 'Focus must open an information tooltip');
+  await page.keyboard.press('Escape');
+  assert.equal(await infoTooltip.getAttribute('aria-expanded'), 'false', 'Escape must close an information tooltip');
+  await infoTooltip.click();
+  assert.equal(await infoTooltip.getAttribute('aria-expanded'), 'true', 'Click must pin an information tooltip open');
+  await page.locator('body').click({ position: { x: 4, y: 4 } });
+  assert.equal(await infoTooltip.getAttribute('aria-expanded'), 'false', 'An outside click must close an information tooltip');
+
+  for (const view of ['compare', 'diagram', 'objects', 'impact', 'health', 'dependencies', 'reporting']) {
     const viewUrl = new URL(appUrl);
     viewUrl.searchParams.set('view', view);
     await page.goto(viewUrl.toString(), { waitUntil: 'networkidle' });
     await assertAxe(page, `${view} view`);
+
+    if (view === 'diagram') {
+      for (const menuLabel of ['Diagram presets', 'Export diagram', 'Diagram options']) {
+        const menuTrigger = page.locator(`summary[aria-label="${menuLabel}"]`);
+        await menuTrigger.click();
+        assert.equal(await menuTrigger.locator('xpath=..').getAttribute('open'), '', `${menuLabel} must open its menu`);
+        await assertAxe(page, `${menuLabel} menu`);
+      }
+    }
   }
 
   await page.goto(appUrl, { waitUntil: 'networkidle' });
+  await page.getByRole('button', { name: 'Command' }).click();
+  assert.equal(await page.getByRole('dialog', { name: 'Command palette' }).count(), 1, 'Command must open an accessible dialog');
+  await assertAxe(page, 'Command palette dialog');
+  await page.keyboard.press('Escape');
+  assert.equal(await page.getByRole('dialog', { name: 'Command palette' }).count(), 0, 'Escape must close the command dialog');
 
   const viewports = [
     ['tablet', { width: 900, height: 1100 }],

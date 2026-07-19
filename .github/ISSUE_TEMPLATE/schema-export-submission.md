@@ -1,6 +1,6 @@
 ---
 name: Schema export submission
-about: Submit metadata-only schema exports for a Laserfiche product version
+about: Request private intake for a sanitized Laserfiche product schema export
 title: "Schema export: "
 labels: schema-export, needs-review
 assignees: ""
@@ -14,6 +14,9 @@ assignees: ""
 - Export date:
 
 ## Files Included
+
+Do not attach raw exports to this public issue. This checklist describes the
+sanitized package available for private maintainer intake after initial triage.
 
 - [ ] `manifest.json`
 - [ ] `schemas.json`
@@ -29,6 +32,8 @@ assignees: ""
 
 ## Privacy Confirmation
 
+- [ ] I have not attached raw or sanitized export files to this public issue.
+- [ ] I used the current repository export script, which omits source IDs, row counts, owner names, dates, extended descriptions, and SQL module bodies.
 - [ ] Export contains schema metadata only.
 - [ ] Export does not contain table row data.
 - [ ] Export does not contain customer names, document values, form submission values, or workflow instance values.
@@ -37,6 +42,10 @@ assignees: ""
 - [ ] Export does not include SQL Server version, compatibility level, file paths, or instance configuration.
 - [ ] Export does not include `dbo.sysdiagrams`.
 - [ ] I reviewed `docs/data-privacy.md` and `docs/privacy-review-checklist.md`.
+
+After this issue is triaged, a maintainer will provide private transfer
+instructions. Only the sanitized output should be transferred. Never publish a
+raw catalog export, even if it appears to contain metadata only.
 
 ## Duplicate Version Review
 
@@ -47,4 +56,5 @@ If this is a replacement, explain why:
 
 ## Notes
 
-Add any missing optional files or empty result set context here.
+Describe missing optional files or empty result sets here. Do not paste JSON,
+SQL definitions, object inventories, or links to downloadable exports.

@@ -1,4 +1,4 @@
-import { Fragment, lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   AlertTriangle,
@@ -48,18 +48,12 @@ import {
 import { buildCatalogProduct, DataLoadError, fetchJson, loadVersionEntry } from './data/productLoader.js';
 import { readUrlState, writeUrlState } from './data/urlState.js';
 import { copyTextToClipboard } from './data/clipboard.js';
-import { ComparisonDetail, ComparisonSummary } from './components/ComparisonViews.jsx';
-import { DatabaseDiagram } from './components/DatabaseDiagram.jsx';
-import { DependencyReportView } from './components/DependencyReportView.jsx';
+import { buildCorrectionIssueUrl } from './data/correctionIssue.js';
 import { ErrorBoundary } from './components/ErrorBoundary.jsx';
-import { ImpactView } from './components/ImpactView.jsx';
-import { ObjectExplorer } from './components/ObjectExplorer.jsx';
-import { ReportingGuide } from './components/ReportingGuide.jsx';
-import { SchemaHealthView } from './components/SchemaHealthView.jsx';
-import { TableWorkspace } from './components/TableWorkspace.jsx';
 import { AccessibleModal } from './components/AccessibleModal.jsx';
 import { InfoTooltip } from './components/InfoTooltip.jsx';
 import './styles.css';
+import './accessibility.css';
 import './system-overlays.css';
 
 const editingBuildEnabled = import.meta.env.VITE_ENABLE_EDITING === 'true';
@@ -70,58 +64,15 @@ const ImportPreviewView = editingBuildEnabled
 const EditingCapabilityGuard = editingBuildEnabled
   ? lazy(() => import('./components/EditingCapabilityGuard.jsx').then((module) => ({ default: module.EditingCapabilityGuard })))
   : null;
-
-function buildCorrectionIssueUrl({ productKey, productName, version, view, objectLabel, currentUrl }) {
-  const issueUrl = new URL('https://github.com/SilhouetteBS/FicheBaitSchemaReference/issues/new');
-  const productLabel = productName || productKey || '';
-  const productFieldValue = ['Forms', 'LFDS', 'Repository', 'Workflow'].includes(productLabel) ? productLabel : 'Other or unsure';
-  const areaOptions = new Set([
-    'Tables',
-    'Compare',
-    'Diagram',
-    'Objects',
-    'Impact',
-    'Health',
-    'Dependencies',
-    'Import',
-    'Reporting',
-    'AI export package',
-  ]);
-  const areaFieldValue = areaOptions.has(view) ? view : 'Other or unsure';
-
-  issueUrl.searchParams.set('template', 'documentation-correction.yml');
-  issueUrl.searchParams.set('title', `Documentation correction: ${productLabel} ${version || ''}`.trim());
-  issueUrl.searchParams.set('labels', 'documentation,needs-review');
-  issueUrl.searchParams.set('correction_type', 'Other correction or update');
-  issueUrl.searchParams.set('product', productFieldValue);
-  issueUrl.searchParams.set('version', version || '');
-  issueUrl.searchParams.set('area', areaFieldValue);
-  issueUrl.searchParams.set('schema_object', objectLabel || '');
-  issueUrl.searchParams.set('current_link', currentUrl || '');
-  issueUrl.searchParams.set(
-    'current_detail',
-    [
-      `Opened from: ${productLabel || 'Unknown product'}${version ? ` ${version}` : ''}`,
-      view ? `Page or area: ${view}` : '',
-      objectLabel ? `Object: ${objectLabel}` : '',
-      currentUrl ? `Current page link: ${currentUrl}` : '',
-      '',
-      'Describe the wording, behavior, relationship, or query guidance that seems incorrect or incomplete:',
-    ]
-      .filter((line) => line !== '')
-      .join('\n'),
-  );
-  issueUrl.searchParams.set('suggested_update', 'Describe the proposed correction or update.');
-  issueUrl.searchParams.set(
-    'source_context',
-    'Include non-sensitive source context, version details, Laserfiche Answers links, documentation links, or schema evidence if available.',
-  );
-  issueUrl.searchParams.set(
-    'safety_acknowledgement',
-    'This correction is intended for read-only reporting, troubleshooting, or education and does not include row data, customer-specific values, database names, server names, credentials, production screenshots, or other sensitive details.',
-  );
-  return issueUrl.toString();
-}
+const ComparisonDetail = lazy(() => import('./components/ComparisonViews.jsx').then((module) => ({ default: module.ComparisonDetail })));
+const ComparisonSummary = lazy(() => import('./components/ComparisonViews.jsx').then((module) => ({ default: module.ComparisonSummary })));
+const DatabaseDiagram = lazy(() => import('./components/DatabaseDiagram.jsx').then((module) => ({ default: module.DatabaseDiagram })));
+const DependencyReportView = lazy(() => import('./components/DependencyReportView.jsx').then((module) => ({ default: module.DependencyReportView })));
+const ImpactView = lazy(() => import('./components/ImpactView.jsx').then((module) => ({ default: module.ImpactView })));
+const ObjectExplorer = lazy(() => import('./components/ObjectExplorer.jsx').then((module) => ({ default: module.ObjectExplorer })));
+const ReportingGuide = lazy(() => import('./components/ReportingGuide.jsx').then((module) => ({ default: module.ReportingGuide })));
+const SchemaHealthView = lazy(() => import('./components/SchemaHealthView.jsx').then((module) => ({ default: module.SchemaHealthView })));
+const TableWorkspace = lazy(() => import('./components/TableWorkspace.jsx').then((module) => ({ default: module.TableWorkspace })));
 
 function normalize(value) {
   return String(value ?? '').toLowerCase().trim();
@@ -324,7 +275,7 @@ const versionTrendColumns = [
   ['Notes', 'Percent of tables with manual notes in this version.'],
 ];
 
-function SnapshotFreshnessPanel({ product, productsManifest, productName, version, onDownloadMarkdown }) {
+function SnapshotFreshnessPanel({ product, productsManifest, productName, version, onDownloadMarkdown, onRequestVersionHistory }) {
   const stats = getSnapshotStats(version);
   const [showSnapshotDetails, setShowSnapshotDetails] = useState(false);
   const source = version.source ?? {};
@@ -349,7 +300,14 @@ function SnapshotFreshnessPanel({ product, productsManifest, productName, versio
           <button
             aria-expanded={showSnapshotDetails}
             className="snapshot-details-button"
-            onClick={() => setShowSnapshotDetails((current) => !current)}
+            onClick={() => {
+              setShowSnapshotDetails((current) => {
+                if (!current) {
+                  onRequestVersionHistory?.();
+                }
+                return !current;
+              });
+            }}
             type="button"
           >
             {showSnapshotDetails ? 'Hide details' : 'Metadata details'}
@@ -567,6 +525,7 @@ function App() {
   const [productsManifest, setProductsManifest] = useState(null);
   const [selectedProductKey, setSelectedProductKey] = useState(preferredProductKey);
   const [loadError, setLoadError] = useState('');
+  const [operationError, setOperationError] = useState('');
   const [dataWarnings, setDataWarnings] = useState([]);
   const [selectedVersion, setSelectedVersion] = useState(preferredVersion);
   const [selectedTableId, setSelectedTableId] = useState(initialUrlState.table);
@@ -615,8 +574,16 @@ function App() {
   const [diagramPresets, setDiagramPresets] = useState(() => readJsonStorage('lfdd.diagramPresets.v1', []));
   const loadedVersionEntriesRef = useRef(new Map());
   const productLoadRequestRef = useRef(0);
+  const versionSelectionRequestRef = useRef(0);
+  const activeProductManifestRef = useRef(null);
+  const historyReadyRef = useRef(false);
+  const previousNavigationKeyRef = useRef('');
   const canEditNotes = editingEnabled && editingWarningAccepted;
   const canUseImport = canEditNotes;
+
+  useEffect(() => {
+    activeProductManifestRef.current = activeProductManifest;
+  }, [activeProductManifest]);
 
   useEffect(() => {
     let isCurrent = true;
@@ -689,30 +656,6 @@ function App() {
       );
       setDiagramFocusKey(initialUrlState.diagramFocus);
 
-      const remainingVersions = manifest.versions.filter((version) => version.version !== urlVersion);
-      Promise.allSettled(remainingVersions.map(async (versionEntry) => [
-        versionEntry.version,
-        await loadVersionEntry(versionEntry),
-      ])).then((results) => {
-        if (!isCurrent || requestId !== productLoadRequestRef.current) {
-          return;
-        }
-        const warnings = selectedEntry.warning ? [selectedEntry.warning] : [];
-        results.forEach((result, index) => {
-          if (result.status === 'fulfilled') {
-            const [loadedVersion, entry] = result.value;
-            loadedEntries.set(loadedVersion, { schema: entry.schema, notes: entry.notes });
-            if (entry.warning) {
-              warnings.push(entry.warning);
-            }
-          } else {
-            warnings.push(`Version ${remainingVersions[index].version} could not be loaded for comparison: ${result.reason.message}`);
-          }
-        });
-        loadedVersionEntriesRef.current = loadedEntries;
-        setProduct(buildCatalogProduct(manifest, [...loadedEntries.values()]));
-        setDataWarnings(warnings);
-      });
     }
 
     async function loadDefaultProduct() {
@@ -754,11 +697,68 @@ function App() {
   const localNotesForVersion = editingEnabled ? localNotes[localNotesKey] ?? {} : {};
   const tables = version?.tables ?? emptyTables;
 
+  const ensureVersionsLoaded = useCallback(async (versionNames) => {
+    if (!activeProductManifest) {
+      return null;
+    }
+    const requestedManifest = activeProductManifest;
+    const missingEntries = [...new Set(versionNames)]
+      .filter((versionName) => !loadedVersionEntriesRef.current.has(versionName))
+      .map((versionName) => requestedManifest.versions.find((item) => item.version === versionName))
+      .filter(Boolean);
+    if (missingEntries.length === 0) {
+      return buildCatalogProduct(requestedManifest, [...loadedVersionEntriesRef.current.values()]);
+    }
+    setOperationError('');
+    const results = await Promise.allSettled(missingEntries.map(async (entry) => [entry.version, await loadVersionEntry(entry)]));
+    if (requestedManifest !== activeProductManifestRef.current || productLoadRequestRef.current === 0) {
+      return null;
+    }
+    const failures = [];
+    const warnings = [];
+    results.forEach((result, index) => {
+      if (result.status === 'fulfilled') {
+        const [loadedVersion, entry] = result.value;
+        loadedVersionEntriesRef.current.set(loadedVersion, { schema: entry.schema, notes: entry.notes });
+        if (entry.warning) warnings.push(entry.warning);
+      } else {
+        failures.push(`${missingEntries[index].version}: ${result.reason.message}`);
+      }
+    });
+    if (warnings.length > 0) {
+      setDataWarnings((current) => [...new Set([...current, ...warnings])]);
+    }
+    if (failures.length > 0) {
+      setOperationError(`Some version metadata could not be loaded. ${failures.join(' ')}`);
+    }
+    const nextProduct = buildCatalogProduct(requestedManifest, [...loadedVersionEntriesRef.current.values()]);
+    setProduct(nextProduct);
+    return nextProduct;
+  }, [activeProductManifest]);
+
+  useEffect(() => {
+    if (activeView === 'compare' && comparisonFromVersion && comparisonToVersion) {
+      ensureVersionsLoaded([comparisonFromVersion, comparisonToVersion]);
+    }
+  }, [activeView, comparisonFromVersion, comparisonToVersion, ensureVersionsLoaded]);
+
   useEffect(() => {
     if (!product || !selectedVersion) {
       return;
     }
 
+    const navigationKey = [
+      selectedProductKey,
+      selectedVersion,
+      activeView,
+      selectedTableId,
+      selectedReportingView,
+      comparisonFromVersion,
+      comparisonToVersion,
+      objectType,
+      diagramFocusKey,
+    ].join('|');
+    const shouldPush = historyReadyRef.current && previousNavigationKeyRef.current !== navigationKey;
     writeUrlState({
       product: selectedProductKey,
       version: selectedVersion,
@@ -781,7 +781,9 @@ function App() {
       diagramSecondHop: showDiagramSecondHopEdges ? '' : 'hidden',
       diagramConnectedOnly: diagramConnectedOnly ? 'true' : '',
       reporting: selectedReportingView === 'overview' ? '' : selectedReportingView,
-    });
+    }, { mode: shouldPush ? 'push' : 'replace' });
+    previousNavigationKeyRef.current = navigationKey;
+    historyReadyRef.current = true;
     writeUiPreferences({
       product: selectedProductKey,
       version: selectedVersion,
@@ -825,6 +827,12 @@ function App() {
     tableConfidenceFilter,
     tableNotesFilter,
   ]);
+
+  useEffect(() => {
+    const restoreUrlState = () => window.location.reload();
+    window.addEventListener('popstate', restoreUrlState);
+    return () => window.removeEventListener('popstate', restoreUrlState);
+  }, []);
 
   const comparison = useMemo(() => {
     if (!product || product.versions.length < 2) {
@@ -963,6 +971,8 @@ function App() {
     tables.find((table) => table.id === selectedTableId) ?? filteredTables[0] ?? tables[0];
 
   async function handleVersionChange(nextVersion) {
+    const requestId = versionSelectionRequestRef.current + 1;
+    versionSelectionRequestRef.current = requestId;
     let nextVersionData = product.versions.find((item) => item.version === nextVersion);
     if (!nextVersionData?.isLoaded) {
       const versionEntry = activeProductManifest?.versions.find((item) => item.version === nextVersion);
@@ -970,22 +980,16 @@ function App() {
         return;
       }
       try {
-        const loadedEntry = await loadVersionEntry(versionEntry);
-        loadedVersionEntriesRef.current.set(nextVersion, {
-          schema: loadedEntry.schema,
-          notes: loadedEntry.notes,
-        });
-        const nextProduct = buildCatalogProduct(activeProductManifest, [...loadedVersionEntriesRef.current.values()]);
-        setProduct(nextProduct);
+        const nextProduct = await ensureVersionsLoaded([nextVersion]);
+        if (!nextProduct || requestId !== versionSelectionRequestRef.current) return;
         nextVersionData = nextProduct.versions.find((item) => item.version === nextVersion);
-        if (loadedEntry.warning) {
-          setDataWarnings((current) => [...new Set([...current, loadedEntry.warning])]);
-        }
+        if (!nextVersionData?.isLoaded) return;
       } catch (error) {
-        setLoadError(error);
+        if (requestId === versionSelectionRequestRef.current) setOperationError(`Unable to load ${nextVersion}: ${error.message}`);
         return;
       }
     }
+    if (requestId !== versionSelectionRequestRef.current) return;
     setSelectedVersion(nextVersion);
     setSelectedTableId(nextVersionData?.tables[0]?.id ?? '');
   }
@@ -999,7 +1003,7 @@ function App() {
     const requestId = productLoadRequestRef.current + 1;
     productLoadRequestRef.current = requestId;
     try {
-      setLoadError('');
+      setOperationError('');
       setDataWarnings([]);
       const manifest = await fetchJson(selectedProduct.manifestUrl, { refresh: true });
       const defaultVersionEntry = manifest.versions.find((item) => item.version === manifest.defaultVersion);
@@ -1033,33 +1037,9 @@ function App() {
       setDiagramFocusKey('');
       setActiveView('tables');
 
-      const remainingVersions = manifest.versions.filter((item) => item.version !== manifest.defaultVersion);
-      Promise.allSettled(remainingVersions.map(async (versionEntry) => [
-        versionEntry.version,
-        await loadVersionEntry(versionEntry),
-      ])).then((results) => {
-        if (requestId !== productLoadRequestRef.current) {
-          return;
-        }
-        const warnings = defaultEntry.warning ? [defaultEntry.warning] : [];
-        results.forEach((result, index) => {
-          if (result.status === 'fulfilled') {
-            const [loadedVersion, entry] = result.value;
-            loadedEntries.set(loadedVersion, { schema: entry.schema, notes: entry.notes });
-            if (entry.warning) {
-              warnings.push(entry.warning);
-            }
-          } else {
-            warnings.push(`Version ${remainingVersions[index].version} could not be loaded for comparison: ${result.reason.message}`);
-          }
-        });
-        loadedVersionEntriesRef.current = loadedEntries;
-        setProduct(buildCatalogProduct(manifest, [...loadedEntries.values()]));
-        setDataWarnings(warnings);
-      });
     } catch (error) {
       if (requestId === productLoadRequestRef.current) {
-        setLoadError(error);
+        setOperationError(`Unable to change product: ${error.message}`);
       }
     }
   }
@@ -1185,7 +1165,7 @@ function App() {
         setLocalNotes(nextNotes);
         writeLocalNotes(nextNotes);
       } catch (error) {
-        setLoadError(`Unable to import notes: ${error.message}`);
+        setOperationError(`Unable to import notes: ${error.message}`);
       }
     };
     reader.readAsText(file);
@@ -1248,7 +1228,7 @@ function App() {
     <main className="app-shell">
       <aside className="sidebar" aria-label="Product, version, and view navigation">
         <div className="brand">
-          <img className="brand-logo" src="fichebait-logo.png" alt="FicheBait" />
+          <img className="brand-logo" src={`${import.meta.env.BASE_URL}fichebait-logo.png`} alt="FicheBait" />
           <div>
             <h1>FicheBait Schema Reference</h1>
             <p>Schema, relationships, and reporting</p>
@@ -1290,6 +1270,7 @@ function App() {
             {activeViewLabels.map(([value, label]) => (
               <button
                 className={activeView === value ? 'selected' : ''}
+                aria-current={activeView === value ? 'page' : undefined}
                 key={value}
                 type="button"
                 onClick={() => setActiveView(value)}
@@ -1318,9 +1299,8 @@ function App() {
             <p>
               This community research aid documents Laserfiche&reg; product databases for read-only
               reporting, troubleshooting, and education. It is not affiliated with or endorsed by
-              Laserfiche. Manually modifying Laserfiche
-              databases is unsupported and violates your support plan; validate changes in a test
-              environment.
+              Laserfiche. Direct modification of Laserfiche product databases is unsupported; consult
+              your applicable license and support agreements. Validate changes in a test environment.
               {' '}
               <a
                 className="warning-link"
@@ -1369,11 +1349,22 @@ function App() {
           </div>
         )}
 
+        {operationError && (
+          <div className="data-load-warning" role="alert">
+            <AlertTriangle size={17} />
+            <p>{operationError}</p>
+            <button className="icon-button" aria-label="Dismiss loading error" onClick={() => setOperationError('')} type="button">
+              <X aria-hidden="true" size={15} />
+            </button>
+          </div>
+        )}
+
         <SnapshotFreshnessPanel
           product={product}
           productsManifest={productsManifest}
           productName={productName}
           version={version}
+          onRequestVersionHistory={() => ensureVersionsLoaded(product.versions.map((item) => item.version))}
           onDownloadMarkdown={() =>
             downloadText(
               `${selectedProductKey}-${selectedVersion}-summary.md`,
@@ -1405,7 +1396,8 @@ function App() {
         )}
 
         {activeView === 'compare' && (
-          <ComparisonSummary
+          <Suspense fallback={<div className="loading-state-inline">Loading comparison...</div>}>
+            <ComparisonSummary
             comparison={comparison}
             versions={product.versions}
             fromVersion={comparisonFromVersion}
@@ -1417,11 +1409,13 @@ function App() {
             onDownloadCsv={() =>
               downloadText(`${selectedProductKey}-version-comparison.csv`, comparisonToCsv(comparison), 'text/csv')
             }
-          />
+            />
+          </Suspense>
         )}
 
         <ErrorBoundary key={`${activeView}:${selectedProductKey}:${selectedVersion}`}>
-          {activeView === 'compare' ? (
+          <Suspense fallback={<div className="loading-state-inline">Loading view...</div>}>
+            {activeView === 'compare' ? (
             <ComparisonDetail
               comparison={comparison}
               onSelectTable={navigateToTable}
@@ -1507,6 +1501,8 @@ function App() {
           ) : activeView === 'reporting' ? (
             <ReportingGuide
               version={version}
+              product={product}
+              onRequestVersionHistory={() => ensureVersionsLoaded(product.versions.map((item) => item.version))}
               onSelectTable={navigateToTable}
               selectedView={selectedReportingView}
               onSelectedViewChange={setSelectedReportingView}
@@ -1516,6 +1512,8 @@ function App() {
               documentationCoverage={documentationCoverage}
               selectedTable={selectedTable}
               version={version}
+              product={product}
+              onRequestVersionHistory={() => ensureVersionsLoaded(product.versions.map((item) => item.version))}
               favoriteObjects={favoriteObjects}
               filteredTables={filteredTables}
               editingEnabled={canEditNotes}
@@ -1561,7 +1559,7 @@ function App() {
                 )
               }
               onQueryChange={setQuery}
-              onSelectTable={setSelectedTableId}
+              onSelectTable={(tableId) => setSelectedTableId(tableId)}
               onSetTableConfidenceFilter={setTableConfidenceFilter}
               onSetTableNotesFilter={setTableNotesFilter}
               onToggleFavoriteObject={toggleFavoriteObject}
@@ -1574,7 +1572,8 @@ function App() {
               setRelationshipFilter={setRelationshipFilter}
               navigateToTable={navigateToTable}
             />
-          )}
+            )}
+          </Suspense>
         </ErrorBoundary>
       </section>
       {commandOpen && (

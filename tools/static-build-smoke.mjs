@@ -31,6 +31,15 @@ const indexHtml = readFileSync(indexPath, 'utf8');
 assert.match(indexHtml, /<div id="root"><\/div>/, 'index.html must contain the React root element');
 assert.match(indexHtml, /Content-Security-Policy/i, 'index.html must include the static CSP meta tag');
 assert.match(indexHtml, /FicheBait Schema Reference/i, 'index.html must include the app title');
+assert.doesNotMatch(indexHtml, /frame-ancestors/i,
+  'index.html must not claim meta-delivered frame-ancestors protection');
+
+const faviconReference = indexHtml.match(/<link[^>]+rel="icon"[^>]+href="([^"]+)"/i)?.[1];
+assert.ok(faviconReference, 'index.html must reference a favicon');
+const faviconPath = faviconReference.startsWith('/')
+  ? join(distDir, faviconReference.split('/').filter(Boolean).at(-1))
+  : join(distDir, faviconReference);
+assertFile(faviconPath, 'Referenced favicon must exist in dist');
 
 const referencedAssets = [...indexHtml.matchAll(/(?:src|href)="([^"]+)"/g)]
   .map((match) => match[1])

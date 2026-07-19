@@ -15,7 +15,7 @@ DROP INDEX ... ON dbo.SomeLaserficheTable;
 
 ## Why
 
-Direct writes can corrupt product state, bypass application logic, and violate Laserfiche Support expectations. This project is for read-only metadata documentation only.
+Direct writes can corrupt product state and bypass application logic. Laserfiche product database modification is unsupported; consult your applicable license and support agreements. This project is for read-only metadata documentation only.
 
 ## Queue Processing Exclusions
 

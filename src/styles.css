@@ -1341,6 +1341,24 @@ button {
   margin: 18px 20px 20px;
 }
 
+.relationship-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 7px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.relationship-metadata code {
+  flex: 1 1 100%;
+  overflow-wrap: anywhere;
+}
+
+.relationship-metadata strong {
+  color: var(--danger, #9b2c2c);
+}
+
 .detail-heading {
   padding: 20px;
   border-bottom: 1px solid var(--line);
@@ -2972,7 +2990,7 @@ button {
 .diagram-toolbar-menu summary:hover,
 .diagram-toolbar-menu summary:focus-visible {
   border-color: var(--brand-blue);
-  color: var(--brand-blue);
+  color: #075fcf;
 }
 
 .diagram-toolbar-menu-panel {
@@ -4891,7 +4909,7 @@ button {
   height: 28px;
   border-radius: 7px;
   color: #ffffff !important;
-  background: var(--accent);
+  background: #075fcf;
 }
 
 .review-list,
@@ -6347,17 +6365,6 @@ code {
 
   .notes-editor-wide {
     grid-column: auto;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.001ms !important;
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
   }
 }
 

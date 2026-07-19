@@ -134,6 +134,12 @@ function toRelationshipDictionaries(table) {
     shortName: toShortName(foreignKey.referencedTableKey),
     note: `SQL foreign key ${foreignKey.name}.`,
     confidence: 'confirmed',
+    constraintName: foreignKey.name,
+    columns: foreignKey.columns ?? [],
+    deleteAction: foreignKey.deleteAction ?? foreignKey.deleteReferentialActionDescription ?? 'NO_ACTION',
+    updateAction: foreignKey.updateAction ?? foreignKey.updateReferentialActionDescription ?? 'NO_ACTION',
+    isDisabled: Boolean(foreignKey.isDisabled),
+    isNotTrusted: Boolean(foreignKey.isNotTrusted),
   }));
 
   const incoming = (table.incomingForeignKeys ?? []).map((foreignKey) => ({
@@ -142,6 +148,12 @@ function toRelationshipDictionaries(table) {
     shortName: toShortName(foreignKey.sourceTableKey),
     note: `SQL foreign key ${foreignKey.name}.`,
     confidence: 'confirmed',
+    constraintName: foreignKey.name,
+    columns: foreignKey.columns ?? [],
+    deleteAction: foreignKey.deleteAction ?? foreignKey.deleteReferentialActionDescription ?? 'NO_ACTION',
+    updateAction: foreignKey.updateAction ?? foreignKey.updateReferentialActionDescription ?? 'NO_ACTION',
+    isDisabled: Boolean(foreignKey.isDisabled),
+    isNotTrusted: Boolean(foreignKey.isNotTrusted),
   }));
 
   return [...outgoing, ...incoming].sort((left, right) =>

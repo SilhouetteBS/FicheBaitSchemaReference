@@ -334,7 +334,7 @@ for (const row of verified.filter((candidate) => candidate.verification === 'Sch
     evidencePath: `${pathPrefix}-evidence.md`,
     sourceCount: Math.max(1, sourceCount),
     tables,
-    tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Needs review', 'Read-only'],
+    tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Needs review', 'Unreviewed source excerpt'],
     answersLinks: [{ title: row.title, url: row.url }],
     confirmedVersions: row.confirmedVersions,
     capturedExcerpt: buildCandidateExcerpt(row),

@@ -46,6 +46,9 @@ jobs:
       - name: Notes validation
         run: npm run validate:notes
 
+      - name: Canonical/public data parity
+        run: npm run verify:data-parity
+
       - name: Static security metadata
         run: npm run verify:static-security
 
@@ -153,6 +156,15 @@ jobs:
 
       - name: Diagram visual screenshots
         run: APP_URL=http://127.0.0.1:4177/FicheBaitSchemaReference/ VISUAL_SCREENSHOT_DIR=artifacts/visual-regression npm run test:visual
+
+      - name: Upload verified Pages artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: pages-dist-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Upload failed e2e screenshots
         if: failure()

@@ -19,7 +19,7 @@ Use this package to help generate and review read-only reporting SQL for the sel
 
 ## Support boundary
 
-This documentation is for read-only reporting, troubleshooting, and education. Manually writing to or modifying Laserfiche product databases, tables, etc. will violate your Laserfiche Support plan and is not supported.
+This documentation supports read-only reporting, troubleshooting, and education. Direct modification of Laserfiche product databases is unsupported; consult your applicable license and support agreements. Validate changes in a test environment.
 
 ## AI rules
 
@@ -136,7 +136,7 @@ SELECT TOP (100)
   u.[displayname],
   u.[email],
   u.[sid],
-  u.[password]
+  u.[user_type]
 FROM [dbo].[cf_users] AS u
 ORDER BY 1;
 ```

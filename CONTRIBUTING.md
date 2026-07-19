@@ -2,7 +2,7 @@
 
 Thank you for helping review the FicheBait Schema Reference.
 
-This project accepts community feedback and metadata-only schema exports for
+This project accepts community feedback and sanitized schema exports for
 read-only reporting, troubleshooting, and education. Do not submit row data,
 customer-specific values, database names, server names, screenshots of records,
 credentials, connection strings, or private notes.
@@ -21,6 +21,12 @@ open pull requests; maintainers will make repository changes after issue review.
 
 Follow `docs/contribute-schema-exports.md` and use the `Schema export
 submission` issue template.
+
+Never attach raw export files to a public GitHub Issue. Open the issue with only
+the product/version and checklist information. After triage, a maintainer will
+provide private intake instructions. Transfer only output produced by the
+current sanitized export script; do not transfer ad hoc catalog dumps or files
+containing excluded metadata.
 
 Expected files:
 
@@ -46,8 +52,10 @@ Before submitting anything, read:
 - `docs/privacy-review-checklist.md`
 - `docs/known-limitations.md`
 
-Submissions that contain row data, environment-specific identifiers, database
-names, server names, credentials, or production screenshots will be rejected.
+Submissions that contain row data, source IDs, row counts, schema owners,
+creation/modification dates, extended descriptions, SQL module bodies,
+environment-specific identifiers, database names, server names, credentials,
+or production screenshots will be rejected.
 
 ## Documentation Corrections
 
@@ -98,5 +106,5 @@ npm run verify:deployed-site
 ## Support Boundary
 
 This is an unofficial FicheBait community resource. It is not Laserfiche support
-documentation. Manually writing to or modifying Laserfiche product databases,
-tables, etc. will violate your Laserfiche Support plan and is not supported.
+documentation. Direct modification of Laserfiche product databases is
+unsupported. Consult your applicable license and support agreements.

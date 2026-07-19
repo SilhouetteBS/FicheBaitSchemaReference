@@ -8,6 +8,10 @@ export function localNotesToVersionNotes(localNotes, localNotesKey, productKey, 
         tableKey,
         {
           confidence: note.confidence,
+          reviewStatus: note.reviewStatus,
+          owner: note.owner,
+          reviewer: note.reviewer,
+          lastReviewedAt: note.lastReviewedAt,
           summary: note.summary,
           safeReportingNotes: note.safeReportingNotes ?? [],
           warnings: note.warnings ?? [],
@@ -25,6 +29,10 @@ export function isLocalNoteDifferent(localNote, table) {
   return (
     (localNote.summary ?? '') !== (table.summary ?? '') ||
     (localNote.confidence ?? '') !== (table.confidence ?? '') ||
+    (localNote.reviewStatus ?? '') !== (table.reviewStatus ?? '') ||
+    (localNote.owner ?? '') !== (table.owner ?? '') ||
+    (localNote.reviewer ?? '') !== (table.reviewer ?? '') ||
+    (localNote.lastReviewedAt ?? '') !== (table.lastReviewedAt ?? '') ||
     JSON.stringify(localNote.safeReportingNotes ?? []) !== JSON.stringify(table.safeReportingNotes ?? []) ||
     JSON.stringify(localNote.warnings ?? []) !== JSON.stringify(table.warnings ?? [])
   );

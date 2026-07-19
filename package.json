@@ -29,6 +29,7 @@
     "audit:performance": "node tools/performance-budget.mjs",
     "validate:data": "node tools/validate-data.mjs",
     "validate:notes": "node tools/validate-notes.mjs",
+    "verify:data-parity": "node tools/verify-data-parity.mjs",
     "verify:lockfile": "node tools/verify-lockfile.mjs",
     "verify:static-security": "node tools/verify-static-security.mjs",
     "test:editing-guard": "node tools/verify-editing-guard.mjs",
@@ -36,7 +37,7 @@
     "release-notes:draft": "node tools/generate-release-notes.mjs",
     "verify:public-build": "node tools/verify-public-build.mjs",
     "verify:deployed-site": "node tools/verify-deployed-site.mjs",
-    "validate": "npm run lint && npm run test:unit && npm run test:diagram && npm run validate:data && npm run validate:notes && npm run generate:ai-export && npm run verify:lockfile && npm run verify:static-security && npm run build && npm run test:static-build && npm run audit:performance && npm run render:check",
+    "validate": "npm run lint && npm run test:unit && npm run test:diagram && npm run validate:data && npm run validate:notes && npm run verify:data-parity && npm run generate:ai-export && npm run verify:lockfile && npm run verify:static-security && npm run build && npm run test:static-build && npm run audit:performance && npm run render:check",
     "validate:full": "npm run validate && npm run test:e2e"
   },
   "dependencies": {

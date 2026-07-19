@@ -165,16 +165,23 @@ await page.locator('.reporting-answers-links').waitFor();
 assert.match(await page.locator('.reporting-answers-links').innerText(), /Forms Instance Monitoring/i);
 
 await page.getByRole('button', { name: 'Tables', exact: true }).click();
-await page.evaluate(() => {
-  const target = [...globalThis.document.querySelectorAll('.table-item')]
-    .find((item) => [...item.querySelectorAll('span')].some((span) => span.textContent === 'dbo.cf_users'));
-  target?.querySelector('.table-item-main')?.click();
+const usersTableButton = page.locator('.table-item-main', {
+  has: page.locator('.table-item-name[title="dbo.cf_users"]'),
 });
-await page.waitForTimeout(100);
+await usersTableButton.waitFor();
+await usersTableButton.click();
+await page.waitForURL(/table=dbo\.cf_users/);
 assert.equal(await page.getByRole('heading', { name: 'Manual documentation notes' }).count(), 0);
 assert.equal(await page.getByText('Import notes', { exact: true }).count(), 0);
 assert.match(page.url(), /table=dbo\.cf_users/);
 await page.reload({ waitUntil: 'networkidle' });
+assert.equal(await page.locator('.table-detail h2').textContent(), 'dbo.cf_users');
+await page.getByRole('button', { name: 'Reporting', exact: true }).click();
+await page.getByRole('heading', { name: 'Reporting guide' }).waitFor();
+await page.goBack({ waitUntil: 'networkidle' });
+await page.locator('.table-detail h2').waitFor();
+assert.match(page.url(), /view=tables/);
+assert.match(page.url(), /table=dbo\.cf_users/);
 assert.equal(await page.locator('.table-detail h2').textContent(), 'dbo.cf_users');
 
 const lfdsDiagramUrl = new URL(appUrl);
@@ -485,6 +492,7 @@ assert.match(page.url(), /diagramConnectedOnly=true/);
 await page.goto(appUrl, { waitUntil: 'networkidle' });
 await page.locator('.sidebar-view-nav').getByRole('button', { name: 'Tables', exact: true }).click();
 const tableBrowserPanel = page.locator('.table-browser-panel');
+await page.locator('.table-item').first().waitFor();
 const initialTableCount = await page.locator('.table-item').count();
 await tableBrowserPanel.getByLabel('Confidence').selectOption('deprecated');
 await page.waitForTimeout(100);

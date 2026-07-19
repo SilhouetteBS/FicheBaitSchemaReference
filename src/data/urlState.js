@@ -49,9 +49,14 @@ export function writeUrlState(
     pathname = window.location.pathname,
     hash = window.location.hash,
     history = window.history,
+    mode = 'replace',
   } = {},
 ) {
   const nextUrl = buildUrlStatePath(state, currentSearch, pathname, hash);
-  history.replaceState(null, '', nextUrl);
+  if (mode === 'push') {
+    history.pushState(null, '', nextUrl);
+  } else {
+    history.replaceState(null, '', nextUrl);
+  }
   return nextUrl;
 }

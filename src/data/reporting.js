@@ -171,7 +171,16 @@ export const productReportingPaths = {
 
 const repoBlobBaseUrl = 'https://github.com/SilhouetteBS/FicheBaitSchemaReference/blob/main';
 
-function buildGeneratedCandidateSql(pattern) {
+function commentSqlExcerpt(excerpt) {
+  return String(excerpt)
+    .replaceAll('\r\n', '\n')
+    .replaceAll('\r', '\n')
+    .split('\n')
+    .map((line) => `--${line ? ` ${line}` : ''}`)
+    .join('\n');
+}
+
+export function buildGeneratedCandidateSql(pattern) {
   const objectList = pattern.tables.length ? pattern.tables.map((table) => `--   ${table}`).join('\n') : '--   None captured';
   const versionList = pattern.confirmedVersions?.length ? pattern.confirmedVersions.join(', ') : 'None';
   const sourceLink = pattern.answersLinks?.[0]?.url ?? '';
@@ -194,7 +203,12 @@ function buildGeneratedCandidateSql(pattern) {
     '*/',
     '',
     excerpt
-      ? `/* Captured excerpt from the Answers post. Review and rewrite before use. */\n${excerpt}`
+      ? [
+          '/* Captured excerpt from the Answers post.',
+          '   It is intentionally line-commented and cannot be executed when copied.',
+          '   Review and rewrite it as a separate script before use. */',
+          commentSqlExcerpt(excerpt),
+        ].join('\n')
       : `/* No SQL excerpt was captured. Use the source link for manual review. */`,
   ].join('\n');
 }
@@ -215,7 +229,7 @@ function buildGeneratedCandidateEvidence(pattern) {
     '- Source type: Laserfiche Answers community post',
     '- Site status: Schema-verified source candidate',
     '- Live tested: No',
-    '- Support posture: Read-only research aid; validate changes in a test environment.',
+    '- Support posture: Unreviewed source excerpt; do not execute it as published.',
     `- Confirmed schema versions: ${versionList}`,
     '',
     '## Referenced objects',
@@ -1229,14 +1243,127 @@ function getTableByKey(version, tableKey) {
   return version.source.tables.find((table) => table.key === tableKey);
 }
 
+function normalizeSqlIdentifier(value) {
+  return String(value ?? '')
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .replace(/[^a-zA-Z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .toLowerCase();
+}
+
+const sensitiveColumnTerms = new Set([
+  'password',
+  'passwd',
+  'pwd',
+  'secret',
+  'token',
+  'credential',
+  'credentials',
+  'certificate',
+  'cert',
+  'connection',
+]);
+
+const credentialOrConfigurationTableTerms = new Set([
+  ...sensitiveColumnTerms,
+  'passwords',
+  'secrets',
+  'tokens',
+  'certificates',
+  'connections',
+  'authentication',
+  'auth',
+  'configuration',
+  'configurations',
+  'config',
+  'configs',
+  'setting',
+  'settings',
+  'datasource',
+]);
+
+export function isSensitiveColumnName(columnName) {
+  const normalized = normalizeSqlIdentifier(columnName);
+  const terms = normalized.split('_').filter(Boolean);
+  const collapsed = terms.join('');
+
+  if (terms.some((term) => sensitiveColumnTerms.has(term))) {
+    return true;
+  }
+
+  if (/(password|passwd|secret|token|credential|certificate|connection)/.test(collapsed)) {
+    return true;
+  }
+
+  const hasKey = terms.includes('key') || collapsed.endsWith('key');
+  return hasKey && (terms.some((term) => ['auth', 'authentication', 'api', 'private'].includes(term)) || /auth(?:entication)?key|apikey|privatekey/.test(collapsed));
+}
+
+export function isCredentialOrConfigurationTable(table) {
+  const normalized = normalizeSqlIdentifier(table?.key ?? table?.name ?? table);
+  const terms = normalized.split('_').filter(Boolean);
+  const collapsed = terms.join('');
+  return (
+    terms.some((term) => credentialOrConfigurationTableTerms.has(term)) ||
+    /(password|secret|token|credential|certificate|connection|authentication|config|setting|datasource)/.test(collapsed)
+  );
+}
+
+function escapeRegularExpression(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function sqlReferencesColumn(sql, columnName) {
+  const escaped = escapeRegularExpression(columnName);
+  return new RegExp(`\\[${escaped.replaceAll(']', ']]')}\\]|\\b${escaped}\\b`, 'i').test(sql);
+}
+
+export function getSensitiveGeneratedSqlReferences(version, examples, fallbackTableKeys = []) {
+  return examples.flatMap((example) => {
+    const tableKeys = example.tables?.length ? example.tables : fallbackTableKeys;
+    return tableKeys.flatMap((tableKey) => {
+      const table = getTableByKey(version, tableKey);
+      if (!table) {
+        return [];
+      }
+
+      return table.columns
+        .filter((column) => isSensitiveColumnName(column.name) && sqlReferencesColumn(example.sql ?? '', column.name))
+        .map((column) => ({
+          exampleTitle: example.title,
+          tableKey,
+          columnName: column.name,
+        }));
+    });
+  });
+}
+
+export function assertGeneratedReportingExamplesSafe(
+  version,
+  examples,
+  context = 'generated reporting examples',
+  fallbackTableKeys = [],
+) {
+  const sensitiveReferences = getSensitiveGeneratedSqlReferences(version, examples, fallbackTableKeys);
+  if (sensitiveReferences.length === 0) {
+    return;
+  }
+
+  const details = sensitiveReferences
+    .map((reference) => `${reference.exampleTitle}: ${reference.tableKey}.${reference.columnName}`)
+    .join(', ');
+  throw new Error(`Sensitive columns found in ${context}: ${details}`);
+}
+
 function chooseColumns(table, patterns, fallbackCount = 5) {
-  if (!table) {
+  if (!table || isCredentialOrConfigurationTable(table)) {
     return [];
   }
 
+  const safeColumns = table.columns.filter((column) => !isSensitiveColumnName(column.name));
   const selected = [];
   patterns.forEach((pattern) => {
-    const match = table.columns.find(
+    const match = safeColumns.find(
       (column) => pattern.test(column.name) && !selected.some((existing) => existing.name === column.name),
     );
     if (match) {
@@ -1244,7 +1371,7 @@ function chooseColumns(table, patterns, fallbackCount = 5) {
     }
   });
 
-  table.columns.slice(0, fallbackCount).forEach((column) => {
+  safeColumns.slice(0, fallbackCount).forEach((column) => {
     if (!selected.some((existing) => existing.name === column.name)) {
       selected.push(column);
     }
@@ -1299,7 +1426,7 @@ export function buildGeneratedReportingExamples(version) {
   const statusColumn = taskTable?.columns.find((column) => /status|state/i.test(column.name));
   const taskDateColumn = taskTable?.columns.find((column) => /updated|modified|created|date/i.test(column.name));
 
-  return [
+  const examples = [
     {
       title: 'List processes',
       tables: ['dbo.cf_business_processes'],
@@ -1339,7 +1466,7 @@ export function buildGeneratedReportingExamples(version) {
     {
       title: 'List users',
       tables: ['dbo.cf_users', 'dbo.cf_usergroups', 'dbo.cf_roles'],
-      available: Boolean(userTable),
+      available: Boolean(userTable && userColumns.length),
       sql: userTable
         ? `SELECT TOP (100)\n${selectList(userColumns, 'u')}\nFROM ${quoteTableKey(userTable.key)} AS u\nORDER BY 1;`
         : '',
@@ -1349,17 +1476,27 @@ export function buildGeneratedReportingExamples(version) {
           : 'User table exists, but expected group or role tables were not found in this snapshot.',
     },
   ];
+
+  assertGeneratedReportingExamplesSafe(version, examples, 'product-level generated reporting examples');
+  return examples;
 }
 
 export function buildTableReportingExamples(version, tableKey) {
   const table = getTableByKey(version, tableKey);
-  if (!table) {
+  if (!table || isCredentialOrConfigurationTable(table)) {
     return [];
   }
 
   const displayColumns = chooseColumns(table, [/name/i, /title/i, /status/i, /type/i, /date/i, /id$|guid$|uuid$/i], 6);
-  const dateColumn = table.columns.find((column) => /date|time|created|modified|updated/i.test(column.name));
-  const statusColumn = table.columns.find((column) => /status|state|type/i.test(column.name));
+  if (displayColumns.length === 0) {
+    return [];
+  }
+  const dateColumn = table.columns.find(
+    (column) => !isSensitiveColumnName(column.name) && /date|time|created|modified|updated/i.test(column.name),
+  );
+  const statusColumn = table.columns.find(
+    (column) => !isSensitiveColumnName(column.name) && /status|state|type/i.test(column.name),
+  );
   const examples = [
     {
       title: 'Inspect representative rows',
@@ -1384,5 +1521,6 @@ export function buildTableReportingExamples(version, tableKey) {
     });
   }
 
+  assertGeneratedReportingExamplesSafe(version, examples, `generated reporting examples for ${table.key}`, [table.key]);
   return examples;
 }

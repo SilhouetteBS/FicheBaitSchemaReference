@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { getErrorBoundaryFallback } from '../src/components/errorBoundaryFallback.js';
+import { buildCorrectionIssueUrl } from '../src/data/correctionIssue.js';
 import {
   comparisonToCsv,
   relationshipsToCsv,
@@ -12,8 +13,17 @@ import {
 import { buildDatabaseDiagram } from '../src/data/diagram.js';
 import { getEdgeGeometry } from '../src/data/diagramGeometry.js';
 import { buildSchemaProduct, compareVersions, validateSchemaSnapshot } from '../src/data/schemaDictionary.js';
-import { localNotesToVersionNotes } from '../src/data/notes.js';
-import { buildGeneratedReportingExamples, getReportingPaths } from '../src/data/reporting.js';
+import { isLocalNoteDifferent, localNotesToVersionNotes } from '../src/data/notes.js';
+import {
+  assertGeneratedReportingExamplesSafe,
+  buildGeneratedCandidateSql,
+  buildGeneratedReportingExamples,
+  buildTableReportingExamples,
+  getReportingPaths,
+  isCredentialOrConfigurationTable,
+  isSensitiveColumnName,
+  loadGeneratedCommunityReportingPatterns,
+} from '../src/data/reporting.js';
 import {
   getDependencyResolutionItems,
   getReviewItems,
@@ -29,7 +39,7 @@ import {
   getTableCompletionBySchema,
   getVersionTrendRows,
 } from '../src/data/schemaCompleteness.js';
-import { buildUrlStatePath, readUrlState } from '../src/data/urlState.js';
+import { buildUrlStatePath, readUrlState, writeUrlState } from '../src/data/urlState.js';
 import { validateData, validateDataReport } from './validate-data.mjs';
 import { validateAllNotes, validateNotesObject } from './validate-notes.mjs';
 import { normalizeSchema, runImport } from './import-forms-metadata.mjs';
@@ -109,9 +119,48 @@ const minimalExport = readJson('tools/fixtures/minimal-export.json');
 const product = buildSchemaProduct([forms11, forms12]);
 const latestVersion = product.versions.at(-1);
 
+const reviewNote = {
+  confidence: 'confirmed',
+  reviewStatus: 'approved',
+  owner: 'Documentation owner',
+  reviewer: 'Schema reviewer',
+  lastReviewedAt: '2026-07-19',
+  summary: 'Reviewed table purpose.',
+  safeReportingNotes: ['Use for SELECT-only reporting.'],
+  warnings: ['Validate against the selected version.'],
+};
+const exportedReviewNotes = localNotesToVersionNotes(
+  { 'forms:12.0': { 'dbo.example': reviewNote } },
+  'forms:12.0',
+  'forms',
+  '12.0',
+);
+assert.deepEqual(exportedReviewNotes.tables['dbo.example'], reviewNote, 'Notes export must preserve review metadata.');
+assert.equal(isLocalNoteDifferent(exportedReviewNotes.tables['dbo.example'], reviewNote), false);
+for (const [field, value] of [
+  ['reviewStatus', 'in_review'],
+  ['owner', 'Different owner'],
+  ['reviewer', 'Different reviewer'],
+  ['lastReviewedAt', '2026-07-18'],
+]) {
+  assert.equal(
+    isLocalNoteDifferent({ ...reviewNote, [field]: value }, reviewNote),
+    true,
+    `${field} changes must mark a local note as different.`,
+  );
+}
+
 assert.equal(product.id, 'forms');
 assert.equal(product.name, 'Forms');
 assert.equal(product.versions.length, 2);
+const documentedRelationship = latestVersion.tables
+  .flatMap((table) => table.relationships)
+  .find((relationship) => relationship.columns?.length > 0);
+assert.ok(documentedRelationship, 'Relationships must retain foreign-key column mappings.');
+assert.equal(typeof documentedRelationship.deleteAction, 'string');
+assert.equal(typeof documentedRelationship.updateAction, 'string');
+assert.equal(typeof documentedRelationship.isDisabled, 'boolean');
+assert.equal(typeof documentedRelationship.isNotTrusted, 'boolean');
 
 const comparison = compareVersions(product.versions[0], latestVersion);
 assert.ok(comparison.addedTables.length > 0);
@@ -144,6 +193,44 @@ const examples = buildGeneratedReportingExamples(latestVersion);
 assert.equal(examples.length, 4);
 assert.ok(examples.some((example) => example.available));
 assert.equal(examples.some((example) => /<process_|<status_/.test(example.sql)), false);
+assert.equal(examples.some((example) => /\[password\]/i.test(example.sql)), false);
+assert.equal(isSensitiveColumnName('password'), true);
+assert.equal(isSensitiveColumnName('refresh_token'), true);
+assert.equal(isSensitiveColumnName('tokenHash'), true);
+assert.equal(isSensitiveColumnName('authentication_key'), true);
+assert.equal(isSensitiveColumnName('authenticationKey'), true);
+assert.equal(isSensitiveColumnName('connectionString'), true);
+assert.equal(isSensitiveColumnName('display_name'), false);
+assert.equal(isCredentialOrConfigurationTable({ key: 'dbo.service_configuration' }), true);
+assert.equal(isCredentialOrConfigurationTable({ key: 'dbo.configValues' }), true);
+assert.equal(isCredentialOrConfigurationTable({ key: 'dbo.cf_users' }), false);
+assert.deepEqual(buildTableReportingExamples(latestVersion, 'dbo.cf_users').some((example) => /\[password\]/i.test(example.sql)), false);
+assert.deepEqual(buildTableReportingExamples(latestVersion, 'dbo.cf_lookup_tokens'), []);
+assert.throws(
+  () =>
+    assertGeneratedReportingExamplesSafe(latestVersion, [
+      {
+        title: 'Unsafe users example',
+        tables: ['dbo.cf_users'],
+        sql: 'SELECT [password] FROM [dbo].[cf_users];',
+      },
+    ]),
+  /Sensitive columns found.*dbo\.cf_users\.password/,
+);
+const inertCandidateSql = buildGeneratedCandidateSql({
+  title: 'Unsafe source excerpt',
+  product: 'forms',
+  tables: ['dbo.cf_users'],
+  confirmedVersions: ['12.0'],
+  answersLinks: [{ title: 'Source', url: 'https://answers.laserfiche.com/questions/1/example' }],
+  capturedExcerpt: 'DELETE FROM dbo.cf_users;\nGO\nEXEC dbo.some_procedure;',
+});
+assert.match(inertCandidateSql, /Source: https:\/\/answers\.laserfiche\.com\/questions\/1\/example/);
+assert.match(inertCandidateSql, /-- DELETE FROM dbo\.cf_users;\n-- GO\n-- EXEC dbo\.some_procedure;/);
+const generatedRepositoryPatterns = await loadGeneratedCommunityReportingPatterns('repository');
+assert.ok(generatedRepositoryPatterns.length > 0);
+assert.ok(generatedRepositoryPatterns.every((pattern) => pattern.tags.includes('Unreviewed source excerpt')));
+assert.ok(generatedRepositoryPatterns.every((pattern) => !pattern.tags.includes('Read-only')));
 
 const impactItems = getTableImpactItems(latestVersion);
 assert.ok(impactItems.length > 0);
@@ -389,6 +476,30 @@ assert.equal(
   ),
   '/app?keep=1&product=forms&version=12&view=diagram&diagramMode=focused&diagramEdges=foreignKey&diagramDepth=2&diagramZoom=1.25&diagramTypes=table%2Cview&diagramSecondHop=hidden&diagramConnectedOnly=true#top',
 );
+const historyCalls = [];
+const fakeHistory = {
+  pushState: (...args) => historyCalls.push(['push', ...args]),
+  replaceState: (...args) => historyCalls.push(['replace', ...args]),
+};
+writeUrlState(
+  { product: 'forms', version: '12', view: 'tables' },
+  { currentSearch: '', pathname: '/app/', hash: '', history: fakeHistory, mode: 'push' },
+);
+writeUrlState(
+  { product: 'forms', version: '12', view: 'tables', q: 'users' },
+  { currentSearch: '', pathname: '/app/', hash: '', history: fakeHistory },
+);
+assert.deepEqual(historyCalls.map(([method]) => method), ['push', 'replace']);
+
+const correctionIssueUrl = new URL(buildCorrectionIssueUrl({
+  productName: 'Forms',
+  version: '12',
+  view: 'Tables',
+  objectLabel: 'dbo.cf_users',
+  currentUrl: 'https://example.test/?table=dbo.cf_users',
+}));
+assert.equal(correctionIssueUrl.searchParams.get('template'), 'documentation-correction.yml');
+assert.equal(correctionIssueUrl.searchParams.get('schema_object'), 'dbo.cf_users');
 
 const notes = localNotesToVersionNotes(
   {

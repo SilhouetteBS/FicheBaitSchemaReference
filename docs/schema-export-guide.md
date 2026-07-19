@@ -109,4 +109,4 @@ The importer also creates separate `notes.json` placeholders when they do not al
 
 The export script reads SQL Server catalog metadata only. It does not query Laserfiche business table rows and does not modify the database.
 
-This documentation is for read-only reporting, troubleshooting, and education. Manually writing to or modifying Laserfiche product databases, tables, etc. will violate your Laserfiche Support plan and is not supported.
+This documentation supports read-only reporting, troubleshooting, and education. Direct modification of Laserfiche product databases is unsupported; consult your applicable license and support agreements. Validate changes in a test environment.

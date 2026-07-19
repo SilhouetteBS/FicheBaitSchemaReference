@@ -35,8 +35,16 @@ function assert(condition, message) {
 const html = await fetchText('./');
 assert(/FicheBait Schema Reference/i.test(html), 'Home page must include the app title.');
 assert(/Content-Security-Policy/i.test(html), 'Home page must include static CSP metadata.');
+assert(!/frame-ancestors/i.test(html),
+  'Home page must not claim meta-delivered frame-ancestors protection.');
 assert(!/Manual documentation notes|Import preview|Import locked|Drop export JSON files|Editing enabled/i.test(html),
   'Public HTML must not include editing or import UI strings.');
+
+const faviconPath = html.match(/<link[^>]+rel="icon"[^>]+href="([^"]+)"/i)?.[1];
+assert(Boolean(faviconPath), 'Home page must reference a favicon.');
+if (faviconPath) {
+  await fetchText(faviconPath);
+}
 
 const assetPaths = [...html.matchAll(/\b(?:src|href)="([^"]+\.(?:js|css))"/g)].map((match) => match[1]);
 assert(assetPaths.length > 0, 'Home page must reference built JavaScript or CSS assets.');
@@ -52,15 +60,20 @@ for (const product of products.products ?? []) {
   const manifest = await fetchJson(manifestPath);
   assert(Array.isArray(manifest.versions) && manifest.versions.length > 0,
     `${manifestPath} must contain version entries.`);
-  const latest = manifest.versions.at(-1);
-  const schemaPath = latest?.schemaUrl?.replace(/^\//, '') ?? '';
-  const notesPath = latest?.notesUrl?.replace(/^\//, '') ?? '';
-  const schema = await fetchJson(schemaPath);
-  await fetchJson(notesPath);
-  assert(schema.productKey === product.productKey,
-    `${schemaPath} productKey ${schema.productKey} must match manifest product ${product.productKey}.`);
-  assert(Array.isArray(schema.tables), `${schemaPath} must include a tables array.`);
+  for (const version of manifest.versions ?? []) {
+    const schemaPath = version?.schemaUrl?.replace(/^\//, '') ?? '';
+    const notesPath = version?.notesUrl?.replace(/^\//, '') ?? '';
+    const schema = await fetchJson(schemaPath);
+    await fetchJson(notesPath);
+    assert(schema.productKey === product.productKey,
+      `${schemaPath} productKey ${schema.productKey} must match manifest product ${product.productKey}.`);
+    assert(Array.isArray(schema.tables), `${schemaPath} must include a tables array.`);
+  }
 }
+
+const aiCatalog = await fetchJson('data/ai/catalog.json');
+assert(Array.isArray(aiCatalog.products) && aiCatalog.products.length > 0,
+  'AI catalog must contain product entries.');
 
 if (failures.length > 0) {
   console.error('Deployed site verification failed:');

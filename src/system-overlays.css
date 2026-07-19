@@ -15,9 +15,15 @@
 }
 
 .data-load-warning p {
+  flex: 1 1 auto;
   margin: 0;
   font-size: 13px;
   line-height: 1.4;
+}
+
+.data-load-warning .icon-button {
+  flex: 0 0 auto;
+  margin-left: auto;
 }
 
 .command-overlay {
@@ -75,7 +81,7 @@
 }
 
 .command-results span {
-  color: var(--accent);
+  color: #075fcf;
   font-size: 11px;
   font-weight: 850;
   text-transform: uppercase;

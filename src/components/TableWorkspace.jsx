@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   AlertTriangle,
   Download,
@@ -21,6 +21,15 @@ import { ConfidenceBadge } from './ConfidenceBadge.jsx';
 const ManualNotesEditor = appConfig.editingEnabled
   ? lazy(() => import('./ManualNotesEditor.jsx').then((module) => ({ default: module.ManualNotesEditor })))
   : null;
+
+const tableDetailTabs = [
+  ['columns', 'Columns'],
+  ['keys', 'Keys'],
+  ['indexes', 'Indexes'],
+  ['relationships', 'Relationships'],
+  ['scripts', 'Scripts'],
+  ['notes', 'Notes'],
+];
 
 function getReviewAgeWarning(table) {
   if (!table.lastReviewedAt) {
@@ -64,6 +73,7 @@ export function TableWorkspace({
   onSetTableNotesFilter,
   onToggleFavoriteObject,
   onOpenReportingScript,
+  onRequestVersionHistory,
   visibleRelationships,
   relationshipFilter,
   setRelationshipFilter,
@@ -73,6 +83,8 @@ export function TableWorkspace({
   const [columnQuery, setColumnQuery] = useState('');
   const [tableDensity, setTableDensity] = useState('comfortable');
   const [activeContextPanel, setActiveContextPanel] = useState('');
+  const tabIdPrefix = useId().replaceAll(':', '');
+  const tabRefs = useRef([]);
   const reviewAgeWarning = getReviewAgeWarning(selectedTable);
   const relatedObjects = useMemo(() => getRelatedObjectItems(version, selectedTable.id), [selectedTable.id, version]);
   const tableStability = useMemo(() => getTableStability(version, selectedTable.id), [selectedTable.id, version]);
@@ -134,6 +146,40 @@ export function TableWorkspace({
     scripts: tableReportingScripts.length,
     notes: selectedTable.hasManualNotes || editingEnabled ? 1 : 0,
   };
+  const activeTabId = `${tabIdPrefix}-tab-${activeTableTab}`;
+  const activePanelId = `${tabIdPrefix}-panel-${activeTableTab}`;
+  const activePanelProps = {
+    'aria-labelledby': activeTabId,
+    id: activePanelId,
+    role: 'tabpanel',
+    tabIndex: 0,
+  };
+
+  function handleTabKeyDown(event, currentIndex) {
+    let nextIndex;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      nextIndex = (currentIndex + 1) % tableDetailTabs.length;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      nextIndex = (currentIndex - 1 + tableDetailTabs.length) % tableDetailTabs.length;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = tableDetailTabs.length - 1;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    setActiveTableTab(tableDetailTabs[nextIndex][0]);
+    tabRefs.current[nextIndex]?.focus();
+  }
+
+  function handleContextPanelChange(nextPanel) {
+    if ((nextPanel === 'stability' || nextPanel === 'trend') && nextPanel !== activeContextPanel) {
+      onRequestVersionHistory?.();
+    }
+    setActiveContextPanel(nextPanel);
+  }
 
   return (
     <div className="content-grid table-content-grid">
@@ -159,7 +205,12 @@ export function TableWorkspace({
         {favoriteObjects.length > 0 && (
           <div className="favorite-object-list" aria-label="Pinned objects">
             {favoriteObjects.map((objectKey) => (
-              <button key={objectKey} type="button" onClick={() => onSelectTable(objectKey)}>
+              <button
+                aria-current={objectKey === selectedTable.id ? 'page' : undefined}
+                key={objectKey}
+                type="button"
+                onClick={() => onSelectTable(objectKey)}
+              >
                 <Star size={12} />
                 {objectKey}
               </button>
@@ -213,7 +264,12 @@ export function TableWorkspace({
               >
                 <Star size={12} fill={favoriteObjects.includes(table.id) ? 'currentColor' : 'none'} />
               </button>
-              <button className="table-item-main" type="button" onClick={() => onSelectTable(table.id)}>
+              <button
+                aria-current={table.id === selectedTable.id ? 'page' : undefined}
+                className="table-item-main"
+                type="button"
+                onClick={() => onSelectTable(table.id)}
+              >
                 <span className="table-item-name" title={table.name}>{table.name}</span>
                 <span className="table-item-badges">
                   {table.hasManualNotes && <span className="notes-dot" title="Manual notes present">Notes</span>}
@@ -298,48 +354,52 @@ export function TableWorkspace({
             tableStability={tableStability}
             tableVersionTrend={tableVersionTrend}
             navigateToTable={navigateToTable}
-            onActivePanelChange={setActiveContextPanel}
+            onActivePanelChange={handleContextPanelChange}
           />
         </section>
 
-        <nav className="table-detail-tabs" aria-label="Table detail sections">
-          {[
-            ['columns', 'Columns'],
-            ['keys', 'Keys'],
-            ['indexes', 'Indexes'],
-            ['relationships', 'Relationships'],
-            ['scripts', 'Scripts'],
-            ['notes', 'Notes'],
-          ].map(([value, label]) => (
+        <div className="table-detail-tabs" aria-label="Table detail sections" role="tablist">
+          {tableDetailTabs.map(([value, label], index) => (
             <button
+              aria-controls={`${tabIdPrefix}-panel-${value}`}
+              aria-selected={activeTableTab === value}
               className={activeTableTab === value ? 'selected' : ''}
+              id={`${tabIdPrefix}-tab-${value}`}
               key={value}
               onClick={() => setActiveTableTab(value)}
+              onKeyDown={(event) => handleTabKeyDown(event, index)}
+              ref={(element) => {
+                tabRefs.current[index] = element;
+              }}
+              role="tab"
+              tabIndex={activeTableTab === value ? 0 : -1}
               type="button"
             >
               {label} <span>{tabCounts[value]}</span>
             </button>
           ))}
-        </nav>
+        </div>
 
         {activeTableTab === 'notes' && editingEnabled && ManualNotesEditor && (
-          <Suspense fallback={null}>
-            <ManualNotesEditor
-              localNote={localNote}
-              localNotesKey={localNotesKey}
-              localNoteChanged={localNoteChanged}
-              selectedTable={selectedTable}
-              onExportLocalNotes={onExportLocalNotes}
-              onExportVersionNotes={onExportVersionNotes}
-              onImportLocalNotes={onImportLocalNotes}
-              onClear={onClearLocalNote}
-              onSave={onSaveLocalNote}
-            />
-          </Suspense>
+          <div {...activePanelProps}>
+            <Suspense fallback={null}>
+              <ManualNotesEditor
+                localNote={localNote}
+                localNotesKey={localNotesKey}
+                localNoteChanged={localNoteChanged}
+                selectedTable={selectedTable}
+                onExportLocalNotes={onExportLocalNotes}
+                onExportVersionNotes={onExportVersionNotes}
+                onImportLocalNotes={onImportLocalNotes}
+                onClear={onClearLocalNote}
+                onSave={onSaveLocalNote}
+              />
+            </Suspense>
+          </div>
         )}
 
         {activeTableTab === 'notes' && !editingEnabled && (
-          <section className="metadata-list table-notes-readonly">
+          <section className="metadata-list table-notes-readonly" {...activePanelProps}>
             <div className="section-title-row">
               <h3>Manual notes</h3>
               <span>{selectedTable.reviewStatus ?? (selectedTable.hasManualNotes ? 'Available' : 'Pending')}</span>
@@ -355,7 +415,7 @@ export function TableWorkspace({
         )}
 
         {activeTableTab === 'keys' && (
-          <section className="metadata-panels metadata-panels-single">
+          <section className="metadata-panels metadata-panels-single" {...activePanelProps}>
             <MetadataList
               title="Keys"
               items={selectedTable.keys}
@@ -372,7 +432,7 @@ export function TableWorkspace({
         )}
 
         {activeTableTab === 'indexes' && (
-          <section className="metadata-panels metadata-panels-single">
+          <section className="metadata-panels metadata-panels-single" {...activePanelProps}>
             <MetadataList
               title="Indexes"
               items={selectedTable.indexes}
@@ -401,7 +461,7 @@ export function TableWorkspace({
         )}
 
         {activeTableTab === 'relationships' && (
-          <section className="table-relationship-tab">
+          <section className="table-relationship-tab" {...activePanelProps}>
             <div className="section-title-row">
               <h3>Relationships</h3>
               <GitBranch size={18} />
@@ -433,6 +493,7 @@ export function TableWorkspace({
                     {relationship.table}
                   </button>
                   <p>{relationship.note}</p>
+                  <RelationshipMetadata relationship={relationship} selectedTable={selectedTable} />
                   <ConfidenceBadge value={relationship.confidence} />
                 </div>
               ))}
@@ -441,7 +502,7 @@ export function TableWorkspace({
         )}
 
         {activeTableTab === 'scripts' && (
-          <section className="metadata-list table-scripts-tab">
+          <section className="metadata-list table-scripts-tab" {...activePanelProps}>
             <div className="section-title-row">
               <h3>Related scripts</h3>
               <span>{tableReportingScripts.length}</span>
@@ -451,7 +512,7 @@ export function TableWorkspace({
         )}
 
         {activeTableTab === 'columns' && (
-          <section className="columns-section">
+          <section className="columns-section" {...activePanelProps}>
             <div className="section-title-row">
               <h3>Columns</h3>
               <span>{filteredColumns.length} columns</span>
@@ -525,6 +586,56 @@ export function TableWorkspace({
           </section>
         )}
       </article>
+    </div>
+  );
+}
+
+function getRelationshipForeignKey(relationship, selectedTable) {
+  if (relationship.foreignKey) {
+    return relationship.foreignKey;
+  }
+
+  const candidates = relationship.type === 'references'
+    ? selectedTable.source?.outgoingForeignKeys
+    : selectedTable.source?.incomingForeignKeys;
+  const relationshipName = relationship.name
+    ?? relationship.constraintName
+    ?? relationship.note?.match(/^SQL foreign key (.+)\.$/)?.[1];
+
+  return (candidates ?? []).find((foreignKey) => {
+    const relatedTable = relationship.type === 'references'
+      ? foreignKey.referencedTableKey
+      : foreignKey.sourceTableKey;
+    return relatedTable === relationship.table && (!relationshipName || foreignKey.name === relationshipName);
+  });
+}
+
+function RelationshipMetadata({ relationship, selectedTable }) {
+  const foreignKey = getRelationshipForeignKey(relationship, selectedTable) ?? relationship;
+  const columns = foreignKey.columns ?? relationship.columnMappings ?? [];
+  const mappings = columns.map((column) => {
+    const source = column.sourceColumnName ?? column.parentColumnName ?? column.sourceColumn;
+    const target = column.referencedColumnName ?? column.targetColumnName ?? column.referencedColumn;
+    return source && target ? `${source} -> ${target}` : '';
+  }).filter(Boolean);
+  const actions = [
+    foreignKey.updateAction && `Update: ${foreignKey.updateAction}`,
+    foreignKey.deleteAction && `Delete: ${foreignKey.deleteAction}`,
+  ].filter(Boolean);
+  const states = [
+    foreignKey.isDisabled && 'Disabled',
+    foreignKey.isNotTrusted && 'Untrusted',
+  ].filter(Boolean);
+
+  if (mappings.length === 0 && actions.length === 0 && states.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="relationship-metadata">
+      {mappings.length > 0 && <code>{mappings.join(', ')}</code>}
+      {actions.length > 0 && <span>{actions.join(' | ')}</span>}
+      {states.length > 0 && <strong>{states.join(', ')}</strong>}
     </div>
   );
 }

@@ -10,9 +10,10 @@ FicheBait Schema Reference contributions should be reviewed before they are copi
 4. Export `notes.json` from the app.
 5. Submit the exported notes through a GitHub Issue for review before publishing.
 
-Community submissions are issue-only. Do not open pull requests. Maintainers
-review issue attachments or pasted Markdown/JSON, then make any repository
-changes themselves.
+Community submissions are issue-only. Do not open pull requests. Documentation
+corrections may include non-sensitive proposed wording in an issue. Never attach
+or paste raw schema exports in a public issue. Maintainers provide private intake
+instructions after triage and make repository changes themselves.
 
 Proposed documentation notes may be submitted as:
 
@@ -31,12 +32,20 @@ Review status should move through:
 
 ## Schema Exports
 
-Schema exports must be metadata only. Do not submit table row data, customer names, record values, document metadata values, or database names.
+Schema exports must be generated with the current sanitized export script. Do
+not submit table row data, customer names, record values, document metadata
+values, database names, source IDs, row counts, schema owners, object dates,
+extended descriptions, or SQL module bodies.
+
+The public issue contains only product/version information and the completed
+privacy checklist. Transfer the sanitized JSON package through the private
+channel supplied by a maintainer. Never attach raw or sanitized JSON exports to
+the public issue.
 
 Submitted exports should move through this maintainer review path before they
 are imported:
 
-1. `Submitted`: issue opened with product, version, and expected JSON files.
+1. `Submitted`: issue opened with product, version, and expected file checklist; no exports attached.
 2. `Privacy review`: confirm files contain schema metadata only.
 3. `Validated`: import preview has no errors and warnings are understood.
 4. `Imported`: static data files are generated locally.
@@ -65,4 +74,7 @@ If a submitted product/version already exists, treat it as a replacement request
 
 ## Export Script Compatibility
 
-Use `docs/sql-server-schema-export.sql` with SQL Server 2016 or newer. The script relies on `FOR JSON` output and SQL Server catalog views. It reads metadata only and does not modify Laserfiche databases.
+Use the current `docs/sql-server-schema-export.sql` with SQL Server 2016 or
+newer. The script relies on `FOR JSON` output and SQL Server catalog views. It
+reads metadata only, omits restricted submission fields and SQL module bodies,
+and does not modify Laserfiche databases.

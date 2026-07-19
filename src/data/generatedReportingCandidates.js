@@ -19,7 +19,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -57,7 +57,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -94,7 +94,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -133,7 +133,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -172,7 +172,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -209,7 +209,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -246,7 +246,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -289,7 +289,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -328,7 +328,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -368,7 +368,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -405,7 +405,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -444,7 +444,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -481,7 +481,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -519,7 +519,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -556,7 +556,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -593,7 +593,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -631,7 +631,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -668,7 +668,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -708,7 +708,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -746,7 +746,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -785,7 +785,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -823,7 +823,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -861,7 +861,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -898,7 +898,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -935,7 +935,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -974,7 +974,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1011,7 +1011,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1049,7 +1049,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1086,7 +1086,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1123,7 +1123,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1160,7 +1160,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1198,7 +1198,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1238,7 +1238,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1275,7 +1275,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1315,7 +1315,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1353,7 +1353,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1390,7 +1390,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1428,7 +1428,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1467,7 +1467,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1504,7 +1504,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1543,7 +1543,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1581,7 +1581,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1619,7 +1619,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1657,7 +1657,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1695,7 +1695,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1734,7 +1734,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1773,7 +1773,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1812,7 +1812,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1849,7 +1849,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1887,7 +1887,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1925,7 +1925,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -1963,7 +1963,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2001,7 +2001,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2041,7 +2041,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2079,7 +2079,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2119,7 +2119,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2159,7 +2159,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2198,7 +2198,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2235,7 +2235,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2273,7 +2273,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2311,7 +2311,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2351,7 +2351,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2389,7 +2389,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2428,7 +2428,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2465,7 +2465,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2503,7 +2503,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2543,7 +2543,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2581,7 +2581,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2619,7 +2619,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2659,7 +2659,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2701,7 +2701,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2739,7 +2739,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2777,7 +2777,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2815,7 +2815,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2853,7 +2853,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2891,7 +2891,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2932,7 +2932,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -2969,7 +2969,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3007,7 +3007,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3047,7 +3047,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3088,7 +3088,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3127,7 +3127,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3169,7 +3169,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3208,7 +3208,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3246,7 +3246,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3284,7 +3284,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3322,7 +3322,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3360,7 +3360,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3398,7 +3398,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3438,7 +3438,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3476,7 +3476,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3515,7 +3515,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3552,7 +3552,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {
@@ -3590,7 +3590,7 @@ export const generatedReportingCandidates = {
         "Schema matched",
         "Not live tested",
         "Needs review",
-        "Read-only"
+        "Unreviewed source excerpt"
       ],
       "answersLinks": [
         {

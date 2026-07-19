@@ -26,7 +26,7 @@ const result = {
   h1: await page.locator('h1').innerText(),
   tableHeading: await page.locator('.detail-heading h2').innerText(),
   hasSupportWarning: (await page.locator('.warning-banner').innerText()).includes(
-    'Laserfiche Support plan',
+    'consult your applicable license and support agreements',
   ),
   columnRows: await page.locator('.columns-table .table-row').count(),
 };

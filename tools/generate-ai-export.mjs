@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildSchemaProduct } from '../src/data/schemaDictionary.js';
 import {
+  assertGeneratedReportingExamplesSafe,
   buildGeneratedReportingExamples,
   buildTableReportingExamples,
   getReportingPaths,
@@ -16,7 +17,7 @@ const publicDataRoot = path.join(repoRoot, 'public', 'data');
 const outputRoots = [path.join(sourceDataRoot, 'ai'), path.join(publicDataRoot, 'ai')];
 
 const supportWarning =
-  'This documentation is for read-only reporting, troubleshooting, and education. Manually writing to or modifying Laserfiche product databases, tables, etc. will violate your Laserfiche Support plan and is not supported.';
+  'This documentation supports read-only reporting, troubleshooting, and education. Direct modification of Laserfiche product databases is unsupported; consult your applicable license and support agreements. Validate changes in a test environment.';
 
 const aiRules = [
   'Generate read-only SQL by default.',
@@ -118,6 +119,15 @@ function summarizeVersion(schema, notes, versionDictionary) {
   );
   const totalColumns = schema.tables.reduce((total, table) => total + table.columns.length, 0);
 
+  const generatedReportingExamples = buildGeneratedReportingExamples(versionDictionary).filter(
+    (example) => example.available,
+  );
+  assertGeneratedReportingExamplesSafe(
+    versionDictionary,
+    generatedReportingExamples,
+    `${schema.productKey} ${schema.productVersion} AI summary`,
+  );
+
   return {
     productKey: schema.productKey,
     productName: schema.productName,
@@ -140,7 +150,7 @@ function summarizeVersion(schema, notes, versionDictionary) {
     },
     reportingPaths: getReportingPaths(schema.productKey),
     reportingQuestions: getReportingQuestions(schema.productKey),
-    generatedReportingExamples: buildGeneratedReportingExamples(versionDictionary).filter((example) => example.available),
+    generatedReportingExamples,
   };
 }
 
@@ -150,6 +160,14 @@ function tableRows(schema, notes, versionDictionary) {
     const tableNotes = getTableNotes(notes, table.key);
     const dictionaryTable = dictionaryTables.get(table.key);
     const primaryKeyColumns = getPrimaryKeyColumns(table);
+    const reportingExamples = buildTableReportingExamples(versionDictionary, table.key);
+    assertGeneratedReportingExamplesSafe(
+      versionDictionary,
+      reportingExamples,
+      `${schema.productKey} ${schema.productVersion} ${table.key} AI table examples`,
+      [table.key],
+    );
+
     return {
       productKey: schema.productKey,
       productName: schema.productName,
@@ -183,7 +201,7 @@ function tableRows(schema, notes, versionDictionary) {
       incomingForeignKeys: table.incomingForeignKeys ?? [],
       triggers: table.triggers ?? [],
       relationshipSummary: dictionaryTable?.relationships ?? [],
-      reportingExamples: buildTableReportingExamples(versionDictionary, table.key),
+      reportingExamples,
     };
   });
 }

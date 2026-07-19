@@ -9,6 +9,9 @@ Use this runbook to keep the public FicheBait Schema Reference useful, safe, and
 - Do not ask users to attach row data, screenshots of production records, database names, server names, credentials, or connection strings.
 - Ask schema contributors to identify product, product version, export date, and which expected JSON files are included.
 - Ask documentation contributors to provide product, version, object, current wording, proposed wording, and non-sensitive source context.
+- Never accept raw or sanitized schema files through public Issue attachments or
+  public download links. Use the public issue for metadata-only triage, then
+  provide private intake instructions for sanitized output.
 
 ## Maintainer Triage
 
@@ -27,6 +30,9 @@ Use this runbook to keep the public FicheBait Schema Reference useful, safe, and
 5. Reject exports that use SQL Server database names as product identity.
 6. Treat duplicate product/version submissions as replacement requests.
 7. Run the Import tab in an editing-enabled local build before copying files into `public/data`.
+8. Confirm the package was produced by the current sanitized export script and
+   contains no source IDs, row counts, owner names, object dates, extended
+   descriptions, or SQL module bodies.
 
 ## Documentation Review
 
@@ -37,6 +43,11 @@ Use this runbook to keep the public FicheBait Schema Reference useful, safe, and
 - Use `Do not rely` for columns that should not be used in reports.
 
 ## Release Validation
+
+Do not publish bundled Laserfiche schema snapshots until the written-publication
+authorization gate in `docs/production-readiness.md` is satisfied. The project
+currently records that authorization as unresolved; do not infer permission
+from prior publication.
 
 Run the focused checks for small documentation changes:
 

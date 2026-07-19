@@ -11,7 +11,7 @@ Accepted schema exports may include:
 - Table names and column definitions
 - Primary keys, unique keys, foreign keys, and indexes
 - View, routine, trigger, and dependency metadata
-- Optional definition hashes
+- Definition hashes, but not SQL module definition bodies
 
 ## Not Collected
 
@@ -25,6 +25,12 @@ Do not submit:
 - SQL Server server names
 - SQL Server version, compatibility level, file paths, or instance configuration
 - Credentials, connection strings, screenshots of records, or private notes
+- Source schema, object, or index IDs
+- Table row-count estimates
+- Schema owner names
+- Object creation or modification dates
+- SQL extended-property descriptions
+- View, routine, function, or trigger definition bodies
 
 ## Why Database Names Are Excluded
 
@@ -40,11 +46,16 @@ Schema export submissions should be reviewed before publishing. If a file contai
 
 Use `docs/privacy-review-checklist.md` for maintainer review before importing or publishing a submission.
 
-## Issue Attachments
+## Submission Boundary
 
-Community submissions are handled through GitHub Issues only. If an issue
-attachment contains sensitive data, remove or hide the public issue content as
-quickly as possible and ask the submitter to regenerate a metadata-only export.
+Never attach raw or sanitized schema exports to a public GitHub Issue. Open an
+issue with product/version information only. A maintainer will provide private
+intake instructions after triage. Only output from the current sanitized export
+script is eligible for transfer.
+
+If export data is accidentally posted publicly, remove or hide it as quickly as
+possible, treat it as potentially disclosed, and ask the submitter to regenerate
+the package with the current script.
 
 Do not copy submitted files into `public/data` until:
 

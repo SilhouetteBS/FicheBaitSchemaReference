@@ -79,6 +79,6 @@ For SQL review:
 
 ## Safety Boundary
 
-This package is for read-only reporting, troubleshooting, and education. Manually writing to or modifying Laserfiche product databases, tables, etc. will violate your Laserfiche Support plan and is not supported.
+This package supports read-only reporting, troubleshooting, and education. Direct modification of Laserfiche product databases is unsupported; consult your applicable license and support agreements. Validate changes in a test environment.
 
 Generated views, stored procedures, indexes, staging tables, and helper tables should be placed in a separate reporting database unless there is a supported product-specific reason to do otherwise.
