@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">FicheBait Schema Reference</title>
+  <desc id="desc">Connected database tables representing the FicheBait Schema Reference.</desc>
+  <rect width="64" height="64" rx="14" fill="#0e3264"/>
+  <path d="M0 0h64v5H0z" fill="#e35205"/>
+  <path d="M23 27v18m0-9h19" fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="10" y="14" width="25" height="17" rx="3" fill="#1c73fe" stroke="#ffffff" stroke-width="2"/>
+  <rect x="10" y="42" width="25" height="15" rx="3" fill="#1c73fe" stroke="#ffffff" stroke-width="2"/>
+  <rect x="40" y="28" width="16" height="17" rx="3" fill="#e35205" stroke="#ffffff" stroke-width="2"/>
+  <path d="M15 20h15m-15 5h15m-15 23h15m-15 4h15m15-18h6m-6 5h6" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+</svg>

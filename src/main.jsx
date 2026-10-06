@@ -1228,11 +1228,10 @@ function App() {
     <main className="app-shell">
       <aside className="sidebar" aria-label="Product, version, and view navigation">
         <div className="brand">
-          <img className="brand-logo" src={`${import.meta.env.BASE_URL}fichebait-logo.png`} alt="FicheBait" />
-          <div>
-            <h1>FicheBait Schema Reference</h1>
-            <p>Schema, relationships, and reporting</p>
-          </div>
+          <h1>
+            <img className="brand-logo" src={`${import.meta.env.BASE_URL}fichebait-schema-reference-logo.svg`} alt="FicheBait Schema Reference" />
+          </h1>
+          <p>Schema, relationships, and reporting</p>
         </div>
 
         <section className="sidebar-section">
