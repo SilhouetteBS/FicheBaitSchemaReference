@@ -98,9 +98,9 @@ Use editing-enabled builds only for local or internal review. The public static 
 
 ## Deployment
 
-`.github/workflows/deploy-pages.yml` publishes the static `dist/` folder to GitHub Pages on pushes to `main` and on manual dispatch. The workflow runs `npm run verify:public-build` before upload so the deployed artifact remains read-only.
+Sites hosts the static `dist/` folder using the project identity in `.openai/hosting.json`. GitHub remains the source repository and issue tracker; `.github/workflows/ci.yml` validates changes without deploying a website.
 
-Before publishing publicly, follow `docs/production-readiness.md`. The public deployment workflow also runs a deployed-site smoke check against the GitHub Pages URL after deployment.
+For updates, validate locally, commit and push to GitHub, then publish the same source commit through Sites. Keep temporary Sites credentials and deployment archives out of Git. Before publishing publicly, follow `docs/production-readiness.md`.
 
 Public project pages:
 

@@ -53,7 +53,7 @@ assignees: ""
 - [ ] Required validation checks passed.
 - [ ] Public build artifact was reviewed before publishing.
 - [ ] Changes committed to `main`.
-- [ ] GitHub Pages deployment completed.
+- [ ] Sites deployment completed.
 - [ ] `SITE_URL=<final-url> npm run verify:deployed-site`
 - [ ] Hosted static paths work under the final base URL.
 

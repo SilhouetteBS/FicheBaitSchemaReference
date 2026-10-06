@@ -61,7 +61,7 @@ because browsers ignore it when delivered through a meta tag. Hosts that support
 HTTP response headers should send the full policy, including
 `frame-ancestors 'none'`.
 
-GitHub Pages is acceptable for the initial public static deployment when the public build checks pass. It does not support arbitrary response headers, so stricter header enforcement requires a host or CDN that can attach headers, such as Azure Static Web Apps, Cloudflare Pages, Netlify, or another reverse proxy in front of the static files.
+Sites hosts the static deployment. Verify the host's actual HTTP response headers before claiming that the recommended header baseline is enforced; the app's CSP meta tag alone does not enforce every header below.
 
 Recommended header baseline:
 

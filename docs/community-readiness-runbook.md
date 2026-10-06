@@ -67,7 +67,7 @@ npm run verify:public-build
 After deployment:
 
 ```powershell
-$env:SITE_URL='https://silhouettebs.github.io/FicheBaitSchemaReference/'
+$env:SITE_URL='https://fichebait-schema-reference.blake-smith365062.chatgpt.site/'
 npm run verify:deployed-site
 ```
 
@@ -97,7 +97,7 @@ npm run verify:deployed-site
 
 - Run `npm run verify:static-security` and `npm run audit:dependencies`.
 - Keep CSP meta tags in the static build.
-- Prefer a host or CDN that can add HTTP security headers when moving beyond GitHub Pages.
+- Verify HTTP security headers supported by the hosting platform.
 - Do not publish editing-enabled builds.
 
 ## AI Export Package

@@ -38,7 +38,7 @@ Laserfiche customer environments can name databases differently. Product and ver
 
 ## Public Site
 
-The public GitHub Pages site is static and read-only. Public builds should not include manual note editing or import UI.
+The hosted Sites application is static and read-only. Public builds should not include manual note editing or import UI.
 
 ## Review Boundary
 

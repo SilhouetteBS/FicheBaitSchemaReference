@@ -126,45 +126,31 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Build static artifact
-        run: VITE_BASE_PATH=/FicheBaitSchemaReference/ npm run build
-
-      - name: Mount Pages subpath
-        run: |
-          mkdir -p /tmp/lfdd-preview/FicheBaitSchemaReference
-          cp -R dist/. /tmp/lfdd-preview/FicheBaitSchemaReference/
+        run: npm run build
 
       - name: Start production preview
-        run: npm run preview -- --outDir /tmp/lfdd-preview --port 4177 --strictPort > /tmp/lfdd-vite.log 2>&1 &
+        run: npm run preview -- --port 4177 --strictPort > /tmp/lfdd-vite.log 2>&1 &
 
       - name: Wait for app
         run: |
           for i in {1..30}; do
-            curl -fsS http://127.0.0.1:4177/FicheBaitSchemaReference/ >/dev/null && exit 0
+            curl -fsS http://127.0.0.1:4177/ >/dev/null && exit 0
             sleep 1
           done
           cat /tmp/lfdd-vite.log
           exit 1
 
       - name: Browser smoke test
-        run: APP_URL=http://127.0.0.1:4177/FicheBaitSchemaReference/ E2E_SCREENSHOT_DIR=artifacts/e2e npm run test:e2e
+        run: APP_URL=http://127.0.0.1:4177/ E2E_SCREENSHOT_DIR=artifacts/e2e npm run test:e2e
 
       - name: Accessibility audit
-        run: APP_URL=http://127.0.0.1:4177/FicheBaitSchemaReference/ ACCESSIBILITY_SCREENSHOT_DIR=artifacts/accessibility npm run audit:accessibility
+        run: APP_URL=http://127.0.0.1:4177/ ACCESSIBILITY_SCREENSHOT_DIR=artifacts/accessibility npm run audit:accessibility
 
       - name: Runtime performance budget
-        run: APP_URL=http://127.0.0.1:4177/FicheBaitSchemaReference/ npm run audit:performance
+        run: APP_URL=http://127.0.0.1:4177/ npm run audit:performance
 
       - name: Diagram visual screenshots
-        run: APP_URL=http://127.0.0.1:4177/FicheBaitSchemaReference/ VISUAL_SCREENSHOT_DIR=artifacts/visual-regression npm run test:visual
-
-      - name: Upload verified Pages artifact
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        with:
-          name: pages-dist-${{ github.sha }}
-          path: dist/
-          if-no-files-found: error
-          retention-days: 7
+        run: APP_URL=http://127.0.0.1:4177/ VISUAL_SCREENSHOT_DIR=artifacts/visual-regression npm run test:visual
 
       - name: Upload failed e2e screenshots
         if: failure()
