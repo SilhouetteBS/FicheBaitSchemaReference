@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": "1.0",
-  "sourceSnapshotMaxExportedAtUtc": "2026-10-09T21:30:36",
+  "sourceSnapshotMaxExportedAtUtc": "2026-10-09T21:46:34",
   "purpose": "Machine-readable FicheBait Schema Reference export for AI-assisted read-only SQL generation and review.",
   "supportWarning": "This documentation supports read-only reporting, troubleshooting, and education. Direct modification of Laserfiche product databases is unsupported; consult your applicable license and support agreements. Validate changes in a test environment.",
   "aiRules": [
@@ -168,7 +168,7 @@
     {
       "productKey": "lfds",
       "productName": "LFDS",
-      "defaultVersion": "12.0.2603.369",
+      "defaultVersion": "12.0.2607.421",
       "versions": [
         {
           "version": "11.0.2403.2474",
@@ -298,6 +298,32 @@
             "objects": "/data/ai/lfds/12.0.2603.369/objects.jsonl",
             "dependencies": "/data/ai/lfds/12.0.2603.369/dependencies.jsonl",
             "queryContext": "/data/ai/lfds/12.0.2603.369/query-context.md"
+          }
+        },
+        {
+          "version": "12.0.2607.421",
+          "label": "LFDS 12.0.2607.421",
+          "counts": {
+            "schemas": 11,
+            "tables": 112,
+            "columns": 600,
+            "foreignKeys": 85,
+            "indexes": 216,
+            "views": 0,
+            "routines": 24,
+            "triggers": 0,
+            "dependencies": 37,
+            "notedTables": 112,
+            "notedColumns": 600
+          },
+          "files": {
+            "summary": "/data/ai/lfds/12.0.2607.421/summary.json",
+            "tables": "/data/ai/lfds/12.0.2607.421/tables.jsonl",
+            "columns": "/data/ai/lfds/12.0.2607.421/columns.jsonl",
+            "relationships": "/data/ai/lfds/12.0.2607.421/relationships.jsonl",
+            "objects": "/data/ai/lfds/12.0.2607.421/objects.jsonl",
+            "dependencies": "/data/ai/lfds/12.0.2607.421/dependencies.jsonl",
+            "queryContext": "/data/ai/lfds/12.0.2607.421/query-context.md"
           }
         }
       ]

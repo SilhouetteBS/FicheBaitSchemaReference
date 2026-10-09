@@ -50,6 +50,7 @@ This documentation supports read-only reporting, troubleshooting, and education.
 - LFDS (lfds) 12.0.2510.261
 - LFDS (lfds) 12.0.2511.289
 - LFDS (lfds) 12.0.2603.369
+- LFDS (lfds) 12.0.2607.421
 - Repository (repository) 11.0.2.338
 - Repository (repository) 12.0.1.237
 - Repository (repository) 12.0.2.343

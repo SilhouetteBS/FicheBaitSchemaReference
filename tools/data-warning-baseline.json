@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "totalWarnings": 4594,
+  "totalWarnings": 4686,
   "warningsByScope": {
     "forms 11.0.2311.50564": 193,
     "forms 12.0.2503.10378": 203,
@@ -12,6 +12,7 @@
     "lfds 12.0.2510.261": 94,
     "lfds 12.0.2511.289": 98,
     "lfds 12.0.2603.369": 96,
+    "lfds 12.0.2607.421": 92,
     "repository 11.0.2.338": 461,
     "repository 12.0.1.237": 461,
     "repository 12.0.2.343": 473,
