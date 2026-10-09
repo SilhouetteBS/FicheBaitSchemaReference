@@ -48,7 +48,7 @@ page.on('console', (message) => {
 
 await page.goto(appUrl, { waitUntil: 'networkidle' });
 assert.equal(await page.title(), 'FicheBait Schema Reference');
-assert.equal(await page.locator('h1').first().textContent(), 'FicheBait Schema Reference');
+assert.equal(await page.getByRole('heading', { name: 'FicheBait Schema Reference', level: 1, exact: true }).count(), 1);
 assert.equal(await page.getByRole('button', { name: 'Import', exact: true }).count(), 0);
 assert.equal(await page.locator('.snapshot-details').count(), 0);
 assert.equal(await page.getByRole('button', { name: 'Metadata details', exact: true }).getAttribute('aria-expanded'), 'false');
