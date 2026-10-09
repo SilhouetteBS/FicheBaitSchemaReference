@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": "1.0",
-  "sourceSnapshotMaxExportedAtUtc": "2026-06-24T22:09:10",
+  "sourceSnapshotMaxExportedAtUtc": "2026-10-09T21:30:36",
   "purpose": "Machine-readable FicheBait Schema Reference export for AI-assisted read-only SQL generation and review.",
   "supportWarning": "This documentation supports read-only reporting, troubleshooting, and education. Direct modification of Laserfiche product databases is unsupported; consult your applicable license and support agreements. Validate changes in a test environment.",
   "aiRules": [
@@ -31,7 +31,7 @@
     {
       "productKey": "forms",
       "productName": "Forms",
-      "defaultVersion": "12.0.2603.30215",
+      "defaultVersion": "12.0.2607.40137",
       "versions": [
         {
           "version": "11.0.2311.50564",
@@ -135,6 +135,32 @@
             "objects": "/data/ai/forms/12.0.2603.30215/objects.jsonl",
             "dependencies": "/data/ai/forms/12.0.2603.30215/dependencies.jsonl",
             "queryContext": "/data/ai/forms/12.0.2603.30215/query-context.md"
+          }
+        },
+        {
+          "version": "12.0.2607.40137",
+          "label": "Forms 12.0.2607.40137",
+          "counts": {
+            "schemas": 12,
+            "tables": 183,
+            "columns": 1338,
+            "foreignKeys": 274,
+            "indexes": 274,
+            "views": 4,
+            "routines": 30,
+            "triggers": 5,
+            "dependencies": 154,
+            "notedTables": 183,
+            "notedColumns": 1338
+          },
+          "files": {
+            "summary": "/data/ai/forms/12.0.2607.40137/summary.json",
+            "tables": "/data/ai/forms/12.0.2607.40137/tables.jsonl",
+            "columns": "/data/ai/forms/12.0.2607.40137/columns.jsonl",
+            "relationships": "/data/ai/forms/12.0.2607.40137/relationships.jsonl",
+            "objects": "/data/ai/forms/12.0.2607.40137/objects.jsonl",
+            "dependencies": "/data/ai/forms/12.0.2607.40137/dependencies.jsonl",
+            "queryContext": "/data/ai/forms/12.0.2607.40137/query-context.md"
           }
         }
       ]
