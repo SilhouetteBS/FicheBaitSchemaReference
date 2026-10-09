@@ -14,6 +14,10 @@ const forbiddenStrings = [
 ];
 
 function runPublicBuild() {
+  for (const script of ['sync-public-data.mjs', 'generate-ai-export.mjs']) {
+    const preparation = spawnSync(process.execPath, [join('tools', script)], { stdio: 'inherit' });
+    if (preparation.status !== 0) process.exit(preparation.status ?? 1);
+  }
   const viteEntrypoint = join(process.cwd(), 'node_modules', 'vite', 'bin', 'vite.js');
   const result = spawnSync(process.execPath, [viteEntrypoint, 'build'], {
     env: {

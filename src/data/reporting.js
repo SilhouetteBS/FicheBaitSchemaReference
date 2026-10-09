@@ -1,3 +1,5 @@
+export { getReportingQuestions, getReportingPaths, productReportingPaths } from './reportingGuidance.js';
+
 const reportingAssetLoaders = {
   'reporting/forms/forms-active-task-monitor.sql': () =>
     import('../../reporting/forms/forms-active-task-monitor.sql?raw').then((module) => module.default),
@@ -93,81 +95,6 @@ const reportingAssetLoaders = {
     import('../../reporting/workflow/workflow-definition-history-evidence.md?raw').then((module) => module.default),
 };
 
-export const productReportingPaths = {
-  forms: [
-    {
-      title: 'Process lifecycle',
-      summary: 'Start with business processes, then follow instances and submission records.',
-      tables: ['dbo.cf_business_processes', 'dbo.cf_bp_main_instances', 'dbo.cf_submissions'],
-    },
-    {
-      title: 'Form design to submitted values',
-      summary: 'Use form definitions and fields to orient submitted data tables before aggregating.',
-      tables: ['dbo.cf_forms', 'dbo.cf_fields', 'dbo.cf_bp_data'],
-    },
-    {
-      title: 'Users, groups, and roles',
-      summary: 'Map user records through group membership and role assignment tables.',
-      tables: ['dbo.cf_users', 'dbo.cf_usergroups_users_mapping', 'dbo.cf_usergroups', 'dbo.cf_roles'],
-    },
-    {
-      title: 'Tasks, timers, and history',
-      summary: 'Use worker instance tables and history tables for queue and task-state reporting.',
-      tables: ['dbo.cf_bp_worker_instances', 'dbo.cf_bp_worker_instance_history', 'dbo.cf_bp_task_reminders'],
-    },
-  ],
-  lfds: [
-    {
-      title: 'Directory identities and providers',
-      summary: 'Start with directory objects, then add provider context and login details.',
-      tables: ['dbo.directory_objects', 'dbo.identity_providers', 'dbo.user_logins'],
-    },
-    {
-      title: 'User licenses',
-      summary: 'Use directory object SIDs to connect identity records to license assignments.',
-      tables: ['dbo.directory_objects', 'dbo.user_licenses', 'dbo.container_limits'],
-    },
-    {
-      title: 'SAML to Laserfiche SID mapping',
-      summary: 'Use SID mapping tables when reconciling federated users to Laserfiche identities.',
-      tables: ['dbo.saml_lf_sid_mappings', 'dbo.directory_objects', 'dbo.identity_providers'],
-    },
-  ],
-  repository: [
-    {
-      title: 'Repository entry inventory',
-      summary: 'Start from TOC entries, then add parent, volume, and template context.',
-      tables: ['dbo.toc', 'dbo.vol', 'dbo.propset'],
-    },
-    {
-      title: 'Field metadata and values',
-      summary: 'Use field definitions with property values to report entry metadata.',
-      tables: ['dbo.propdef', 'dbo.propval', 'dbo.toc'],
-    },
-    {
-      title: 'Document pages and electronic documents',
-      summary: 'Use entry and page tables to review page counts, image sizes, and text inventory.',
-      tables: ['dbo.toc', 'dbo.doc', 'dbo.vol'],
-    },
-  ],
-  workflow: [
-    {
-      title: 'Task queue diagnostics',
-      summary: 'Use queue and queue data tables to review retry state, queued work, and task payload size.',
-      tables: ['dbo.workflow_task_queue', 'dbo.workflow_task_queue_data'],
-    },
-    {
-      title: 'Search activity tracing',
-      summary: 'Connect search instance records to search entry records for current and logged activity.',
-      tables: ['dbo.search_instance', 'dbo.search_entry', 'dbo.search_instance_log', 'dbo.search_entry_log'],
-    },
-    {
-      title: 'Instance completion status',
-      summary: 'Use completion records for workflow instance completion and retry diagnostics.',
-      tables: ['dbo.instance_completion'],
-    },
-  ],
-};
 
 const repoBlobBaseUrl = 'https://github.com/SilhouetteBS/FicheBaitSchemaReference/blob/main';
 
@@ -188,7 +115,7 @@ export function buildGeneratedCandidateSql(pattern) {
 
   return [
     '/*',
-    `  Schema-verified Answers candidate: ${pattern.title}`,
+    `  Object-name-matched Answers candidate: ${pattern.title}`,
     '',
     '  This entry is a source candidate, not a finished reporting script.',
     '  The referenced object names were found in the imported Data Dictionary schemas,',
@@ -269,7 +196,7 @@ export const communityReportingPatterns = {
         'dbo.cf_user_snapshot',
         'dbo.cf_bp_steps',
       ],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Forms Instance Monitoring',
@@ -349,7 +276,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/forms/forms-field-value-instance-lookup-evidence.md',
       sourceCount: 5,
       tables: ['dbo.cf_bp_data', 'dbo.cf_submissions', 'dbo.cf_bp_main_instances', 'dbo.cf_fields'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'How do I find a specific form submission on my Forms database?',
@@ -369,7 +296,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/forms/forms-submission-volume-summary-evidence.md',
       sourceCount: 2,
       tables: ['dbo.cf_bp_main_instances', 'dbo.cf_business_processes', 'dbo.cf_submissions'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Top 10 Forms Submissions',
@@ -389,7 +316,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/forms/forms-user-group-inventory-evidence.md',
       sourceCount: 5,
       tables: ['dbo.cf_users', 'dbo.cf_usergroups_users_mapping', 'dbo.cf_usergroups'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Named users list',
@@ -466,7 +393,7 @@ export const communityReportingPatterns = {
         'dbo.cf_business_processes',
         'dbo.cf_form_process_mapping',
       ],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'SQL query for Form lookups',
@@ -542,7 +469,7 @@ export const communityReportingPatterns = {
         'dbo.cf_bp_processes',
         'dbo.cf_business_processes',
       ],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Validate PDF headers for Forms attachments',
@@ -598,7 +525,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/forms/forms-authenticated-participant-signup-evidence.md',
       sourceCount: 1,
       tables: ['dbo.cf_users_sign_up'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Creation date of a forms authenticated participant',
@@ -614,7 +541,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/forms/forms-session-diagnostics-evidence.md',
       sourceCount: 1,
       tables: ['dbo.cf_sessions', 'dbo.cf_session_variables', 'dbo.cf_users'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Forms SQL queries are consuming all the server resources',
@@ -639,7 +566,7 @@ export const communityReportingPatterns = {
         'dbo.container_limits',
         'dbo.saml_lf_sid_mappings',
       ],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Any ways to get Laserfiche Directory account lock status in batch?',
@@ -683,7 +610,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/lfds/lfds-directory-account-state-evidence.md',
       sourceCount: 3,
       tables: ['dbo.directory_objects', 'dbo.identity_providers', 'dbo.user_logins', 'dbo.group_membership'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Any ways to get Laserfiche Directory account lock status in batch?',
@@ -713,7 +640,7 @@ export const communityReportingPatterns = {
         'dbo.user_licenses',
         'dbo.user_logins',
       ],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'In Progress Forms Tasks',
@@ -759,7 +686,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/repository/repository-annotation-redaction-diagnostics-evidence.md',
       sourceCount: 2,
       tables: ['dbo.ann', 'dbo.annrect', 'dbo.doc', 'dbo.toc'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Redactions without Text',
@@ -779,7 +706,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/repository/repository-path-metadata-lookup-evidence.md',
       sourceCount: 18,
       tables: ['dbo.toc', 'dbo.doc', 'dbo.vol', 'dbo.propset', 'dbo.propdef', 'dbo.propval'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'How to mimic a repository search using a SQL query?',
@@ -839,7 +766,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/repository/repository-page-and-search-diagnostics-evidence.md',
       sourceCount: 10,
       tables: ['dbo.toc', 'dbo.doc', 'dbo.vol', 'dbo.active_doc'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Query to see how many pages in repository are in color and black & white?',
@@ -879,7 +806,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/repository/repository-query-compatibility-helpers-evidence.md',
       sourceCount: 8,
       tables: ['dbo.dboptions', 'dbo.toc', 'dbo.propval', 'dbo.propdef'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'LF Repository - SQL table details with table schema and dictionary',
@@ -931,7 +858,7 @@ export const communityReportingPatterns = {
         'dbo.trusted_group',
         'dbo.trusted_login',
       ],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Is there a way to find out the recycle bin size of a repository?',
@@ -997,7 +924,7 @@ export const communityReportingPatterns = {
         'dbo.search_error_log',
         'dbo.instance_completion',
       ],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Workflow activity search SQL error ambiguous column name',
@@ -1053,7 +980,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/workflow/workflow-wait-completion-diagnostics-evidence.md',
       sourceCount: 2,
       tables: ['dbo.wait_condition', 'dbo.instance_completion'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Connection pool timeout',
@@ -1109,7 +1036,7 @@ export const communityReportingPatterns = {
       evidencePath: 'reporting/workflow/workflow-definition-history-evidence.md',
       sourceCount: 1,
       tables: ['dbo.workflow', 'dbo.workflow_history', 'dbo.workflow_code'],
-      tags: ['Community sourced', 'Schema matched', 'Not live tested', 'Read-only'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
           title: 'Workflow Last Modified Date',
@@ -1161,74 +1088,6 @@ export async function loadReportingScriptsForTable(productKey, tableKey) {
   ];
 }
 
-export function getReportingPaths(productKey) {
-  return productReportingPaths[productKey] ?? [];
-}
-
-export function getReportingQuestions(productKey) {
-  const commonQuestions = {
-    forms: [
-      {
-        question: 'Which processes exist and how are they named?',
-        guidance: 'Start with process definition tables, then inspect process instance tables before counting activity.',
-        tables: ['dbo.cf_business_processes', 'dbo.cf_bp_main_instances'],
-      },
-      {
-        question: 'How many submissions exist by process or date?',
-        guidance: 'Use submission and process tables, then validate the join path from exported foreign keys or the diagram.',
-        tables: ['dbo.cf_business_processes', 'dbo.cf_submissions'],
-      },
-      {
-        question: 'Where are submitted field values stored?',
-        guidance: 'Use form and field definitions to identify the value tables, then verify value column meaning before reporting.',
-        tables: ['dbo.cf_forms', 'dbo.cf_fields', 'dbo.cf_bp_data'],
-      },
-      {
-        question: 'Who can access or administer Forms items?',
-        guidance: 'Start with users and group/role mapping tables, then confirm the meaning of flags and role identifiers.',
-        tables: ['dbo.cf_users', 'dbo.cf_usergroups_users_mapping', 'dbo.cf_roles'],
-      },
-    ],
-    repository: [
-      {
-        question: 'Which templates, fields, and document metadata structures exist?',
-        guidance: 'Start with template and field tables, then use relationships to find document or entry associations.',
-        tables: ['dbo.template', 'dbo.propdef', 'dbo.toc'],
-      },
-      {
-        question: 'How are users, trustees, and access-related records represented?',
-        guidance: 'Start with trustee/security tables and verify joins carefully before reporting access state.',
-        tables: ['dbo.trustee', 'dbo.account_cache', 'dbo.acl'],
-      },
-    ],
-    lfds: [
-      {
-        question: 'Which identities, providers, and groups are configured?',
-        guidance: 'Start with directory object and provider tables, then inspect foreign keys before joining identity records.',
-        tables: ['dbo.directory_objects', 'dbo.identity_providers', 'dbo.groups'],
-      },
-      {
-        question: 'Which licenses or registered applications are represented?',
-        guidance: 'Start with license/application tables and validate product-specific meaning before operational reporting.',
-        tables: ['dbo.licenses', 'dbo.applications'],
-      },
-    ],
-    workflow: [
-      {
-        question: 'Which workflows, schedules, and runtime records exist?',
-        guidance: 'Start with workflow definition tables, then follow runtime/history relationships for execution reporting.',
-        tables: ['dbo.Workflow', 'dbo.Schedule', 'dbo.Instance'],
-      },
-      {
-        question: 'How can I inspect workflow activity or error history?',
-        guidance: 'Use activity/history tables and confirm status values before aggregating by state or error.',
-        tables: ['dbo.Activity', 'dbo.InstanceHistory', 'dbo.Error'],
-      },
-    ],
-  };
-
-  return commonQuestions[productKey] ?? [];
-}
 
 function quoteName(value) {
   return `[${String(value).replaceAll(']', ']]')}]`;

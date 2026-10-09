@@ -124,9 +124,10 @@ const objectsTooltip = await page.evaluate(() =>
 );
 assert.match(objectsTooltip, /views, stored procedures, functions, and triggers/i);
 
-await page.getByRole('button', { name: 'Health', exact: true }).click();
+await page.locator('.sidebar-diagnostics summary').click();
+await page.getByRole('button', { name: 'Schema checks', exact: true }).click();
 await page.waitForTimeout(100);
-assert.equal(await page.locator('.detail-surface h2').textContent(), 'Schema health');
+assert.equal(await page.locator('.detail-surface h2').textContent(), 'Schema checks');
 assert.ok((await page.locator('.health-row').count()) > 0);
 
 await page.getByRole('button', { name: 'Dependencies', exact: true }).click();

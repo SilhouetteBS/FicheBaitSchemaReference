@@ -9,6 +9,7 @@ const keys = [
   'from',
   'to',
   'objectType',
+  'object',
   'objectQuery',
   'diagramFocus',
   'diagramQuery',

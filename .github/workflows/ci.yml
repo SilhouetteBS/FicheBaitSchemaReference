@@ -25,6 +25,9 @@ jobs:
       - name: Lockfile integrity
         run: npm run verify:lockfile
 
+      - name: Generate public metadata
+        run: npm run prepare:data
+
       - name: Dependency audit
         run: npm run audit:dependencies
 
@@ -36,6 +39,9 @@ jobs:
 
       - name: Diagram regression tests
         run: npm run test:diagram
+
+      - name: Reproducible Answers verification
+        run: npm run verify:answers-generated
 
       - name: Data validation
         run: |

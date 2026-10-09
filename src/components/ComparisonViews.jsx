@@ -459,7 +459,7 @@ function DefinitionSnapshot({ title, definition, selectedChange, side }) {
       {/* The constrained list must be focusable so keyboard users can scroll it. */}
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
       <div className="definition-column-list" role="region" tabIndex={0} aria-label={`${title} column definitions`}>
-        {definition.columns.slice(0, 80).map((column) => {
+        {definition.columns.map((column) => {
           const status = getColumnChangeStatus(selectedChange, column.name, side);
           const details = getColumnChangeDetails(selectedChange, column.name);
           return (
@@ -485,7 +485,7 @@ function ChangeList({ title, status, items }) {
         <p className="empty-state">No changes.</p>
       ) : (
         <ul>
-          {items.slice(0, 12).map((item) => (
+          {items.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
@@ -520,7 +520,7 @@ function ChangeBucket({ title, items }) {
         <p className="empty-state">No changes.</p>
       ) : (
         <ul>
-          {items.slice(0, 24).map((item) => (
+          {items.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>

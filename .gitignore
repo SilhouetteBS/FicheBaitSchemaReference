@@ -2,9 +2,14 @@ node_modules/
 dist/
 tmp/
 artifacts/
+public/data/
+data/ai/
 outputs/
 .env
 .env.local
+.env.*
+!.env.example
+.tmp/
 *.log
 
 # Private source-review artifacts from signed-in Laserfiche Answers research.

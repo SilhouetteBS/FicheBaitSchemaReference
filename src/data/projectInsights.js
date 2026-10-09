@@ -113,13 +113,13 @@ export function getSchemaCoverageGaps(productsManifest, product) {
       ? [`${product?.name ?? 'Selected product'} has fewer than two imported versions, so trend and comparison coverage is limited.`]
       : [];
   const missingTriggers = (product?.versions ?? [])
-    .filter((version) => (version.source?.triggers?.length ?? 0) === 0)
+    .filter((version) => version.isLoaded !== false && (version.source?.triggers?.length ?? 0) === 0)
     .map((version) => `${product.name} ${version.version} has no exported triggers.`);
   const missingViews = (product?.versions ?? [])
-    .filter((version) => (version.source?.views?.length ?? 0) === 0)
+    .filter((version) => version.isLoaded !== false && (version.source?.views?.length ?? 0) === 0)
     .map((version) => `${product.name} ${version.version} has no exported views.`);
   const missingDependencies = (product?.versions ?? [])
-    .filter((version) => (version.source?.dependencies?.length ?? 0) === 0)
+    .filter((version) => version.isLoaded !== false && (version.source?.dependencies?.length ?? 0) === 0)
     .map((version) => `${product.name} ${version.version} has no exported dependencies.`);
 
   return [
@@ -128,13 +128,16 @@ export function getSchemaCoverageGaps(productsManifest, product) {
     ...missingTriggers,
     ...missingViews,
     ...missingDependencies,
-  ].slice(0, 12);
+  ];
 }
 
 export function getTableStability(version, tableKey) {
   const versions = version?.productVersions ?? [];
   if (versions.length === 0) {
     return null;
+  }
+  if (versions.some((item) => item.isLoaded === false)) {
+    return { pending: true, versionCount: versions.length, stable: null };
   }
   const appearances = versions.filter((item) => item.source.tables.some((table) => table.key === tableKey));
   const firstSeen = appearances[0]?.version ?? '';
@@ -154,7 +157,7 @@ export function getTableVersionTrend(version, tableKey) {
     const table = item.source.tables.find((candidate) => candidate.key === tableKey);
     return {
       version: item.version,
-      present: Boolean(table),
+      present: item.isLoaded === false ? null : Boolean(table),
       columns: table?.columns.length ?? 0,
       keys: table?.keys.length ?? 0,
       indexes: table?.indexes.length ?? 0,
@@ -165,6 +168,7 @@ export function getTableVersionTrend(version, tableKey) {
 
 export function getColumnLifecycleItems(version, tableKey) {
   const versions = version?.productVersions ?? [];
+  if (versions.some((item) => item.isLoaded === false)) return [];
   const lifecycles = new Map();
   versions.forEach((item) => {
     const table = item.source.tables.find((candidate) => candidate.key === tableKey);
@@ -200,6 +204,13 @@ export function attachProductVersions(product) {
   };
 }
 
+function relatedDependencyItems(dependencies) {
+  return [...new Map(dependencies.map((dependency) => {
+    const key = `${dependency.referencingObjectKey ?? dependency.referencingObjectName} -> ${dependency.referencedObjectKey ?? dependency.referencedEntityName}`;
+    return [key, { key, description: dependency.referencingObjectTypeDescription ?? dependency.referencedObjectTypeDescription ?? 'Dependency' }];
+  })).values()];
+}
+
 export function getRelatedObjectItems(version, tableKey) {
   const relatedDependencies = (version.source.dependencies ?? []).filter((dependency) =>
     [dependency.referencingObjectKey, dependency.referencedObjectKey, dependency.referencingObjectName, dependency.referencedEntityName]
@@ -215,16 +226,13 @@ export function getRelatedObjectItems(version, tableKey) {
   const relatedTriggers = (version.source.triggers ?? []).filter((trigger) => trigger.parentObjectKey === tableKey);
 
   return {
-    dependencies: relatedDependencies.slice(0, 12).map((dependency) => ({
-      key: `${dependency.referencingObjectKey ?? dependency.referencingObjectName} -> ${dependency.referencedObjectKey ?? dependency.referencedEntityName}`,
-      description: dependency.referencingObjectTypeDescription ?? dependency.referencedObjectTypeDescription ?? 'Dependency',
-    })),
-    views: relatedViews.slice(0, 8).map((view, index) => ({ key: objectKey(view, index), description: view.typeDescription ?? 'View' })),
-    routines: relatedRoutines.slice(0, 8).map((routine, index) => ({
+    dependencies: relatedDependencyItems(relatedDependencies),
+    views: relatedViews.map((view, index) => ({ key: objectKey(view, index), description: view.typeDescription ?? 'View' })),
+    routines: relatedRoutines.map((routine, index) => ({
       key: objectKey(routine, index),
       description: routine.typeDescription ?? 'Routine',
     })),
-    triggers: relatedTriggers.slice(0, 8).map((trigger, index) => ({
+    triggers: relatedTriggers.map((trigger, index) => ({
       key: objectKey(trigger, index),
       description: trigger.isDisabled ? 'Disabled trigger' : 'Trigger',
     })),
@@ -241,10 +249,7 @@ export function getObjectRelatedItems(version, selectedObject) {
     : [];
   return {
     parent,
-    dependencies: dependencies.slice(0, 12).map((dependency) => ({
-      key: `${dependency.referencingObjectKey ?? dependency.referencingObjectName} -> ${dependency.referencedObjectKey ?? dependency.referencedEntityName}`,
-      description: dependency.referencingObjectTypeDescription ?? dependency.referencedObjectTypeDescription ?? 'Dependency',
-    })),
+    dependencies: relatedDependencyItems(dependencies),
   };
 }
 

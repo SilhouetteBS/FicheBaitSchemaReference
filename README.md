@@ -62,13 +62,13 @@ Or run the bundled non-browser validation:
 npm run validate
 ```
 
-To regenerate schema-matched Reporting candidates from processed Laserfiche Answers rows:
+To regenerate object-name-matched Reporting candidates from sanitized tracked research inputs:
 
 ```powershell
 npm run verify:answers-schema
 ```
 
-This updates `docs/answers-sql-schema-verification-2026-07-01.md` and the generated `src/data/generatedReportingCandidates.js` file. Do not edit generated candidate data by hand.
+This updates `docs/answers-sql-object-name-verification.md` and `src/data/generatedReportingCandidates.js` from `data/research/answers-candidates.json`. It never reads private Downloads, research queues, or source ledgers. Run `npm run verify:answers-generated` to detect stale generated output without changing files. Matching names does not verify columns or SQL execution.
 
 For browser smoke testing, start the dev server first and then run:
 
@@ -133,7 +133,7 @@ public/
         notes.json
 ```
 
-`data/` is the source-side copy. `public/data/` is what the static app fetches at runtime.
+`data/` is canonical, including product/version manifests. `npm run prepare:data` generates ignored `public/data/` runtime files and AI packages. Both `npm run dev` and `npm run build` run this preparation automatically. Do not edit generated files; `npm run verify:data-parity` checks identity, contents, AI parity, and unexpected files.
 
 Database names are environment-specific and must not be used as product or version identifiers. Use explicit export fields such as `productKey`, `productVersion`, and `databaseRole`.
 
@@ -201,7 +201,7 @@ Generic product import, for example LFDS:
 npm run import:schema -- --product=lfds --product-name="LFDS" --database-role=lfds --input-dir "C:\path\to\lfds-export"
 ```
 
-The importer updates product/version manifests in `public/data/` and creates empty `notes.json` files when they do not already exist.
+The importer updates canonical product/version manifests in `data/` and creates empty `notes.json` files only when missing. Run `npm run prepare:data` after imports to refresh generated runtime files. Existing documentation notes are preserved.
 
 ## Manual Notes Workflow
 

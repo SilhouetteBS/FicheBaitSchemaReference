@@ -1,0 +1,14 @@
+.sidebar-diagnostics { margin-top: 12px; border-top: 1px solid #ffffff35; padding-top: 10px; }
+.sidebar-diagnostics summary { cursor: pointer; color: #1956a0; font-size: 12px; margin-bottom: 8px; }
+.community-disclaimer { min-width: 0; width: 100%; }
+.community-disclaimer summary { cursor: pointer; font-size: 12px; line-height: 1.5; }
+.community-disclaimer p { margin-top: 8px; }
+.reporting-script-search { display: grid; gap: 6px; padding: 12px; font-size: 12px; }
+.reporting-script-search input { width: 100%; min-width: 0; font-weight: 400; }
+.reporting-markdown { white-space: normal; overflow-wrap: anywhere; }
+.reporting-markdown h1 { font-size: 20px; }
+.reporting-markdown h2 { font-size: 18px; }
+.reporting-markdown h3 { font-size: 16px; }
+.reporting-markdown p, .reporting-markdown ul, .reporting-markdown ol { margin: 10px 0; }
+.reporting-markdown pre { overflow-x: auto; padding: 12px; background: #eef3f6; }
+.reporting-markdown code { white-space: pre-wrap; }

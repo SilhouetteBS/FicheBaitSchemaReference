@@ -17,7 +17,7 @@ export function ImpactView({ version, localNotesForVersion, onDownloadJson, onSe
         </button>
       </div>
       <div className="impact-list">
-        {impactItems.slice(0, 80).map((item, index) => (
+        {impactItems.map((item, index) => (
           <button className="impact-row" key={item.key} type="button" onClick={() => onSelectTable(item.key)}>
             <span className="impact-rank">{index + 1}</span>
             <strong>{item.key}</strong>

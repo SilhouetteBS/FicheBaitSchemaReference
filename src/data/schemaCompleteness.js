@@ -31,6 +31,10 @@ export function getSnapshotCompletenessRows(version) {
 
 export function getVersionTrendRows(product) {
   return product.versions.map((item) => {
+    if (item.isLoaded === false) return {
+      version: item.version, schemaSize: 'Not loaded', objectCount: 'Not loaded',
+      healthIssues: 'Not loaded', dependencyResolution: 'Not loaded', notesCompletion: 'Not loaded',
+    };
     const dependencyItems = getDependencyResolutionItems(item);
     const resolvedDependencies = dependencyItems.filter((dependency) =>
       dependency.referencingResolvedKey && dependency.referencedResolvedKey).length;

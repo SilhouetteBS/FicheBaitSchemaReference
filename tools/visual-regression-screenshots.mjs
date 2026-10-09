@@ -2,10 +2,13 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
+import pixelmatch from 'pixelmatch';
+import { PNG } from 'pngjs';
 
 const appUrl = process.env.APP_URL ?? 'http://127.0.0.1:4177';
 const outputDir = process.env.VISUAL_SCREENSHOT_DIR ?? 'artifacts/visual-regression';
 const executablePath = process.env.CHROME_PATH || undefined;
+const baselineDir = 'tests/visual-baselines';
 
 fs.mkdirSync(outputDir, { recursive: true });
 
@@ -47,6 +50,25 @@ async function capture(name, params, beforeCapture) {
   await page.locator('.detail-surface').screenshot({ path: filePath });
   const fileSize = fs.statSync(filePath).size;
   assert.ok(fileSize > 10_000, `${name} screenshot should not be blank`);
+  // Compare connectors and card boundaries independently of OS font rasterization.
+  const geometry = await page.locator('.database-diagram').screenshot({
+    animations: 'disabled',
+    style: '.diagram-box > *, .diagram-lines text, .diagram-highlight-lines text, .diagram-lane-layer { visibility: hidden !important; }',
+  });
+  const baselinePath = path.join(baselineDir, `${name}.png`);
+  if (process.env.UPDATE_VISUAL_BASELINES === '1') {
+    fs.mkdirSync(baselineDir, { recursive: true });
+    fs.writeFileSync(baselinePath, geometry);
+  }
+  assert.ok(fs.existsSync(baselinePath), `Missing reviewed visual baseline: ${baselinePath}`);
+  const actual = PNG.sync.read(geometry);
+  const expected = PNG.sync.read(fs.readFileSync(baselinePath));
+  assert.equal(actual.width, expected.width, `${name} width changed`);
+  assert.equal(actual.height, expected.height, `${name} height changed`);
+  const diff = new PNG({ width: actual.width, height: actual.height });
+  const changedPixels = pixelmatch(actual.data, expected.data, diff.data, actual.width, actual.height, { threshold: 0.1 });
+  fs.writeFileSync(path.join(outputDir, `${name}-diff.png`), PNG.sync.write(diff));
+  assert.ok(changedPixels / (actual.width * actual.height) <= 0.001, `${name}: ${changedPixels} geometry pixels differ from the reviewed baseline`);
   return { filePath, fileSize };
 }
 

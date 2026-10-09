@@ -37,7 +37,7 @@ export function DependencyReportView({ version, onDownloadJson }) {
         {unresolvedItems.length === 0 ? (
           <p className="empty-state">All exported SQL expression dependencies resolved to exported objects.</p>
         ) : (
-          unresolvedItems.slice(0, 200).map((item) => (
+          unresolvedItems.map((item) => (
             <article className="dependency-report-row" key={item.id}>
               <div>
                 <strong>{item.status}</strong>

@@ -36,6 +36,15 @@ export function comparisonToCsv(comparison) {
   comparison.addedTables.forEach((table) => rows.push(['added_table', table, '', 'added']));
   comparison.removedTables.forEach((table) => rows.push(['removed_table', table, '', 'removed']));
   comparison.changedTables.forEach((table) => {
+    for (const [property, category] of [['Keys', 'key'], ['Indexes', 'index'], ['ForeignKeys', 'foreign_key']]) {
+      if (property === 'Keys') {
+        (table.addedKeys ?? []).forEach((name) => rows.push(['added_key', table.key, name, 'added']));
+        (table.removedKeys ?? []).forEach((name) => rows.push(['removed_key', table.key, name, 'removed']));
+      }
+      (table[`changed${property}`] ?? []).forEach((item) =>
+        rows.push([`changed_${category}`, table.key, item.name, item.details.join('; ')]),
+      );
+    }
     table.addedColumns.forEach((column) => rows.push(['added_column', table.key, column, 'added']));
     table.removedColumns.forEach((column) => rows.push(['removed_column', table.key, column, 'removed']));
     table.changedColumns.forEach((column) =>

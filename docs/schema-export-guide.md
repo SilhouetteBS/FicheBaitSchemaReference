@@ -105,6 +105,8 @@ public/data/<productKey>/<productVersion>/schema.json
 
 The importer also creates separate `notes.json` placeholders when they do not already exist. The generated snapshot intentionally avoids using SQL Server database names as product or version identifiers.
 
+Product/version manifests are maintained in canonical `data/`. Run `npm run prepare:data` after importing to rebuild the ignored runtime mirrors and AI package. Development and production builds run this preparation automatically. Both `--input-dir="folder"` and `--input-dir "folder"` are accepted. Product-prefixed filenames are matched case-insensitively; ambiguous folders fail instead of guessing which export to use.
+
 ## Safety
 
 The export script reads SQL Server catalog metadata only. It does not query Laserfiche business table rows and does not modify the database.

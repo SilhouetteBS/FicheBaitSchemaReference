@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
+import Markdown from 'react-markdown';
+import { objectNamesMatch } from '../data/objectNameMatching.js';
 import { exportCompatibilityNotes, glossaryTerms } from '../data/glossary.js';
 import { copyTextToClipboard } from '../data/clipboard.js';
 import {
@@ -19,7 +21,6 @@ const referenceItems = [
   { key: 'glossary', label: 'Glossary' },
   { key: 'compatibility', label: 'Export compatibility' },
   { key: 'cautions', label: 'Caution notes' },
-  { key: 'processed-queue', label: 'Processed queue' },
 ];
 
 const notepadPlusSqlTheme = {
@@ -136,7 +137,7 @@ function ReportingSectionHeader({ title, count }) {
 function ScriptStatusTags({ tags }) {
   const tagClasses = {
     'Community sourced': 'community-tag-source',
-    'Schema matched': 'community-tag-matched',
+    'Object names matched': 'community-tag-matched',
     'Schema neutral': 'community-tag-neutral',
     'Not live tested': 'community-tag-untested',
     'Needs review': 'community-tag-review',
@@ -223,13 +224,16 @@ export function ReportingGuide({
   const [scriptTab, setScriptTab] = useState('sql');
   const [scriptContent, setScriptContent] = useState({ key: '', status: 'idle', text: '' });
   const [copyStatus, setCopyStatus] = useState('idle');
+  const [scriptQuery, setScriptQuery] = useState('');
   const [generatedCommunityPatterns, setGeneratedCommunityPatterns] = useState([]);
   const [generatedLoadState, setGeneratedLoadState] = useState({ status: 'loading', message: '' });
   const knownTables = useMemo(() => new Set(version.tables.map((table) => table.id)), [version.tables]);
-  const reportingPaths = useMemo(() => getReportingPaths(version.source.productKey), [version.source.productKey]);
+  const knownObjects = useMemo(() => new Set(['tables', 'views', 'routines', 'triggers'].flatMap((type) =>
+    (version.source[type] ?? []).map((item) => (item.key ?? `${item.schemaName}.${item.name}`).toLowerCase()))), [version.source]);
+  const reportingPaths = useMemo(() => getReportingPaths(version.source.productKey).filter((item) => item.tables.every((table) => knownTables.has(table))), [version.source.productKey, knownTables]);
   const reportingQuestions = useMemo(
-    () => getReportingQuestions(version.source.productKey),
-    [version.source.productKey],
+    () => getReportingQuestions(version.source.productKey, knownTables),
+    [version.source.productKey, knownTables],
   );
   const curatedCommunityPatterns = useMemo(
     () => getCommunityReportingPatterns(version.source.productKey),
@@ -243,6 +247,8 @@ export function ReportingGuide({
   const generatedCandidateCount = generatedCommunityPatterns.length;
   const generatedExamples = useMemo(() => buildGeneratedReportingExamples(version), [version]);
   const selectedScript = communityPatterns.find((pattern) => getScriptKey(pattern) === selectedView);
+  const matchesScript = (pattern) => `${pattern.title} ${pattern.summary} ${pattern.tables.join(' ')} ${pattern.tags.join(' ')}`
+    .toLowerCase().includes(scriptQuery.trim().toLowerCase());
 
   useEffect(() => {
     setScriptTab('sql');
@@ -267,7 +273,7 @@ export function ReportingGuide({
           setGeneratedCommunityPatterns([]);
           setGeneratedLoadState({
             status: 'error',
-            message: `Schema-matched candidates could not be loaded: ${error.message}`,
+            message: `Object-name-matched candidates could not be loaded: ${error.message}`,
           });
         }
       });
@@ -370,7 +376,7 @@ export function ReportingGuide({
       },
       {
         key: 'candidates',
-        title: 'Schema-matched candidates',
+        title: 'Object-name-matched candidates',
         count: generatedCandidateCount,
         summary:
           'Answers source candidates whose referenced objects exist in documented schema versions. These still need review before operational use.',
@@ -400,11 +406,11 @@ export function ReportingGuide({
           <article>
             <strong>{communityPatterns.length}</strong>
             <span>Reporting scripts</span>
-            <p>{curatedScriptCount} curated and {generatedCandidateCount} schema-matched source candidates.</p>
+            <p>{curatedScriptCount} curated and {generatedCandidateCount} object-name-matched source candidates.</p>
           </article>
         </div>
         <div className="reporting-schema-note">
-          <strong>Schema matched</strong>
+          <strong>Object names matched</strong>
           <p>
             Referenced object names exist in at least one documented schema version. It does not mean the SQL was
             live-tested, optimized, or rewritten into a production-ready reporting script.
@@ -517,7 +523,7 @@ export function ReportingGuide({
         </div>
         {pattern.generated ? (
           <div className="reporting-schema-note">
-            <strong>Schema-matched source candidate</strong>
+            <strong>Object-name-matched source candidate</strong>
             <p>
               This entry is not a finished script. It exists because the referenced objects were found in documented
               schemas. Review the source, rewrite for your environment, and validate in a test environment before use.
@@ -525,6 +531,12 @@ export function ReportingGuide({
           </div>
         ) : null}
         <ScriptStatusTags tags={pattern.tags} />
+        <p className="script-version-compatibility" role="status">
+          {pattern.tables.length === 0 ? `Object compatibility is not established for ${version.version}.`
+            : pattern.tables.every((name) => objectNamesMatch(name, knownObjects))
+              ? `Referenced object names match ${version.version}. Columns and execution are not validated.`
+              : `Some referenced objects are missing from ${version.version}. Check compatibility before use.`}
+        </p>
         <TableLinks tables={pattern.tables} knownTables={knownTables} onSelectTable={onSelectTable} />
         <div className="reporting-script-toolbar">
           <div className="reporting-script-tabs" role="tablist" aria-label={`${pattern.title} content`}>
@@ -533,11 +545,24 @@ export function ReportingGuide({
                 key={tab}
                 type="button"
                 role="tab"
+                id={`reporting-tab-${tab}`}
+                aria-controls={`reporting-content-${tab}`}
+                tabIndex={scriptTab === tab ? 0 : -1}
                 aria-selected={scriptTab === tab}
                 className={scriptTab === tab ? 'selected' : ''}
                 onClick={() => {
                   setScriptTab(tab);
                   setCopyStatus('idle');
+                }}
+                onKeyDown={(event) => {
+                  const tabs = ['sql', 'notes', 'answers'];
+                  const next = event.key === 'Home' ? 'sql' : event.key === 'End' ? 'answers'
+                    : event.key === 'ArrowRight' ? tabs[(tabs.indexOf(tab) + 1) % tabs.length]
+                      : event.key === 'ArrowLeft' ? tabs[(tabs.indexOf(tab) + 2) % tabs.length] : '';
+                  if (!next) return;
+                  event.preventDefault();
+                  setScriptTab(next);
+                  document.getElementById(`reporting-tab-${next}`)?.focus();
                 }}
               >
                 {tab === 'sql' ? 'SQL' : tab === 'notes' ? 'Review notes' : 'Links to Resources'}
@@ -555,19 +580,23 @@ export function ReportingGuide({
             </button>
           ) : null}
         </div>
+        <div role="tabpanel" id={`reporting-content-${scriptTab}`} aria-labelledby={`reporting-tab-${scriptTab}`}>
         {scriptTab === 'answers' ? (
           <ScriptAnswersLinks links={pattern.answersLinks} />
         ) : scriptContent.status === 'ready' ? (
           scriptTab === 'sql' ? (
             <SqlViewer sql={scriptContent.text} />
           ) : (
-            <pre className="reporting-script-content notes">{scriptContent.text}</pre>
+            <div className="reporting-script-content notes reporting-markdown">
+              <Markdown skipHtml components={{ a: ({ children, href }) => <a href={href} target="_blank" rel="noreferrer">{children}</a> }}>{scriptContent.text}</Markdown>
+            </div>
           )
         ) : (
           <div className={`reporting-script-content-state ${scriptContent.status}`}>
             {scriptContent.status === 'error' ? scriptContent.text : 'Loading content...'}
           </div>
         )}
+        </div>
       </section>
     );
   }
@@ -616,90 +645,13 @@ export function ReportingGuide({
           </article>
           <article>
             <h4>Validate before production use</h4>
-            <p>Scripts tagged as not live tested are schema-matched starting points. Validate them in a test environment before depending on them.</p>
+            <p>Scripts tagged as not live tested are object-name-matched starting points. Validate them in a test environment before depending on them.</p>
           </article>
         </div>
       </section>
     );
   }
 
-  function renderProcessedQueue() {
-    return (
-      <section className="reporting-section reporting-section-full">
-        <ReportingSectionHeader title="Processed non-promoted queue" count={2543} />
-        <div className="reporting-overview-grid reporting-queue-summary-grid">
-          <article>
-            <strong>1046</strong>
-            <span>Do not publish</span>
-            <p>Unsafe, write-oriented, destructive, environment setup, or support-directed content.</p>
-          </article>
-          <article>
-            <strong>284</strong>
-            <span>Manual extraction</span>
-            <p>Not promoted because the source needed manual extraction and supportability review.</p>
-          </article>
-          <article>
-            <strong>931</strong>
-            <span>Weak candidates</span>
-            <p>Reference only because the row had insufficient SQL or schema signal.</p>
-          </article>
-          <article>
-            <strong>236</strong>
-            <span>Schema verification</span>
-            <p>Reference rows that need additional schema or version confirmation before promotion.</p>
-          </article>
-          <article>
-            <strong>46</strong>
-            <span>Ready reference</span>
-            <p>Ready but not promoted because it was not a portable read-only reporting script.</p>
-          </article>
-          <article>
-            <strong>2543</strong>
-            <span>Processed rows</span>
-            <p>All remaining non-promoted Answers queue rows are documented without copying raw forum SQL.</p>
-          </article>
-        </div>
-        <div className="reporting-caution-list">
-          <article>
-            <h4>Detailed processed queue</h4>
-            <p>
-              The public-safe queue files are indexed in{' '}
-              <a
-                href="https://github.com/SilhouetteBS/FicheBaitSchemaReference/blob/main/docs/answers-sql-processed-index.md"
-                target="_blank"
-                rel="noreferrer"
-              >
-                docs/answers-sql-processed-index.md
-              </a>
-              . The current schema-verification report is stored in{' '}
-              <a
-                href="https://github.com/SilhouetteBS/FicheBaitSchemaReference/blob/main/docs/answers-sql-schema-verification-2026-07-01.md"
-                target="_blank"
-                rel="noreferrer"
-              >
-                docs/answers-sql-schema-verification-2026-07-01.md
-              </a>
-              .
-            </p>
-          </article>
-          <article>
-            <h4>No-reference candidates</h4>
-            <p>
-              Rows without captured product object names remain in the report only. They are not published as scripts
-              until a better extractor or manual review captures usable schema references.
-            </p>
-          </article>
-          <article>
-            <h4>Why these are not scripts</h4>
-            <p>
-              These rows were processed as caution or reference material because publishing them as runnable SQL would
-              either be unsafe, unsupported, too environment-specific, or too weakly tied to imported schema.
-            </p>
-          </article>
-        </div>
-      </section>
-    );
-  }
 
   function renderSelectedView() {
     if (generatedLoadState.status === 'error' && selectedView.startsWith('script:') && !selectedScript) {
@@ -731,9 +683,6 @@ export function ReportingGuide({
     if (selectedView === 'cautions') {
       return renderCautions();
     }
-    if (selectedView === 'processed-queue') {
-      return renderProcessedQueue();
-    }
     return renderScriptDetail(selectedScript);
   }
 
@@ -747,6 +696,10 @@ export function ReportingGuide({
       </div>
       <div className="reporting-workspace">
         <aside className="reporting-nav" aria-label="Reporting sections">
+          <label className="reporting-script-search">
+            <span>Find scripts</span>
+            <input type="search" value={scriptQuery} onChange={(event) => setScriptQuery(event.target.value)} placeholder="Title, table, or tag" />
+          </label>
           <div className="reporting-nav-group">
             <NavButton item={{ key: 'overview', label: 'Overview' }} selectedView={selectedView} onSelect={selectReportingView} />
           </div>
@@ -774,7 +727,7 @@ export function ReportingGuide({
               <em>{curatedScriptCount}</em>
             </strong>
             {curatedCommunityPatterns.length > 0 ? (
-              curatedCommunityPatterns.map((pattern) => (
+              curatedCommunityPatterns.filter(matchesScript).map((pattern) => (
                 <NavButton
                   key={pattern.scriptPath}
                   item={{ key: getScriptKey(pattern), label: pattern.title }}
@@ -790,7 +743,7 @@ export function ReportingGuide({
           </div>
           <div className="reporting-nav-group">
             <strong>
-              <span>Schema-matched candidates</span>
+              <span>Object-name-matched candidates</span>
               <em>{generatedCandidateCount}</em>
             </strong>
             {generatedLoadState.status === 'loading' ? (
@@ -798,7 +751,7 @@ export function ReportingGuide({
             ) : generatedLoadState.status === 'error' ? (
               <p role="alert">Candidates unavailable.</p>
             ) : generatedCommunityPatterns.length > 0 ? (
-              generatedCommunityPatterns.map((pattern) => (
+              generatedCommunityPatterns.filter(matchesScript).map((pattern) => (
                 <NavButton
                   key={pattern.scriptPath}
                   item={{ key: getScriptKey(pattern), label: pattern.title }}

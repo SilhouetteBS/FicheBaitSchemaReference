@@ -16,7 +16,7 @@ export function resolvePublicUrl(url) {
     return url;
   }
 
-  const baseUrl = import.meta.env.BASE_URL || '/';
+  const baseUrl = import.meta.env?.BASE_URL || '/';
   const normalizedBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
   const normalizedPath = String(url).replace(/^\/+/, '');
   return `${normalizedBase}${normalizedPath}`;
@@ -67,7 +67,7 @@ export async function fetchJson(url, { refresh = false } = {}) {
   }
 }
 
-export async function loadVersionEntry(versionEntry) {
+export async function loadVersionEntry(versionEntry, productKey) {
   const schema = await fetchJson(versionEntry.schemaUrl).catch((error) => {
     throw new DataLoadError(`Unable to load schema snapshot for ${versionEntry.version}.`, [
       versionEntry.schemaUrl,
@@ -76,7 +76,10 @@ export async function loadVersionEntry(versionEntry) {
     ]);
   });
   const schemaErrors = validateSchemaSnapshot(schema);
+  if (schema.productVersion !== versionEntry.version) schemaErrors.push('Schema version does not match the version manifest.');
+  if (productKey && schema.productKey !== productKey) schemaErrors.push('Schema product does not match the selected product.');
   if (schemaErrors.length > 0) {
+    requestCache.delete(resolvePublicUrl(versionEntry.schemaUrl));
     throw new DataLoadError(`Schema snapshot failed validation for ${versionEntry.version}.`, [
       versionEntry.schemaUrl,
       ...schemaErrors.slice(0, 8),
@@ -88,7 +91,14 @@ export async function loadVersionEntry(versionEntry) {
   let warning = '';
   try {
     notes = await fetchJson(versionEntry.notesUrl);
+    if (!notes || typeof notes !== 'object' || !notes.tables || Array.isArray(notes.tables)
+      || (notes.productVersion && notes.productVersion !== versionEntry.version)
+      || (productKey && notes.productKey && notes.productKey !== productKey)) {
+      throw new Error('Notes identity or table documentation is invalid.');
+    }
   } catch (error) {
+    requestCache.delete(resolvePublicUrl(versionEntry.notesUrl));
+    notes = { tables: {} };
     warning = `Notes for ${versionEntry.version} could not be loaded. Table and column documentation may be incomplete. ${error.message}`;
   }
   return { schema, notes, warning };

@@ -11,11 +11,11 @@ export function SchemaHealthView({ version, onDownloadJson, onSelectTable }) {
     <section className="detail-surface">
       <div className="detail-heading">
         <div>
-          <h2>Schema health</h2>
+          <h2>Schema checks</h2>
           <p>Review structural flags that affect reporting joins, table risk, and documentation priority.</p>
         </div>
         <button className="text-button" type="button" onClick={onDownloadJson}>
-          Export health
+          Export checks
         </button>
       </div>
       <div className="health-summary">
@@ -51,7 +51,7 @@ export function SchemaHealthView({ version, onDownloadJson, onSelectTable }) {
           can start with objects that are most likely to help reporting users.
         </p>
         <div className="health-list">
-          {reviewItems.slice(0, 40).map((item) => (
+          {reviewItems.map((item) => (
             <button className="health-row health-row-review" key={item.key} type="button" onClick={() => onSelectTable(item.key)}>
               <strong>{item.key}</strong>
               <span>{item.relationshipCount} relationships</span>
@@ -69,7 +69,7 @@ export function SchemaHealthView({ version, onDownloadJson, onSelectTable }) {
           <span>{healthItems.length}</span>
         </div>
         <div className="health-list">
-          {healthItems.slice(0, 120).map((item) => (
+          {healthItems.map((item) => (
             <button className="health-row" key={item.key} type="button" onClick={() => onSelectTable(item.key)}>
               <strong>{item.key}</strong>
               <span>{item.primaryKeyCount} PKs</span>
@@ -93,7 +93,7 @@ export function SchemaHealthView({ version, onDownloadJson, onSelectTable }) {
         <div className="dependency-resolution-list">
           {unresolvedDependencies.length === 0 ? (
             <p className="empty-state">No unresolved dependency rows were found.</p>
-          ) : unresolvedDependencies.slice(0, 80).map((item) => (
+          ) : unresolvedDependencies.map((item) => (
             <article key={item.id}>
               <strong>{item.referencingObjectKey || 'Unknown'} {'->'} {item.referencedObjectKey || item.referencedEntityName || 'Unknown'}</strong>
               <span>{item.status}</span>

@@ -1,4 +1,14 @@
 export function buildCorrectionIssueUrl({ productKey, productName, version, view, objectLabel, currentUrl }) {
+  if (currentUrl) {
+    const page = new URL(currentUrl);
+    for (const [key, value] of [['product', productKey], ['version', version], ['view', view]]) {
+      if (value) page.searchParams.set(key, value);
+    }
+    if (objectLabel && view?.toLowerCase() === 'tables') page.searchParams.set('table', objectLabel);
+    if (objectLabel && view?.toLowerCase() === 'objects') page.searchParams.set('object', objectLabel);
+    if (objectLabel && view?.toLowerCase() === 'reporting') page.searchParams.set('reporting', objectLabel);
+    currentUrl = page.toString();
+  }
   const issueUrl = new URL('https://github.com/SilhouetteBS/FicheBaitSchemaReference/issues/new');
   const productLabel = productName || productKey || '';
   const productFieldValue = ['Forms', 'LFDS', 'Repository', 'Workflow'].includes(productLabel)
@@ -23,7 +33,8 @@ export function buildCorrectionIssueUrl({ productKey, productName, version, view
   issueUrl.searchParams.set('correction_type', 'Other correction or update');
   issueUrl.searchParams.set('product', productFieldValue);
   issueUrl.searchParams.set('version', version || '');
-  issueUrl.searchParams.set('area', areaOptions.has(view) ? view : 'Other or unsure');
+  const area = [...areaOptions].find((option) => option.toLowerCase() === String(view ?? '').toLowerCase());
+  issueUrl.searchParams.set('area', area ?? 'Other or unsure');
   issueUrl.searchParams.set('schema_object', objectLabel || '');
   issueUrl.searchParams.set('current_link', currentUrl || '');
   issueUrl.searchParams.set(

@@ -6,6 +6,7 @@ import {
 import { buildDatabaseDiagram } from '../data/diagram.js';
 import { getEdgeGeometry } from '../data/diagramGeometry.js';
 import { copyTextToClipboard } from '../data/clipboard.js';
+import { downloadText, downloadJson } from '../data/downloads.js';
 import { DiagramCanvas } from './DiagramCanvas.jsx';
 import { DiagramMiniMap } from './DiagramMiniMap.jsx';
 import { DiagramObjectDetailPanel } from './DiagramObjectDetailPanel.jsx';
@@ -20,20 +21,6 @@ function xmlEscape(value) {
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;');
-}
-
-function downloadText(filename, value, type) {
-  const blob = new Blob([value], { type });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-function downloadJson(filename, value) {
-  downloadText(filename, `${JSON.stringify(value, null, 2)}\n`, 'application/json');
 }
 
 const builtInDiagramPresets = [

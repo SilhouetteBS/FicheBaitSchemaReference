@@ -7,6 +7,12 @@
     "node": ">=24"
   },
   "scripts": {
+    "prepare:data": "node tools/sync-public-data.mjs && node tools/generate-ai-export.mjs",
+    "prebuild": "npm run prepare:data",
+    "predev": "npm run prepare:data",
+    "predev:editing": "npm run prepare:data",
+    "pretest": "npm run prepare:data",
+    "pretest:unit": "npm run prepare:data",
     "dev": "vite --host 127.0.0.1",
     "dev:editing": "node tools/dev-editing.mjs",
     "build": "vite build",
@@ -18,10 +24,11 @@
     "research:answers-sql": "node tools/answers-sql-research.mjs",
     "research:answers-sql:existing": "node tools/answers-sql-research.mjs --review-existing",
     "verify:answers-schema": "node tools/verify-answers-schema-candidates.mjs",
+    "verify:answers-generated": "node tools/verify-answers-schema-candidates.mjs --check",
     "lint": "eslint .",
-    "test": "node tools/run-tests.mjs",
-    "test:unit": "node tools/run-tests.mjs",
-    "test:e2e": "node tools/e2e-smoke.mjs",
+    "test": "node tools/run-tests.mjs && node tools/review-regressions.mjs",
+    "test:unit": "node tools/run-tests.mjs && node tools/review-regressions.mjs",
+    "test:e2e": "node tools/e2e-smoke.mjs && node tools/review-browser-regressions.mjs",
     "test:diagram": "node tools/diagram-regression.mjs",
     "test:visual": "node tools/visual-regression-screenshots.mjs",
     "test:static-build": "node tools/static-build-smoke.mjs",
@@ -45,16 +52,20 @@
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
     "shiki": "^4.3.0",
     "vite": "^7.0.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "^9.0.0",
+    "csv-parse": "^7.0.3",
     "eslint": "^9.0.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^15.0.0",
-    "playwright": "^1.61.0"
+    "pixelmatch": "^8.0.0",
+    "playwright": "^1.61.0",
+    "pngjs": "^7.0.0"
   }
 }

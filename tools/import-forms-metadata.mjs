@@ -3,6 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
+import { parse } from 'csv-parse/sync';
 import { validateSchemaSnapshot } from '../src/data/schemaDictionary.js';
 
 const defaultInputDir = path.join(os.homedir(), 'Downloads');
@@ -21,8 +22,23 @@ const defaultInputs = {
 };
 
 function readJsonResultSet(filePath) {
-  const raw = cleanJsonText(fs.readFileSync(filePath, 'utf8').replace(/^\uFEFF/, '').replace(/\r?\n/g, ''));
-  return JSON.parse(raw);
+  return parseExportJson(fs.readFileSync(filePath, 'utf8'));
+}
+
+export function parseExportJson(input) {
+  const text = cleanJsonText(input.replace(/^\uFEFF/, ''));
+  try { return JSON.parse(text); } catch (originalError) {
+    try { return JSON.parse(text.replace(/\r?\n/g, '')); } catch { /* Try quoted SSMS records next. */ }
+    // SSMS can split FOR JSON output into one-column CSV records.
+    try {
+      const rows = parse(text, { bom: true, skip_empty_lines: true, relax_column_count: false });
+      if (!rows.every((row) => row.length === 1)) throw originalError;
+      if (/^(?:JSON_|\(No column name\))/i.test(rows[0]?.[0] ?? '')) rows.shift();
+      return JSON.parse(rows.map((row) => row[0]).join(''));
+    } catch {
+      throw new Error(`Invalid JSON export: ${originalError.message}`);
+    }
+  }
 }
 
 function readOptionalJsonResultSet(filePath) {
@@ -40,8 +56,9 @@ function readJsonOrTabRows(filePath, columns) {
   }
 
   if (raw.startsWith('[')) {
-    return JSON.parse(raw.replace(/\r?\n/g, ''));
+    return parseExportJson(raw);
   }
+  if (raw.startsWith('"') || raw.startsWith('JSON_')) return parseExportJson(raw);
 
   return raw.split(/\r?\n/).map((line) => {
     const values = line.split('\t');
@@ -68,11 +85,16 @@ function cleanJsonText(value) {
 function getOption(name, fallback) {
   const prefix = `--${name}=`;
   const match = process.argv.find((arg) => arg.startsWith(prefix));
-  return match ? match.slice(prefix.length) : fallback;
+  if (match) return match.slice(prefix.length);
+  const index = process.argv.indexOf(`--${name}`);
+  if (index < 0) return fallback;
+  const value = process.argv[index + 1];
+  if (!value || value.startsWith('--')) throw new Error(`Missing value for --${name}`);
+  return value;
 }
 
 function hasOption(name) {
-  return process.argv.some((arg) => arg.startsWith(`--${name}=`));
+  return process.argv.some((arg) => arg === `--${name}` || arg.startsWith(`--${name}=`));
 }
 
 function validatePathSegment(value, label, pattern) {
@@ -323,7 +345,16 @@ export function runImport() {
   const inputDir = getOption('input-dir', defaultInputDir);
   const resolvedDefaultInputs = { ...defaultInputs };
   for (const key of Object.keys(resolvedDefaultInputs)) {
-    resolvedDefaultInputs[key] = path.join(inputDir, path.basename(resolvedDefaultInputs[key]));
+    const basename = path.basename(resolvedDefaultInputs[key]);
+    const files = fs.readdirSync(inputDir);
+    const product = getOption('product', '').toLowerCase();
+    const candidates = files.filter((file) => file.toLowerCase() === basename.toLowerCase()
+      || (file.toLowerCase().endsWith(`_${basename.toLowerCase()}`)
+        && (!product || file.toLowerCase() === `${product}_${basename.toLowerCase()}`)));
+    if (candidates.length > 1 && !hasOption(key)) {
+      throw new Error(`Ambiguous ${basename}: ${candidates.join(', ')}. Specify --${key} or --product.`);
+    }
+    resolvedDefaultInputs[key] = path.join(inputDir, candidates[0] ?? basename);
   }
 
   const inputs = Object.fromEntries(
@@ -388,10 +419,10 @@ export function runImport() {
   const publicNotesPath = path.join(publicOutputDir, 'notes.json');
   const publicVersionsPath = hasOption('public-versions-out')
     ? getOption('public-versions-out', '')
-    : resolveInside(path.join('public', 'data'), schema.productKey, 'versions.json');
+    : resolveInside('data', schema.productKey, 'versions.json');
   const publicProductsPath = hasOption('public-products-out')
     ? getOption('public-products-out', '')
-    : resolveInside(path.join('public', 'data'), 'products.json');
+    : resolveInside('data', 'products.json');
 
   const emptyNotes = {
     productKey: schema.productKey,
@@ -440,7 +471,7 @@ export function runImport() {
     writeJsonAtomic(notesPath, emptyNotes);
   }
   if (!fs.existsSync(publicNotesPath)) {
-    writeJsonAtomic(publicNotesPath, emptyNotes);
+    writeJsonAtomic(publicNotesPath, JSON.parse(fs.readFileSync(notesPath, 'utf8')));
   }
   writeJsonAtomic(publicVersionsPath, {
     ...existingVersions,

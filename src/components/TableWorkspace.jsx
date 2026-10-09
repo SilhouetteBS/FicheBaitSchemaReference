@@ -654,7 +654,7 @@ function TableContextBar({
   const relatedGroups = getRelatedObjectGroups(relatedObjects);
   const relatedTotal = relatedGroups.reduce((count, [, items]) => count + items.length, 0);
   const stabilitySummary = tableStability
-    ? `${tableStability.appearanceCount}/${tableStability.versionCount} versions`
+    ? tableStability.pending ? 'Load history' : `${tableStability.appearanceCount}/${tableStability.versionCount} versions`
     : 'No trend data';
   const relatedSummary = relatedTotal === 0
     ? 'None'
@@ -662,7 +662,7 @@ function TableContextBar({
   const panelItems = [
     ['stability', 'Stability', stabilitySummary],
     ['related', 'Related', relatedSummary],
-    ['trend', 'Trend', `${changedColumns} changed cols`],
+    ['trend', 'Trend', tableStability?.pending ? 'Load history' : `${changedColumns} changed cols`],
   ];
   const activePanelTitle = panelItems.find(([key]) => key === activePanel)?.[1] ?? '';
 
@@ -741,6 +741,7 @@ function TableScriptsDetails({ scripts, onOpenReportingScript }) {
 }
 
 function VersionStabilityDetails({ tableStability }) {
+  if (tableStability?.pending) return <p>Version history is incomplete. Load all versions before interpreting stability.</p>;
   if (!tableStability) {
     return <p>No version trend data is available for this table.</p>;
   }
@@ -800,9 +801,7 @@ function RelatedObjectsDetails({ groups, navigateToTable, total }) {
                     key={`${label}:${item.key}`}
                     type="button"
                     onClick={() => {
-                      if (label === 'Triggers' && item.key.includes('.')) {
-                        navigateToTable(item.key);
-                      }
+                      navigateToTable(item.key);
                     }}
                   >
                     <span>{item.key}</span>
@@ -825,7 +824,7 @@ function TableTrendDetails({ columnLifecycleItems, tableVersionTrend }) {
         {tableVersionTrend.map((item) => (
           <span className={item.present ? '' : 'missing'} key={item.version}>
             <strong>{item.version}</strong>
-            {item.present ? `${item.columns} cols / ${item.keys} keys / ${item.indexes} indexes / ${item.foreignKeys} FKs` : 'Not present'}
+            {item.present === null ? 'Not loaded' : item.present ? `${item.columns} cols / ${item.keys} keys / ${item.indexes} indexes / ${item.foreignKeys} FKs` : 'Not present'}
           </span>
         ))}
       </div>

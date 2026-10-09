@@ -17,7 +17,7 @@ Exports for other Laserfiche product versions are useful.
 
 ## Missing Versions Wanted
 
-Exports are especially useful for product versions not listed above. Before exporting, check the current `public/data/<product>/versions.json` file or the public app product/version dropdown to avoid duplicate submissions.
+Exports are especially useful for product versions not listed above. Before exporting, check the canonical `data/<product>/versions.json` file or the app product/version dropdown to avoid duplicate submissions.
 
 ## Export Steps
 

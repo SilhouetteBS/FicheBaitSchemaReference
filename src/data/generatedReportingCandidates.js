@@ -7,7 +7,7 @@ export const generatedReportingCandidates = {
   "repository": [
     {
       "title": "Can't find dollar amounts in sql database",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propval.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propval.",
       "scriptPath": "answers-candidates/repository/repository-can-t-find-dollar-amounts-in-sql-database.sql",
       "evidencePath": "answers-candidates/repository/repository-can-t-find-dollar-amounts-in-sql-database-evidence.md",
       "sourceCount": 3,
@@ -16,7 +16,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -31,7 +31,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT tocid, prop_id, num_val FROM propval where tocid = 508569 and num_val is not null\n\nSELECT tocid, prop_id, num_val FROM propval where tocid = 508569 and num_val is not null tocid prop_id num_val 508569 907 12345.00000 Maybe there's something wrong with your query? Are you sure you're running it against the right database? 2 0\n\nselect * from propval where tocid=[your entry id] Do you see the various other field values set on that document and is it only the currency value that you don't see at all in any of the returned rows and columns? 0 0",
       "reviewNotes": [
@@ -44,7 +45,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Crystal Reports not Loading Results",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propval, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propval, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-crystal-reports-not-loading-results.sql",
       "evidencePath": "answers-candidates/repository/repository-crystal-reports-not-loading-results-evidence.md",
       "sourceCount": 2,
@@ -54,7 +55,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -69,7 +70,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select PONumber.str_val as PONumber, InvNumber.str_val as InvoiceNumber, dates.date_val as Date, NumReceivers.num_val as NumReceivers from toc inner join propval as PONumber on toc.tocid = PONumber.tocid and PONumber.prop_id = 87 inner join propval as InvNumber on toc.tocid = InvNumber.tocid and InvNumber.prop_id = 35 inner join propval as dates on toc.tocid = dates.tocid and dates.prop_id = 41 inner join propval as NumReceivers on toc.tocid = NumReceivers.tocid and NumReceivers.prop_id = 188\n\nselect vendor.str_val as VendorName, dates.date_val as Date, ReceiverNumber.num_val as ReceiverNumber, PONumber.str_val as PONumber, rcvrMatched.str_val as Match from toc inner join propval as vendor on toc.tocid = vendor.tocid and vendor.prop_id = 13 inner join propval as ReceiverNumber on toc.tocid = ReceiverNumber.tocid and ReceiverNumber.prop_id = 158 inner join propval as dates on toc.tocid = dates.tocid and dates.prop_id = 236 inner join propval as PONumber on toc.tocid = PONumber.tocid an",
       "reviewNotes": [
@@ -82,7 +84,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Database statement execution on 9.2.0.485 LF server",
-      "summary": "Schema-verified Answers source candidate referencing dbo.vol.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.vol.",
       "scriptPath": "answers-candidates/repository/repository-database-statement-execution-on-9-2-0-485-lf-server.sql",
       "evidencePath": "answers-candidates/repository/repository-database-statement-execution-on-9-2-0-485-lf-server-evidence.md",
       "sourceCount": 1,
@@ -91,7 +93,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -106,7 +108,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select vol_id, vol_name, localid, fixpath, rempath, vol_flags, cksum_alg, maxsize, sourcevol, rollover_date, rollover_schedule, rollover_unit, rollover_base, encryption_key_guid, full_enc_alg_id from vol where vol_id = :vid '; SQL variable: ''; SQL State: 08S01. OS is 2008R2 on both LF and separate SQL Servers Thanks in advance for any assistance, 0 0",
       "reviewNotes": [
@@ -119,7 +122,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "how to identify orphaned .tif",
-      "summary": "Schema-verified Answers source candidate referencing dbo.doc, dbo.toc, dbo.vol.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.doc, dbo.toc, dbo.vol.",
       "scriptPath": "answers-candidates/repository/repository-how-to-identify-orphaned-tif.sql",
       "evidencePath": "answers-candidates/repository/repository-how-to-identify-orphaned-tif-evidence.md",
       "sourceCount": 2,
@@ -130,7 +133,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -145,7 +148,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "DECLARE @IsImage bit, @FileName varchar(10), @VolName nvarchar(63) -- Edit the below 3 SET values -- @IsImage Options -- 0 = No(Electronic Document), 1 = Yes(TIFF Image) SET @IsImage = 0 -- copy the whole file name without extention SET @FileName = '0000029B' -- Copy the folder name of the folder that contains the 00 and e00 folders Set @VolName = N'DEFAULT000001' -- Do Not Edit Below This Point DECLARE @iFileName int, @hexstr nvarchar(10), @hex char(1), @i int, @place bigint, @a bigint -- Get i\n\nSELECT [dbo].[doc].[tocid] AS [EntryID] FROM [dbo].[doc] INNER JOIN [dbo].[toc] ON [dbo].[doc].[tocid] = [dbo].[toc].[tocid] INNER JOIN [dbo].[vol] ON [dbo].[toc].[vol_id] = [dbo].[vol].[vol_id] WHERE [dbo].[vol].[vol_name] = @VolName AND [dbo].[doc].[storeid] = @iFileName End Else Begin SELECT [dbo].[toc].[tocid] AS [EntryID] FROM [dbo].[toc] INNER JOIN [dbo].[vol] ON [dbo].[toc].[vol_id] = [dbo].[vol].[vol_id] WHERE [dbo].[toc].[edoc_storeid] = @iFileName AND [dbo].[vol].[vol_name] = @VolName",
       "reviewNotes": [
@@ -158,7 +162,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Locating File in Laserfiche based on File Path in Volume",
-      "summary": "Schema-verified Answers source candidate referencing dbo.doc, dbo.toc, dbo.vol.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.doc, dbo.toc, dbo.vol.",
       "scriptPath": "answers-candidates/repository/repository-locating-file-in-laserfiche-based-on-file-path-in-volume.sql",
       "evidencePath": "answers-candidates/repository/repository-locating-file-in-laserfiche-based-on-file-path-in-volume-evidence.md",
       "sourceCount": 2,
@@ -169,7 +173,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -184,7 +188,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT doc.tocid FROM doc INNER JOIN toc ON doc.tocid = toc.tocid INNER JOIN vol ON toc.vol_id = vol.vol_id WHERE (vol.vol_name = N'XXXXXX') AND (doc.storeid = Y) Replace XXXXXX with the Volume Name (found as the Folder above the ## folder Replace the Y with the decimal equivalent of the Hex document name. Use a Programmer calculator in Hex mode to enter the Hex (without leading zeros) to get the decimal conversion. 4 0\n\nSELECT * FROM toc WHERE edoc_storeid = 866 AND vol_id=X That would give you the entry name (if the entry exists in your system). Easiest thing to do would be search your entire repository for that entry name to find the document in question. You could also figure out the path in SQL if you prefer. Each entry also has a tocid and a parentid. A parentid is just a reference to another tocid in the toc table, which would be the parent folder of the current entry. You can use this to track the folder",
       "reviewNotes": [
@@ -197,7 +202,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Error copying entry and/or pages",
-      "summary": "Schema-verified Answers source candidate referencing dbo.ann.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.ann.",
       "scriptPath": "answers-candidates/repository/repository-error-copying-entry-and-or-pages.sql",
       "evidencePath": "answers-candidates/repository/repository-error-copying-entry-and-or-pages-evidence.md",
       "sourceCount": 1,
@@ -206,7 +211,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -221,7 +226,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select ann_id, attach_storeid from ann where page_id = :pageid order by ann_id\"; SQL Variable=\"\"; SQL State=\"HY000\". Copy a LF Page: An error occurred when executing an SQL query, retrieving the results of a query, or otherwise communicating with the database server. Session ID=89312; Dialog ID=1243112; Repository=\"LFDocs\"; Function=SysPageCopy; Message=\"[Microsoft][ODBC Driver 11 for SQL Server]Connection is busy with results for another command\"; Statement=\"select ann_id, attach_storeid from a",
       "reviewNotes": [
@@ -234,7 +240,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Export and Print Event Types in Audit Trail",
-      "summary": "Schema-verified Answers source candidate referencing dbo.location.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.location.",
       "scriptPath": "answers-candidates/repository/repository-export-and-print-event-types-in-audit-trail.sql",
       "evidencePath": "answers-candidates/repository/repository-export-and-print-event-types-in-audit-trail-evidence.md",
       "sourceCount": 4,
@@ -243,7 +249,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -258,7 +264,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "create a new audit database in 9.1 had a problem which is causing this issue. Presuming that you are using Microsoft SQL as the audit database backend, please go into C:\\Program Files\\Laserfiche\\Audit Trail\\SQL and first backup the ms-audit.sql file to another location. Then,\n\ncreate the database. After the date range is set and the audit data is loaded into the new database (that was created using the modified script) please confirm that you can retrieve the entry_id values for the export events. 2 0\n\nselect * from export_events 0 0\n\ncreate a new Audit Trail database? After the new database is created and the audit date ranges set, the audit data from the Laserfiche Server's binary audit logs should be loaded into the database. Once that's complete, try querying the export_events view again and see if you can see the entry IDs. 0 0",
       "reviewNotes": [
@@ -275,7 +282,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Can't set new constraint; get error 9250",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propdef, dbo.propval, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propdef, dbo.propval, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-can-t-set-new-constraint-get-error-9250.sql",
       "evidencePath": "answers-candidates/repository/repository-can-t-set-new-constraint-get-error-9250-evidence.md",
       "sourceCount": 2,
@@ -286,7 +293,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -301,7 +308,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT toc.tocid [Entry ID], name [Entry Name], pos [Value#], str_val [Value] FROM toc JOIN propval ON toc.tocid = propval.tocid WHERE toc.toc_flags & 0x800 0 AND prop_id IN ( SELECT prop_id FROM propdef WHERE prop_name = 'MyField') ORDER BY toc.tocid, pos\n\nSELECT toc.tocid [Entry ID], name [Entry Name], pos [Value#], str_val [Value] FROM toc JOIN propval ON toc.tocid = propval.tocid WHERE toc.toc_flags & 0x800 0 AND prop_id IN ( SELECT prop_id FROM propdef WHERE prop_name = 'MyField') ORDER BY toc.tocid, pos 0 0",
       "reviewNotes": [
@@ -314,7 +322,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Deleting a Field - how to search for it later.",
-      "summary": "Schema-verified Answers source candidate referencing dbo.lup, dbo.propdef, dbo.propval.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.lup, dbo.propdef, dbo.propval.",
       "scriptPath": "answers-candidates/repository/repository-deleting-a-field-how-to-search-for-it-later.sql",
       "evidencePath": "answers-candidates/repository/repository-deleting-a-field-how-to-search-for-it-later-evidence.md",
       "sourceCount": 3,
@@ -325,7 +333,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -340,7 +348,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT * FROM propdef where prop_type = 'L'\n\nSELECT DISTINCT str_val FROM propval where prop_id = 49 and str_val not in ( SELECT list_val FROM lup where prop_id = 49)\n\nSELECT * FROM propdef where prop_type = 'L' I'm looking for our list field called 'Section' and see that it has the property id of 49. I can then use that id (49) to return a distinct list of all values used in that metadata list field (from propval table) while removing any values that are currently configured in the metadata list ( lup table). Resulting in all the old list values that are still used in the repository but not currently part of your metadata list. SELECT DISTINCT str_val FROM pr",
       "reviewNotes": [
@@ -355,7 +364,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How can I search for images over 16384 pixels wide or tall?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.doc, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.doc, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-how-can-i-search-for-images-over-16384-pixels-wide-or-tall.sql",
       "evidencePath": "answers-candidates/repository/repository-how-can-i-search-for-images-over-16384-pixels-wide-or-tall-evidence.md",
       "sourceCount": 2,
@@ -365,7 +374,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -380,7 +389,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT DISTINCT t.tocid FROM doc d JOIN toc t ON d.tocid = t.tocid WHERE toc_flags & 2048 = 0 AND pagenum >= 0 AND img_size > 0 AND (img_width > 16384 OR img_height > 16384)\n\nSELECT DISTINCT t.tocid FROM doc d JOIN toc t ON d.tocid = t.tocid WHERE toc_flags & 2048 = 0 AND pagenum >= 0 AND img_size > 0 AND (img_width > 16384 OR img_height > 16384) 2 0",
       "reviewNotes": [
@@ -393,7 +403,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How to count the number of pages",
-      "summary": "Schema-verified Answers source candidate referencing dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-how-to-count-the-number-of-pages.sql",
       "evidencePath": "answers-candidates/repository/repository-how-to-count-the-number-of-pages-evidence.md",
       "sourceCount": 4,
@@ -402,7 +412,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -417,7 +427,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT SUM(pagecount) as pages FROM [Your_Repository].[dbo].[toc] where created>@monthago\n\nSELECT SUM(pagecount) as pages FROM [Your_Repository].[dbo].[toc] where created>@datetoken and vol_id=@volumeidtoken\n\nCreate a monthly scheduled workflow with a custom sql query, email yourself the results. SELECT SUM(pagecount) as pages FROM [Your_Repository].[dbo].[toc] where created>@monthago 1 0\n\nSELECT SUM(pagecount) as pages FROM [Your_Repository].[dbo].[toc] where created>@datetoken and vol_id=@volumeidtoken As for keystrokes, I am not sure what that means to you. 0 0",
       "reviewNotes": [
@@ -432,7 +443,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "SID name in Audit Trail",
-      "summary": "Schema-verified Answers source candidate referencing dbo.trustee.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.trustee.",
       "scriptPath": "answers-candidates/repository/repository-sid-name-in-audit-trail.sql",
       "evidencePath": "answers-candidates/repository/repository-sid-name-in-audit-trail-evidence.md",
       "sourceCount": 1,
@@ -441,7 +452,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -456,7 +467,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT trustee_name FROM trustee WHERE trustee_id = 9). If the trustee has been deleted from the repository, you could try looking for other audit events with a trustee ID of 9 to see if one of them mentions the name. If the SID starts with S-1-5-, it's a Windows trustee, and you'll need to query Active Directory to figure out the name. Unfortunately, I'm less familiar with the particulars of how to do that. 0 0",
       "reviewNotes": [
@@ -469,7 +481,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Sophos AV-Customer getting General DB Error 9008",
-      "summary": "Schema-verified Answers source candidate referencing dbo.thumbnails.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.thumbnails.",
       "scriptPath": "answers-candidates/repository/repository-sophos-av-customer-getting-general-db-error-9008.sql",
       "evidencePath": "answers-candidates/repository/repository-sophos-av-customer-getting-general-db-error-9008-evidence.md",
       "sourceCount": 1,
@@ -478,7 +490,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -493,7 +505,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select datalength(data) from thumbnails where pageid=:pageid \"; SQL Variable=\"\"; SQL State=\"42000\". They are trying to figure what settings to tweak, for Sophos on the Server. They are excluding the real time scanning of the E:\\LaserficheData folder. I have provided the customer with the Workstation exclusion that were provided by Miruna in another LF Answer Post. Appreciate any guidance that can be offered. Jeff Curtis 0 0",
       "reviewNotes": [
@@ -506,7 +519,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "sql query to arrange template/metadata column wise",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propval, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propval, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-sql-query-to-arrange-template-metadata-column-wise.sql",
       "evidencePath": "answers-candidates/repository/repository-sql-query-to-arrange-template-metadata-column-wise-evidence.md",
       "sourceCount": 2,
@@ -516,7 +529,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -531,7 +544,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select distinct * from ( select toc.tocid, LRO_Attorney.pos,LRO_Attorney.pos2, toc.name AS ReportName, LRO_Attorney.str_val as LRO_Attorney, Rulemaking_Stage.str_val as [Rulemaking stage], RIN.str_val as [RIN],Bureau.str_val as [Bureau],Stage_Status.str_val as [Stage_Status],isnull(Phase_of_Review.str_val,'') as [Phase_of_Review] from toc inner join propval as LRO_Attorney on toc.tocid = LRO_Attorney.tocid and LRO_Attorney.prop_id = 1515 inner join propval as Rulemaking_Stage on toc.tocid = Rule\n\ncreate a temp table where you convert your multi-values into a single value, and then you can join on that. But it will require multiple operations and isn't usable as-is if you need a single query. 1 0",
       "reviewNotes": [
@@ -544,7 +558,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "6TB Migration Project Issue - Select statement that is hanging the server after migrating 2 volumes",
-      "summary": "Schema-verified Answers source candidate referencing dbo.deletedpage.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.deletedpage.",
       "scriptPath": "answers-candidates/repository/repository-6tb-migration-project-issue-select-statement-that-is-hanging-the-server-after-m.sql",
       "evidencePath": "answers-candidates/repository/repository-6tb-migration-project-issue-select-statement-that-is-hanging-the-server-after-m-evidence.md",
       "sourceCount": 2,
@@ -553,7 +567,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -568,7 +582,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "Select statement that is hanging the server after migrating 2 volumes Laserfiche Version 10 Migration Updated June 13, 2024 Subscribe Subscribed asked on May 4, 2018 HAPPY FRIDAY!! So the last two Thursday evenings I have migrated 2 different volumes. And Friday come 9 am the app server service \"Network PowerSnap Service\" stops and once it is restarted the web server is still showing communication errors and prod is stuck. A DBA saw the outage notification that I post and checked the database an\n\nselect vol_id, storeid from deletedpage\" to find items that have been marked for deletion but haven't been removed from the file system. It's a very simple query, so it's surprising that it is taking a lot of resources. Though due to the purpose of the table, if there is a problem running the query the table will only grow in size, and things may pile up from there. I'd start by looking at the size of the deletedpage table - how many rows are in there? Can you run the select statement from SQL M",
       "reviewNotes": [
@@ -581,7 +596,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Auditar usuario participantes de forms",
-      "summary": "Schema-verified Answers source candidate referencing dbo.auditlogs.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.auditlogs.",
       "scriptPath": "answers-candidates/repository/repository-auditar-usuario-participantes-de-forms.sql",
       "evidencePath": "answers-candidates/repository/repository-auditar-usuario-participantes-de-forms-evidence.md",
       "sourceCount": 1,
@@ -590,7 +605,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -605,7 +620,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select log_state from auditlogs where log_uuid = :uuid '; Variable SQL: ''; Estado SQL: 42S02. Pueden apoyarme con la query para generar la tabla ??? por favor 0 0",
       "reviewNotes": [
@@ -618,7 +634,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Calculate folder and Documents in Laserfiche",
-      "summary": "Schema-verified Answers source candidate referencing dbo.doc, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.doc, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-calculate-folder-and-documents-in-laserfiche.sql",
       "evidencePath": "answers-candidates/repository/repository-calculate-folder-and-documents-in-laserfiche-evidence.md",
       "sourceCount": 2,
@@ -628,7 +644,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -643,7 +659,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT SUM(tocsum.docsum) AS[value] FROM( SELECT( SELECT SUM(CONVERT(BigInt,doc.img_size)) AS tsum FROM doc WHERE doc.tocid = toc.tocid ) AS docsum FROM toc ) AS tocsum\n\nSELECT SUM(tocsum.docsum) AS[value] FROM( SELECT( SELECT SUM(CONVERT(BigInt,doc.img_size)) AS tsum FROM doc WHERE doc.tocid = toc.tocid ) AS docsum FROM toc ) AS tocsum Of course, there are other size columns in doc, and you need to take into account the edoc_size column on the toc table. What questions are you trying to answer? 5 0",
       "reviewNotes": [
@@ -656,7 +673,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Change Template via SQL",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propval.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propval.",
       "scriptPath": "answers-candidates/repository/repository-change-template-via-sql.sql",
       "evidencePath": "answers-candidates/repository/repository-change-template-via-sql-evidence.md",
       "sourceCount": 1,
@@ -665,7 +682,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -680,7 +697,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select * from propval where tocid= to see how to set the values directly. The standard disclaimer applies: back up your database before modifying it, and we do not recommend modifying sql directly. The SDK is the preferred way to do this. Also, the LF server caches information about entries in memory, so the LFS service should be restarted after making the change. 0 0",
       "reviewNotes": [
@@ -695,7 +713,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Crystal Report Running Very Slow",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propval, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propval, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-crystal-report-running-very-slow.sql",
       "evidencePath": "answers-candidates/repository/repository-crystal-report-running-very-slow-evidence.md",
       "sourceCount": 1,
@@ -705,7 +723,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -720,7 +738,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select PONumber.str_val as PONumber, InvNumber.str_val as InvoiceNumber, dates.date_val as Date, NumReceivers.num_val as NumReceivers from toc inner join propval as PONumber on toc.tocid = PONumber.tocid and PONumber.prop_id = 87 inner join propval as InvNumber on toc.tocid = InvNumber.tocid and InvNumber.prop_id = 35 inner join propval as dates on toc.tocid = dates.tocid and dates.prop_id = 41 inner join propval as NumReceivers on toc.tocid = NumReceivers.tocid and NumReceivers.prop_id = 188",
       "reviewNotes": [
@@ -733,7 +752,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Crystal Reports",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propval, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propval, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-crystal-reports.sql",
       "evidencePath": "answers-candidates/repository/repository-crystal-reports-evidence.md",
       "sourceCount": 5,
@@ -743,7 +762,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -758,7 +777,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select toc.name as ReportName, vendor.str_val as VendorName, amount.num_val as Amount from toc inner join propval as vendor on toc.tocid = vendor.tocid and vendor.prop_id = 42 inner join propval as amount on toc.tocid = amount.tocid and amount.prop_id = 50\n\nselect toc.name AS ReportName, PONumber.str_val as PONumber, dates.date_val as Date, EQ.str_val as EQNumber, MakeModel.str_val as MakeModel, ProdLineNum.str_val as ProdLineNum, PartOfLine.str_val as PartOfLine, VendorName.str_val as VendorName, Company.str_val as Company, UnitPrice.num_val As UnitPrice, Quantity.num_val as Quantity, Total.num_val as Total, MVPNum.num_val as MVPNum, Requestor.str_val as Requestor from toc inner join propval as PONumber on toc.tocid = PONumber.tocid and PONumber.p\n\nselect toc.name as ReportName, vendor.str_val as VendorName, amount.num_val as Amount from toc inner join propval as vendor on toc.tocid = vendor.tocid and vendor.prop_id = 42 inner join propval as amount on toc.tocid = amount.tocid and amount.prop_id = 50 The key to keeping this query readable is using sensible aliases for the instances of the propval table. The values 42 and 50 are the hypothetical ids for the fields you want, it's po\n/* excerpt truncated */",
       "reviewNotes": [
@@ -771,7 +791,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Determining the number of times a specific stamp has been applied using Workflow",
-      "summary": "Schema-verified Answers source candidate referencing dbo.ann, dbo.doc, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.ann, dbo.doc, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-determining-the-number-of-times-a-specific-stamp-has-been-applied-using-workflo.sql",
       "evidencePath": "answers-candidates/repository/repository-determining-the-number-of-times-a-specific-stamp-has-been-applied-using-workflo-evidence.md",
       "sourceCount": 1,
@@ -782,7 +802,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -797,7 +817,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT * FROM ann INNER JOIN doc ON doc.page_id = ann.page_id INNER JOIN toc ON toc.tocid = doc.tocid WHERE ann.ann_type = 16 AND toc.tocid = [YourEntryID] Where [YourEntryID] is the Entry_ID for your document. Between the Toc, Doc, Ann and Stamp tables, all of the info you need should be there. 0 0",
       "reviewNotes": [
@@ -810,7 +831,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Error - 9119 - How to find entries that you don't have access to?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propset, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propset, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-error-9119-how-to-find-entries-that-you-don-t-have-access-to.sql",
       "evidencePath": "answers-candidates/repository/repository-error-9119-how-to-find-entries-that-you-don-t-have-access-to-evidence.md",
       "sourceCount": 3,
@@ -820,7 +841,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -835,7 +856,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select count(*) from toc where pset_id in (select pset_id from propset where pset_name = 'TEMPLATE NAME GOES HERE' )\n\nselect top 10 tocid, name, parentid from toc where pset_id in (select pset_id from propset where pset_name = 'TEMPLATE NAME GOES HERE' )\n\nselect count(*) from toc where pset_id in (select pset_id from propset where pset_name = 'TEMPLATE NAME GOES HERE' ) Then you can look in the TOC table for the documents: select top 10 tocid, name, parentid from toc where pset_id in (select pset_id from propset where pset_name = 'TEMPLATE NAME GOES HERE' ) You can chase the parent name up the tree based on the ID in the TOC table as well. 1 0",
       "reviewNotes": [
@@ -848,7 +870,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Find all modified entries during time period from SQL",
-      "summary": "Schema-verified Answers source candidate referencing dbo.toc, dbo.trustee.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.toc, dbo.trustee.",
       "scriptPath": "answers-candidates/repository/repository-find-all-modified-entries-during-time-period-from-sql.sql",
       "evidencePath": "answers-candidates/repository/repository-find-all-modified-entries-during-time-period-from-sql-evidence.md",
       "sourceCount": 1,
@@ -858,7 +880,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -873,7 +895,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT toc.created, trustee.trustee_name AS Creator, toc.modified, trustee_1.trustee_name AS Modifier, toc.tocid, toc.name, toc.del_tocid FROM toc INNER JOIN trustee ON toc.creator = trustee.sid LEFT JOIN trustee AS trustee_1 ON toc.toc_modifier = trustee_1.sid where toc.modified > '2021-02-01 19:30:00.000' AND toc.modified < '2021-02-01 20:30:00.000'",
       "reviewNotes": [
@@ -886,7 +909,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Find Duplicate Entries",
-      "summary": "Schema-verified Answers source candidate referencing dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-find-duplicate-entries.sql",
       "evidencePath": "answers-candidates/repository/repository-find-duplicate-entries-evidence.md",
       "sourceCount": 2,
@@ -895,7 +918,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -910,7 +933,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select count(name), name from toc where etype = -2 group by name having count(name) >=2\n\nselect count(name), name from toc where etype = -2 group by name having count(name) >=2 Depending on how many duplicates you have now, you may need to limit the number of results returned. Then I would iterate through the search results and build a search query for a name search as a token. The next step depends on whether Web Access is available or not. If Web Access is available, then use a Generate Web Access URL with the search and email that link to the user. That way, the search runs when",
       "reviewNotes": [
@@ -923,7 +947,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How do I find all Documents that have the inherit from parent unchecked?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-how-do-i-find-all-documents-that-have-the-inherit-from-parent-unchecked.sql",
       "evidencePath": "answers-candidates/repository/repository-how-do-i-find-all-documents-that-have-the-inherit-from-parent-unchecked-evidence.md",
       "sourceCount": 5,
@@ -932,7 +956,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -947,7 +971,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select * from toc where etype=-2 and (toc_sdctl & 4096 = 4096) and (toc_flags & 2048 = 0)\n\nselect * from toc where etype=-2 and (toc_sdctl & 4096 = 4096) and parentid 2\n\nselect * from toc where etype=-2 and (toc_sdctl & 4096 = 4096)\n\nselect * from toc where etype=-2 and (toc_sdctl & 4096 = 4096) and (toc_flags & 2048 = 0) The 2048 bit in toc_flags records whether an entry is currently in the recycle bin (including children of recycled folders). 1 0\n\nselect * from toc where etype=-2 and (toc_sdctl & 4096 = 4096) and parentid 2 but when I try and search for the documents I can not see them or the parent folder. I have tried to search using different user accounts and adding a user into every group in the system but still not finding the documents any ideas? Andrew 1 0",
       "reviewNotes": [
@@ -960,7 +985,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How do I track down a document from the image filename in a volume?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.doc, dbo.toc, dbo.vol.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.doc, dbo.toc, dbo.vol.",
       "scriptPath": "answers-candidates/repository/repository-how-do-i-track-down-a-document-from-the-image-filename-in-a-volume.sql",
       "evidencePath": "answers-candidates/repository/repository-how-do-i-track-down-a-document-from-the-image-filename-in-a-volume-evidence.md",
       "sourceCount": 4,
@@ -971,7 +996,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -986,7 +1011,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select t1.tocid, t1.name, (t3.pagenum+1), t2.fixedpath from toc t1 join vol t2 on t1.volumeid=t2.volumeid join doc t3 on t1.tocid=t3.tocid where t1.tocid in (select distinct(tocid) from doc where storeid=x) and storeid=x\n\nselect t1.tocid, t1.name, t2.fixedpath from toc t1 join vol t2 on t1.volumeid=t2.volumeid where t1.tocid in (select distinct(tocid) from doc where storeid=x)\n\nselect t1.tocid, t1.name, (t3.pagenum+1), t2.fixedpath from toc t1 join vol t2 on t1.volumeid=t2.volumeid join doc t3 on t1.tocid=t3.tocid where t1.tocid in (select distinct(tocid) from doc where storeid=x) and storeid=x Just replace x with the storeid. Note that the page numbers in the doc table are 0 based so that's why we're adding 1 to it to get the actual page number you'd look for when reviewing the document. 1 0\n\nselect t1.tocid, t1.name, t2.fixedpath from toc t1 join vol t2 on t1.volumeid=t2.volumeid where t1.tocid in (select distinct(tocid) from doc where storeid=x) Just replace \"x\" with the actual value. This query will return all instances of a document that has a page with a given storeid. Note that the storeid may not be unique since you could have multiple volumes with pages that end up using t\n/* excerpt truncated */",
       "reviewNotes": [
@@ -999,7 +1025,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How do you search for folders that are not assigned a specific volume?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-how-do-you-search-for-folders-that-are-not-assigned-a-specific-volume.sql",
       "evidencePath": "answers-candidates/repository/repository-how-do-you-search-for-folders-that-are-not-assigned-a-specific-volume-evidence.md",
       "sourceCount": 2,
@@ -1008,7 +1034,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1023,7 +1049,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT name, tocid FROM toc WHERE vol_id IS NULL AND etype = 0 AND tocid 2\n\nSELECT name, tocid FROM toc WHERE vol_id IS NULL AND etype = 0 AND tocid 2 1 0",
       "reviewNotes": [
@@ -1036,7 +1063,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How to return total \"content\" count in whole repository with workflow",
-      "summary": "Schema-verified Answers source candidate referencing dbo.doc, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.doc, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-how-to-return-total-content-count-in-whole-repository-with-workflow.sql",
       "evidencePath": "answers-candidates/repository/repository-how-to-return-total-content-count-in-whole-repository-with-workflow-evidence.md",
       "sourceCount": 2,
@@ -1046,7 +1073,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1061,7 +1088,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select count(*) from toc where etype = -2 select count(*) from [doc] where img_size is not null and txt_size =0\n\nselect count(*) from toc where etype = -2 select count(*) from [doc] where img_size is not null and txt_size =0 1 0",
       "reviewNotes": [
@@ -1074,7 +1102,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How to search for duplicate folder names",
-      "summary": "Schema-verified Answers source candidate referencing dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-how-to-search-for-duplicate-folder-names.sql",
       "evidencePath": "answers-candidates/repository/repository-how-to-search-for-duplicate-folder-names-evidence.md",
       "sourceCount": 2,
@@ -1083,7 +1111,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1098,7 +1126,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select name, count(*) from toc where etype = 0 group by name having count(*) > 1\n\nselect name, count(*) from toc where etype = 0 group by name having count(*) > 1 1 0",
       "reviewNotes": [
@@ -1111,7 +1140,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Laserfiche document date property compare",
-      "summary": "Schema-verified Answers source candidate referencing dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-laserfiche-document-date-property-compare.sql",
       "evidencePath": "answers-candidates/repository/repository-laserfiche-document-date-property-compare-evidence.md",
       "sourceCount": 3,
@@ -1120,7 +1149,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1135,7 +1164,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select top 100 tocid, name from toc where created < modified\n\ncreate a simple search via Search Syntax or the Advanced Search option in the thick client that will identify documents that have been truly changed vs. documents that have not. I understand you can use the date option in a customized search to see when a document was created or modified...if the dates and time are the same, it was never modified as the modified time also reflects the creation time of the document. I'm trying to locate the documents where the modified and creation dates and time\n\nselect top 100 tocid, name from toc where created 0 0",
       "reviewNotes": [
@@ -1148,7 +1178,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Metadata Field to Allow Selection of a LF Folder",
-      "summary": "Schema-verified Answers source candidate referencing dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-metadata-field-to-allow-selection-of-a-lf-folder.sql",
       "evidencePath": "answers-candidates/repository/repository-metadata-field-to-allow-selection-of-a-lf-folder-evidence.md",
       "sourceCount": 4,
@@ -1157,7 +1187,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1172,7 +1202,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "CREATE view [dbo].[3LevelDynamicField] as SELECT convert(nvarchar(40),t1.name) as [Level1], convert(nvarchar(40),t2.name) as [Level2], convert(nvarchar(40),ISNULL(t3.name,'')) as [Level3] FROM toc AS t3 inner join toc AS t2 ON t3.parentid =t2.tocid inner join toc AS t1 ON t2.parentid=t1.tocid WHERE t1.filter_expr='1=1' --This is the folder filter exression that marks the root folder and t1.etype=0 and t2.etype=0 --Just folders are required and (t3.etype =0 or t3.etype is null) --the \"is null\" ch\n\nCREATE view [dbo].[7LevelDynamicField] as SELECT convert(nvarchar(40),t1.name) as [Level1], convert(nvarchar(40),t2.name) as [Level2], convert(nvarchar(40),t3.name) as [Level3], convert(nvarchar(40),t4.name) as [Level4], convert(nvarchar(40),t5.name) as [Level5], convert(nvarchar(40),t6.name) as [Level6], convert(nvarchar(40),ISNULL(t7.name,'')) as [Level7] FROM toc AS t7 inner join toc AS t6 ON t7.parentid = t6.tocid inner join toc AS t5 ON t6.parentid = t5.tocid inner join toc AS t4 ON t5.pare\n\ncreate a branch for each folder or use tokens to avoid multiple branches. Another option that you may want to consider is to set up a metadata list field of \"Document Type\" and set up a workflow t\n/* excerpt truncated */",
       "reviewNotes": [
@@ -1185,7 +1216,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Questions with Topic Laserfiche",
-      "summary": "Schema-verified Answers source candidate referencing dbo.doc, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.doc, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-questions-with-topic-laserfiche.sql",
       "evidencePath": "answers-candidates/repository/repository-questions-with-topic-laserfiche-evidence.md",
       "sourceCount": 1,
@@ -1195,7 +1226,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1210,7 +1241,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT [tocid] , sum ( cast ( [img_size] as bigint )) + sum ( cast ( [txt_size] as bigint )) + sum ( cast ( [loc_size] as bigint )) as totaldocsize into [Laserfiche_Reporting] . [dbo] . [BI_totaldoc] FROM [Laserfiche_ProductionReporting_IntertrustAmsterdam] . [dbo] . [doc] group by tocid I added the total to the toc.edoc_size , [Laserfiche_ProductionReporting_IntertrustAmsterdam] . [dbo] . [toc] . [edoc_size] + [Laserfiche_Reporting] . [dbo] . [BI_totaldoc] . [totaldocsize] as TotalDocumentSize",
       "reviewNotes": [
@@ -1225,7 +1257,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Recurring query",
-      "summary": "Schema-verified Answers source candidate referencing dbo.doc, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.doc, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-recurring-query.sql",
       "evidencePath": "answers-candidates/repository/repository-recurring-query-evidence.md",
       "sourceCount": 1,
@@ -1235,7 +1267,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1250,7 +1282,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select sum(convert(bigint, d.txt_size)) + sum(convert(bigint, d.img_size)) + sum(convert(bigint, d.lft_size)) + sum(convert(bigint, d.loc_size)) from doc d join toc t on d.tocid = t.tocid where t.vol_id = @P1 We are using 9.1 Does anybody know what is triggering this query? Is very intensive and locking the rest of the LF sql statements. Thanks Gian 0 0",
       "reviewNotes": [
@@ -1263,7 +1296,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Running Silent Installs on User Machines w Batch Files - Elevation Required?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.location.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.location.",
       "scriptPath": "answers-candidates/repository/repository-running-silent-installs-on-user-machines-w-batch-files-elevation-required.sql",
       "evidencePath": "answers-candidates/repository/repository-running-silent-installs-on-user-machines-w-batch-files-elevation-required-evidence.md",
       "sourceCount": 1,
@@ -1272,7 +1305,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1287,7 +1320,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "create a package with the following configurations Make sure the Package that is being created is configured Run As: Deploy User (Interactive) More on this later For the install step use the following configuration Making sure the \"Include Entire Directory\" is checked, then on additional files select the \"msxml6_x64.msi\" (location was not moved from Laserfiche_20250722\\en\\Support\\msxml6_x64.msi) and include it in the installation package. you can't move the msxml6_x64.msi from its original locat",
       "reviewNotes": [
@@ -1302,7 +1336,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Search for Hard Carriage Returns or Tabs",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propval, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propval, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-search-for-hard-carriage-returns-or-tabs.sql",
       "evidencePath": "answers-candidates/repository/repository-search-for-hard-carriage-returns-or-tabs-evidence.md",
       "sourceCount": 2,
@@ -1312,7 +1346,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1327,7 +1361,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select a.tocid, a.str_val, b.name from propval a inner join toc b on a.tocid = b.tocid where a.str_val like '%' + CHAR(10) + '%' or a.str_val like '%' + CHAR(13) + '%' or a.str_val like '%' + CHAR(9) + '%'\n\nselect a.tocid, a.str_val, b.name from propval a inner join toc b on a.tocid = b.tocid where a.str_val like '%' + CHAR(10) + '%' or a.str_val like '%' + CHAR(13) + '%' or a.str_val like '%' + CHAR(9) + '%' Tab = char(9) Line feed = char(10) Carriage return = char(13) Then maybe pair it with a Workflow replaces those characters with spaces or something similar. 1 0",
       "reviewNotes": [
@@ -1340,7 +1375,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Searching with SQL",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propval, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propval, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-searching-with-sql.sql",
       "evidencePath": "answers-candidates/repository/repository-searching-with-sql-evidence.md",
       "sourceCount": 1,
@@ -1350,7 +1385,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1365,7 +1400,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select t.tocid from toc t inner join propval p on p.tocid = t.tocid and p.prop_id = 96 and p.str_val='Human Resources' --Department inner join propval p2 on p2.tocid = t.tocid and p2.prop_id = 98 and p2.str_val='Riley Recruiter' --author inner join propval p3 on p3.tocid = t.tocid and p3.prop_id = 130 and p3.str_val='Template' --DocumentType",
       "reviewNotes": [
@@ -1378,7 +1414,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "SQL query Question",
-      "summary": "Schema-verified Answers source candidate referencing dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-sql-query-question.sql",
       "evidencePath": "answers-candidates/repository/repository-sql-query-question-evidence.md",
       "sourceCount": 1,
@@ -1387,7 +1423,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1402,7 +1438,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select tocid from toc where toc_flags & 0x800 = 0'. J ust wondering what this",
       "reviewNotes": [
@@ -1415,7 +1452,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Template field length and size of user input box",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propdef, dbo.propval.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propdef, dbo.propval.",
       "scriptPath": "answers-candidates/repository/repository-template-field-length-and-size-of-user-input-box.sql",
       "evidencePath": "answers-candidates/repository/repository-template-field-length-and-size-of-user-input-box-evidence.md",
       "sourceCount": 2,
@@ -1425,7 +1462,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1440,7 +1477,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "select count(*) from propval where prop_id in (select prop_id from propdef where prop_name = 'message') and LEN(str_val) >=50\n\nselect count(*) from propval where prop_id in (select prop_id from propdef where prop_name = 'message') and LEN(str_val) >=50 Or replace \"count(*)\" with \"tocid\" to get a list of entry IDs. 3 0",
       "reviewNotes": [
@@ -1453,7 +1491,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Tracing the origin of a long-running query using a temporary table called search_entry_cache",
-      "summary": "Schema-verified Answers source candidate referencing dbo.ann, dbo.doc, dbo.toc.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.ann, dbo.doc, dbo.toc.",
       "scriptPath": "answers-candidates/repository/repository-tracing-the-origin-of-a-long-running-query-using-a-temporary-table-called-searc.sql",
       "evidencePath": "answers-candidates/repository/repository-tracing-the-origin-of-a-long-running-query-using-a-temporary-table-called-searc-evidence.md",
       "sourceCount": 2,
@@ -1464,7 +1502,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1479,7 +1517,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT tocid, parentid, etype, vol_id, acl_tocid, ( SELECT Count(d.tocid) FROM ann a JOIN doc d ON a.page_id = d.page_id WHERE a.ann_type = 2 AND d.tocid = toc.tocid ) AS redactions, CASE WHEN acl_tocid IS NULL THEN - 1 ELSE CASE WHEN acl_tocid = tocid THEN 0 ELSE CASE WHEN acl_tocid = parentid THEN 1 ELSE 2 END END END AS depth FROM toc INNER JOIN #search_entry_cache ON tocid = entry_id\n\nexecute (up to several hours), so I'm trying to determine the origin of the queries (for example, is this a LF housekeeping function? part of the index service? etc.) All of the queries include a temporary sql table called either #search_entry_cache or #search_entry_cache2. Here is one of the problem queries &mdash; does anybody recognize what might be the source of this? Thanks, Ken SELECT tocid, parentid, etype, vol_id, acl_tocid, ( SELECT Count(d.tocid) FROM ann a JOIN doc d ON a.page_id = d.",
       "reviewNotes": [
@@ -1492,7 +1531,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "What Laserfiche DB table do field names reside in?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.propval.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.propval.",
       "scriptPath": "answers-candidates/repository/repository-what-laserfiche-db-table-do-field-names-reside-in.sql",
       "evidencePath": "answers-candidates/repository/repository-what-laserfiche-db-table-do-field-names-reside-in-evidence.md",
       "sourceCount": 3,
@@ -1501,7 +1540,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1516,7 +1555,8 @@ export const generatedReportingCandidates = {
         "11.0.2.338",
         "12.0.1.237",
         "12.0.2.343",
-        "12.0.3.423"
+        "12.0.3.423",
+        "12.0.4.433"
       ],
       "capturedExcerpt": "SELECT DISTINCT str_val FROM propval WHERE prop_id =\n\nSELECT DISTINCT str_val FROM propval WHERE prop_id = 2 0\n\ncreate a dedicated lookup table for this sort of thing. I usually will set up a nightly process to load the table with the relevant values. Unless you require live data, I tend to think it offers more flexibility in the long run. 2 0",
       "reviewNotes": [
@@ -1531,7 +1571,7 @@ export const generatedReportingCandidates = {
   "workflow": [
     {
       "title": "Contacting Customers on a schedule.",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-contacting-customers-on-a-schedule.sql",
       "evidencePath": "answers-candidates/workflow/workflow-contacting-customers-on-a-schedule-evidence.md",
       "sourceCount": 1,
@@ -1540,7 +1580,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1569,7 +1609,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Issue Converting NVARCHAR to VARBINARY in Laserfiche Workflow Custom Query",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-issue-converting-nvarchar-to-varbinary-in-laserfiche-workflow-custom-query.sql",
       "evidencePath": "answers-candidates/workflow/workflow-issue-converting-nvarchar-to-varbinary-in-laserfiche-workflow-custom-query-evidence.md",
       "sourceCount": 3,
@@ -1578,7 +1618,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1607,7 +1647,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Query email address from database",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-query-email-address-from-database.sql",
       "evidencePath": "answers-candidates/workflow/workflow-query-email-address-from-database-evidence.md",
       "sourceCount": 2,
@@ -1616,7 +1656,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1645,7 +1685,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Reports needed in Forms",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-reports-needed-in-forms.sql",
       "evidencePath": "answers-candidates/workflow/workflow-reports-needed-in-forms-evidence.md",
       "sourceCount": 2,
@@ -1654,7 +1694,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1683,7 +1723,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Stored Procedure in Workflow - Return Value to Use as a Token",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-stored-procedure-in-workflow-return-value-to-use-as-a-token.sql",
       "evidencePath": "answers-candidates/workflow/workflow-stored-procedure-in-workflow-return-value-to-use-as-a-token-evidence.md",
       "sourceCount": 1,
@@ -1692,7 +1732,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1721,7 +1761,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Using a stored procedure in workflow and using the return value",
-      "summary": "Schema-verified Answers source candidate referencing dbo.activities, dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.activities, dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-using-a-stored-procedure-in-workflow-and-using-the-return-value.sql",
       "evidencePath": "answers-candidates/workflow/workflow-using-a-stored-procedure-in-workflow-and-using-the-return-value-evidence.md",
       "sourceCount": 4,
@@ -1731,7 +1771,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1761,7 +1801,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow Custom Query output parameters from a stored procedure",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-custom-query-output-parameters-from-a-stored-procedure.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-custom-query-output-parameters-from-a-stored-procedure-evidence.md",
       "sourceCount": 1,
@@ -1770,7 +1810,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1799,7 +1839,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How to delay sending a workflow email by 24hrs after a form submission happens",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow, dbo.workflows.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow, dbo.workflows.",
       "scriptPath": "answers-candidates/workflow/workflow-how-to-delay-sending-a-workflow-email-by-24hrs-after-a-form-submission-happens.sql",
       "evidencePath": "answers-candidates/workflow/workflow-how-to-delay-sending-a-workflow-email-by-24hrs-after-a-form-submission-happens-evidence.md",
       "sourceCount": 1,
@@ -1809,7 +1849,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1837,7 +1877,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How to see all instances assigned to a user",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-how-to-see-all-instances-assigned-to-a-user.sql",
       "evidencePath": "answers-candidates/workflow/workflow-how-to-see-all-instances-assigned-to-a-user-evidence.md",
       "sourceCount": 5,
@@ -1846,7 +1886,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1875,7 +1915,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Sorting in Update Word Doc Task",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-sorting-in-update-word-doc-task.sql",
       "evidencePath": "answers-candidates/workflow/workflow-sorting-in-update-word-doc-task-evidence.md",
       "sourceCount": 1,
@@ -1884,7 +1924,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1913,7 +1953,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow Custom Query - Error converting datatype nvarchar to date [Wf 9.1.0.328]",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-custom-query-error-converting-datatype-nvarchar-to-date-wf-9-1-0-328.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-custom-query-error-converting-datatype-nvarchar-to-date-wf-9-1-0-328-evidence.md",
       "sourceCount": 1,
@@ -1922,7 +1962,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1951,7 +1991,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow Custom Query - how to access the result data?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-custom-query-how-to-access-the-result-data.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-custom-query-how-to-access-the-result-data-evidence.md",
       "sourceCount": 1,
@@ -1960,7 +2000,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -1989,7 +2029,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow Custom Query sort order",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-custom-query-sort-order.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-custom-query-sort-order-evidence.md",
       "sourceCount": 1,
@@ -1998,7 +2038,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2029,7 +2069,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Assign existing data fields in DB to PDF files metadata using Workflow",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-assign-existing-data-fields-in-db-to-pdf-files-metadata-using-workflow.sql",
       "evidencePath": "answers-candidates/workflow/workflow-assign-existing-data-fields-in-db-to-pdf-files-metadata-using-workflow-evidence.md",
       "sourceCount": 1,
@@ -2038,7 +2078,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2067,7 +2107,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Can forms processes be halted?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-can-forms-processes-be-halted.sql",
       "evidencePath": "answers-candidates/workflow/workflow-can-forms-processes-be-halted-evidence.md",
       "sourceCount": 2,
@@ -2076,7 +2116,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2107,7 +2147,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Does the Query Data workflow activity automatically escape single quote characters?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-does-the-query-data-workflow-activity-automatically-escape-single-quote-character.sql",
       "evidencePath": "answers-candidates/workflow/workflow-does-the-query-data-workflow-activity-automatically-escape-single-quote-character-evidence.md",
       "sourceCount": 1,
@@ -2116,7 +2156,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2147,7 +2187,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "how to configure more than one Database in data source of Laserfiche workflow",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-how-to-configure-more-than-one-database-in-data-source-of-laserfiche-workflow.sql",
       "evidencePath": "answers-candidates/workflow/workflow-how-to-configure-more-than-one-database-in-data-source-of-laserfiche-workflow-evidence.md",
       "sourceCount": 1,
@@ -2156,7 +2196,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2185,7 +2225,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How to find all workflow database connections",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow, dbo.workflows.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow, dbo.workflows.",
       "scriptPath": "answers-candidates/workflow/workflow-how-to-find-all-workflow-database-connections.sql",
       "evidencePath": "answers-candidates/workflow/workflow-how-to-find-all-workflow-database-connections-evidence.md",
       "sourceCount": 1,
@@ -2195,7 +2235,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2223,7 +2263,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Openedge ODBC and Workflow",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-openedge-odbc-and-workflow.sql",
       "evidencePath": "answers-candidates/workflow/workflow-openedge-odbc-and-workflow-evidence.md",
       "sourceCount": 4,
@@ -2232,7 +2272,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2261,7 +2301,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Scanning Hard Copy Sheets, OCR Content and Save it into SQL Database or CSV File",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-scanning-hard-copy-sheets-ocr-content-and-save-it-into-sql-database-or-csv-file.sql",
       "evidencePath": "answers-candidates/workflow/workflow-scanning-hard-copy-sheets-ocr-content-and-save-it-into-sql-database-or-csv-file-evidence.md",
       "sourceCount": 2,
@@ -2270,7 +2310,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2299,7 +2339,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "SQL date format not recognised by workflow",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-sql-date-format-not-recognised-by-workflow.sql",
       "evidencePath": "answers-candidates/workflow/workflow-sql-date-format-not-recognised-by-workflow-evidence.md",
       "sourceCount": 2,
@@ -2308,7 +2348,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2339,7 +2379,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow action: Query active directory",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-action-query-active-directory.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-action-query-active-directory-evidence.md",
       "sourceCount": 3,
@@ -2348,7 +2388,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2377,7 +2417,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow Custom ODBC Query to MySQL Database: SELECT WHERE with variable",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-custom-odbc-query-to-mysql-database-select-where-with-variable.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-custom-odbc-query-to-mysql-database-select-where-with-variable-evidence.md",
       "sourceCount": 1,
@@ -2386,7 +2426,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2415,7 +2455,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow database source connected, but need help configuring Activities",
-      "summary": "Schema-verified Answers source candidate referencing dbo.activities, dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.activities, dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-database-source-connected-but-need-help-configuring-activities.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-database-source-connected-but-need-help-configuring-activities-evidence.md",
       "sourceCount": 2,
@@ -2425,7 +2465,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2453,7 +2493,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Can I export the search results in Workflow Designer 8.0 to a csv?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-can-i-export-the-search-results-in-workflow-designer-8-0-to-a-csv.sql",
       "evidencePath": "answers-candidates/workflow/workflow-can-i-export-the-search-results-in-workflow-designer-8-0-to-a-csv-evidence.md",
       "sourceCount": 2,
@@ -2462,7 +2502,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2491,7 +2531,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Can Laserfiche be used to manage copyright documents, to limit access to one person at a time?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-can-laserfiche-be-used-to-manage-copyright-documents-to-limit-access-to-one-perso.sql",
       "evidencePath": "answers-candidates/workflow/workflow-can-laserfiche-be-used-to-manage-copyright-documents-to-limit-access-to-one-perso-evidence.md",
       "sourceCount": 1,
@@ -2500,7 +2540,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2531,7 +2571,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Can you revert to older versions of a workflow in laserfiche workflow designer?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-can-you-revert-to-older-versions-of-a-workflow-in-laserfiche-workflow-designer.sql",
       "evidencePath": "answers-candidates/workflow/workflow-can-you-revert-to-older-versions-of-a-workflow-in-laserfiche-workflow-designer-evidence.md",
       "sourceCount": 1,
@@ -2540,7 +2580,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2569,7 +2609,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Check number of rows returned by Query Data Activity in Workflow",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-check-number-of-rows-returned-by-query-data-activity-in-workflow.sql",
       "evidencePath": "answers-candidates/workflow/workflow-check-number-of-rows-returned-by-query-data-activity-in-workflow-evidence.md",
       "sourceCount": 4,
@@ -2578,7 +2618,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2607,7 +2647,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Create a report via a votes forms",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-create-a-report-via-a-votes-forms.sql",
       "evidencePath": "answers-candidates/workflow/workflow-create-a-report-via-a-votes-forms-evidence.md",
       "sourceCount": 1,
@@ -2616,7 +2656,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2647,7 +2687,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Custom Query - how to set Parameter Values to create tokens",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-custom-query-how-to-set-parameter-values-to-create-tokens.sql",
       "evidencePath": "answers-candidates/workflow/workflow-custom-query-how-to-set-parameter-values-to-create-tokens-evidence.md",
       "sourceCount": 1,
@@ -2656,7 +2696,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2689,7 +2729,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Feature Request: Allow Use of Multiple Email Addresses in Lookup",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-feature-request-allow-use-of-multiple-email-addresses-in-lookup.sql",
       "evidencePath": "answers-candidates/workflow/workflow-feature-request-allow-use-of-multiple-email-addresses-in-lookup-evidence.md",
       "sourceCount": 1,
@@ -2698,7 +2738,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2727,7 +2767,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "For Each Row Help",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-for-each-row-help.sql",
       "evidencePath": "answers-candidates/workflow/workflow-for-each-row-help-evidence.md",
       "sourceCount": 2,
@@ -2736,7 +2776,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2765,7 +2805,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Form Response By Non-Named User",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-form-response-by-non-named-user.sql",
       "evidencePath": "answers-candidates/workflow/workflow-form-response-by-non-named-user-evidence.md",
       "sourceCount": 2,
@@ -2774,7 +2814,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2803,7 +2843,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Forms Feature for lookup with \"Value not equal\" and \"Like\"",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-forms-feature-for-lookup-with-value-not-equal-and-like.sql",
       "evidencePath": "answers-candidates/workflow/workflow-forms-feature-for-lookup-with-value-not-equal-and-like-evidence.md",
       "sourceCount": 1,
@@ -2812,7 +2852,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2841,7 +2881,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How to kick off a lookup after copying a field value to another field?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-how-to-kick-off-a-lookup-after-copying-a-field-value-to-another-field.sql",
       "evidencePath": "answers-candidates/workflow/workflow-how-to-kick-off-a-lookup-after-copying-a-field-value-to-another-field-evidence.md",
       "sourceCount": 1,
@@ -2850,7 +2890,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2879,7 +2919,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "How to pass a multivalued token of strings to a MSSQL stored procedure",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-how-to-pass-a-multivalued-token-of-strings-to-a-mssql-stored-procedure.sql",
       "evidencePath": "answers-candidates/workflow/workflow-how-to-pass-a-multivalued-token-of-strings-to-a-mssql-stored-procedure-evidence.md",
       "sourceCount": 1,
@@ -2888,7 +2928,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2919,7 +2959,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Invoked Workflows / Linked Objects",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow, dbo.workflows.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow, dbo.workflows.",
       "scriptPath": "answers-candidates/workflow/workflow-invoked-workflows-linked-objects.sql",
       "evidencePath": "answers-candidates/workflow/workflow-invoked-workflows-linked-objects-evidence.md",
       "sourceCount": 1,
@@ -2929,7 +2969,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2957,7 +2997,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Is there any option to call a SQL stored procedure from cloud workflow?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-is-there-any-option-to-call-a-sql-stored-procedure-from-cloud-workflow.sql",
       "evidencePath": "answers-candidates/workflow/workflow-is-there-any-option-to-call-a-sql-stored-procedure-from-cloud-workflow-evidence.md",
       "sourceCount": 1,
@@ -2966,7 +3006,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -2995,7 +3035,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "meeting sign-in sheet",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-meeting-sign-in-sheet.sql",
       "evidencePath": "answers-candidates/workflow/workflow-meeting-sign-in-sheet-evidence.md",
       "sourceCount": 1,
@@ -3004,7 +3044,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3035,7 +3075,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Order Results from Query Rule in WF",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-order-results-from-query-rule-in-wf.sql",
       "evidencePath": "answers-candidates/workflow/workflow-order-results-from-query-rule-in-wf-evidence.md",
       "sourceCount": 2,
@@ -3044,7 +3084,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3075,7 +3115,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Random Name Select",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow, dbo.workflows.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow, dbo.workflows.",
       "scriptPath": "answers-candidates/workflow/workflow-random-name-select.sql",
       "evidencePath": "answers-candidates/workflow/workflow-random-name-select-evidence.md",
       "sourceCount": 1,
@@ -3085,7 +3125,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3115,7 +3155,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Reducing the size of the Workflow .MDF Database file",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-reducing-the-size-of-the-workflow-mdf-database-file.sql",
       "evidencePath": "answers-candidates/workflow/workflow-reducing-the-size-of-the-workflow-mdf-database-file-evidence.md",
       "sourceCount": 1,
@@ -3124,7 +3164,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3155,7 +3195,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Report of Long Running Activities in Workflow",
-      "summary": "Schema-verified Answers source candidate referencing dbo.activities, dbo.workflow, dbo.workflows.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.activities, dbo.workflow, dbo.workflows.",
       "scriptPath": "answers-candidates/workflow/workflow-report-of-long-running-activities-in-workflow.sql",
       "evidencePath": "answers-candidates/workflow/workflow-report-of-long-running-activities-in-workflow-evidence.md",
       "sourceCount": 1,
@@ -3166,7 +3206,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3196,7 +3236,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Stored Procedure runs in sql server manager, but gives errors in workflow",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-stored-procedure-runs-in-sql-server-manager-but-gives-errors-in-workflow.sql",
       "evidencePath": "answers-candidates/workflow/workflow-stored-procedure-runs-in-sql-server-manager-but-gives-errors-in-workflow-evidence.md",
       "sourceCount": 1,
@@ -3205,7 +3245,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3234,7 +3274,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Track Tokens activity - suggestion",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-track-tokens-activity-suggestion.sql",
       "evidencePath": "answers-candidates/workflow/workflow-track-tokens-activity-suggestion-evidence.md",
       "sourceCount": 1,
@@ -3243,7 +3283,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3272,7 +3312,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Where is submitAuthkey created/stored",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-where-is-submitauthkey-created-stored.sql",
       "evidencePath": "answers-candidates/workflow/workflow-where-is-submitauthkey-created-stored-evidence.md",
       "sourceCount": 1,
@@ -3281,7 +3321,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3310,7 +3350,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Wildcard Syntax with Workflow Custom Query",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-wildcard-syntax-with-workflow-custom-query.sql",
       "evidencePath": "answers-candidates/workflow/workflow-wildcard-syntax-with-workflow-custom-query-evidence.md",
       "sourceCount": 2,
@@ -3319,7 +3359,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3348,7 +3388,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow - Microsoft Word Table Formatting",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-microsoft-word-table-formatting.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-microsoft-word-table-formatting-evidence.md",
       "sourceCount": 1,
@@ -3357,7 +3397,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3386,7 +3426,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow bug? Custom Query/Query Data activity with multiple fields",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-bug-custom-query-query-data-activity-with-multiple-fields.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-bug-custom-query-query-data-activity-with-multiple-fields-evidence.md",
       "sourceCount": 1,
@@ -3395,7 +3435,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3426,7 +3466,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow Custom Query with \"In List\" Parameter",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-custom-query-with-in-list-parameter.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-custom-query-with-in-list-parameter-evidence.md",
       "sourceCount": 1,
@@ -3435,7 +3475,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3464,7 +3504,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow Custom Query: Syntax for using LIKE % with parameters",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-custom-query-syntax-for-using-like-with-parameters.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-custom-query-syntax-for-using-like-with-parameters-evidence.md",
       "sourceCount": 1,
@@ -3473,7 +3513,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3502,7 +3542,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow not being same in database occasionally",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow, dbo.workflows.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow, dbo.workflows.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-not-being-same-in-database-occasionally.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-not-being-same-in-database-occasionally-evidence.md",
       "sourceCount": 1,
@@ -3512,7 +3552,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3540,7 +3580,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow Query Data and then add 1",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-query-data-and-then-add-1.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-query-data-and-then-add-1-evidence.md",
       "sourceCount": 1,
@@ -3549,7 +3589,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"
@@ -3578,7 +3618,7 @@ export const generatedReportingCandidates = {
     },
     {
       "title": "Workflow: How to format data retrieved from business process variables for upload to SQL table?",
-      "summary": "Schema-verified Answers source candidate referencing dbo.workflow.",
+      "summary": "Object-name-matched Answers source candidate referencing dbo.workflow.",
       "scriptPath": "answers-candidates/workflow/workflow-workflow-how-to-format-data-retrieved-from-business-process-variables-for-upload-.sql",
       "evidencePath": "answers-candidates/workflow/workflow-workflow-how-to-format-data-retrieved-from-business-process-variables-for-upload--evidence.md",
       "sourceCount": 2,
@@ -3587,7 +3627,7 @@ export const generatedReportingCandidates = {
       ],
       "tags": [
         "Community sourced",
-        "Schema matched",
+        "Object names matched",
         "Not live tested",
         "Needs review",
         "Unreviewed source excerpt"

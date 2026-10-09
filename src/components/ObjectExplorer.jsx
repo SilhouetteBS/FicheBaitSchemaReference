@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { getObjectRelatedItems } from '../data/projectInsights.js';
 import { getColumnUsages, getReviewItems } from '../data/schemaAnalysis.js';
 
@@ -10,8 +10,9 @@ export function ObjectExplorer({
   version,
   onDownloadReviewQueue,
   onSelectTable,
+  selectedObjectKey,
+  onSelectedObjectChange,
 }) {
-  const [selectedObjectKey, setSelectedObjectKey] = useState('');
   const detailPanelRef = useRef(null);
   const objects = {
     views: version.source.views ?? [],
@@ -31,15 +32,15 @@ export function ObjectExplorer({
   );
 
   useEffect(() => {
-    setSelectedObjectKey('');
-  }, [objectType, version.version]);
+    if (selectedObject && getObjectKey(selectedObject) !== selectedObjectKey) onSelectedObjectChange(getObjectKey(selectedObject));
+  }, [selectedObject, selectedObjectKey, onSelectedObjectChange]);
 
   function openObjectDetails(objectKey) {
     if (objectType === 'dependencies') {
       return;
     }
 
-    setSelectedObjectKey(objectKey);
+    onSelectedObjectChange(objectKey);
     window.requestAnimationFrame(() => {
       detailPanelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       detailPanelRef.current?.focus({ preventScroll: true });
@@ -76,7 +77,7 @@ export function ObjectExplorer({
             Export queue
           </button>
           <div className="review-list">
-            {reviewItems.slice(0, 8).map((item) => (
+            {reviewItems.map((item) => (
               <button key={item.key} type="button" onClick={() => onSelectTable(item.key)}>
                 <strong>{item.key}</strong>
                 <span>
@@ -95,6 +96,7 @@ export function ObjectExplorer({
             <span>{columnUsages.length}</span>
           </div>
           <input
+            aria-label="Search column usage"
             value={columnUsageQuery}
             onChange={(event) => onColumnUsageQueryChange(event.target.value)}
             placeholder="Search column name, type, purpose"
@@ -103,7 +105,7 @@ export function ObjectExplorer({
             {columnUsages.length === 0 ? (
               <p className="empty-state">Enter a column name such as bp_id or tenant_id.</p>
             ) : (
-              columnUsages.slice(0, 10).map((usage) => (
+              columnUsages.map((usage) => (
                 <button
                   key={`${usage.tableKey}-${usage.columnName}`}
                   type="button"
@@ -125,12 +127,12 @@ export function ObjectExplorer({
           {selectedObjects.length === 0 ? (
             <p className="empty-state">No {objectType} exported.</p>
           ) : (
-            selectedObjects.slice(0, 250).map((item, index) => {
+            selectedObjects.map((item, index) => {
               const objectKey = getObjectKey(item, index);
               return (
                 <article
                   className={selectedObject === item ? 'object-item selected' : 'object-item'}
-                  key={`${objectType}-${objectKey}`}
+                  key={`${objectType}-${objectKey}${objectType === 'dependencies' ? `-${index}` : ''}`}
                 >
                   {objectType === 'dependencies' ? (
                     <>
@@ -212,7 +214,22 @@ export function ObjectExplorer({
                     <div>
                       <strong>Dependencies</strong>
                       {selectedObjectRelatedItems.dependencies.map((item) => (
-                        <button key={item.key} type="button">
+                        <button key={item.key} type="button" onClick={() => {
+                          const target = item.key.split(' -> ').find((key) => key !== getObjectKey(selectedObject));
+                          if (version.tables.some((table) => table.id === target)) {
+                            onSelectTable(target);
+                            return;
+                          }
+                          const match = Object.entries(objects).find(([type, items]) => type !== 'dependencies'
+                            && items.some((object) => getObjectKey(object) === target));
+                          if (match) {
+                            onObjectTypeChange(match[0]);
+                            onSelectedObjectChange(target);
+                          }
+                        }} disabled={!item.key.split(' -> ').some((key) => key !== getObjectKey(selectedObject)
+                          && (version.tables.some((table) => table.id === key)
+                            || Object.entries(objects).some(([type, items]) => type !== 'dependencies'
+                              && items.some((object) => getObjectKey(object) === key))))}>
                           <span>{item.key}</span>
                           <em>{item.description}</em>
                         </button>

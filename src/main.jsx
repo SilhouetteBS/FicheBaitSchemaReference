@@ -1,20 +1,15 @@
-import { Fragment, lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   AlertTriangle,
-  CalendarClock,
-  Columns3,
   Database,
   ExternalLink,
-  FileCode2,
-  GitBranch,
   HelpCircle,
   Lock,
   MessageSquarePlus,
   Search,
   Share2,
   ShieldAlert,
-  TableProperties,
   X,
 } from 'lucide-react';
 import { appConfig } from './config.js';
@@ -34,25 +29,23 @@ import {
 } from './data/csvExports.js';
 import {
   formatCompletenessValue,
-  getDatabaseRoleExplanation,
-  getObjectCompletionByType,
   getSnapshotCompletenessRows,
-  getTableCompletionBySchema,
-  getVersionTrendRows,
 } from './data/schemaCompleteness.js';
 import {
   buildGlobalSearchItems,
-  getConfidenceLegendItems,
-  getSchemaCoverageGaps,
 } from './data/projectInsights.js';
 import { buildCatalogProduct, DataLoadError, fetchJson, loadVersionEntry } from './data/productLoader.js';
+import { readStorage, writeStorage } from './data/browserStorage.js';
+import { isTableNoteMap } from './data/notes.js';
+import { downloadText, downloadJson } from './data/downloads.js';
 import { readUrlState, writeUrlState } from './data/urlState.js';
 import { copyTextToClipboard } from './data/clipboard.js';
 import { buildCorrectionIssueUrl } from './data/correctionIssue.js';
 import { ErrorBoundary } from './components/ErrorBoundary.jsx';
 import { AccessibleModal } from './components/AccessibleModal.jsx';
-import { InfoTooltip } from './components/InfoTooltip.jsx';
+import { ProductMetadataPanel, formatSnapshotDate } from './components/ProductMetadataPanel.jsx';
 import './styles.css';
+import './community.css';
 import './accessibility.css';
 import './system-overlays.css';
 
@@ -78,52 +71,30 @@ function normalize(value) {
   return String(value ?? '').toLowerCase().trim();
 }
 
-function downloadText(filename, value, type) {
-  const blob = new Blob([value], { type });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-function downloadJson(filename, value) {
-  downloadText(filename, `${JSON.stringify(value, null, 2)}\n`, 'application/json');
-}
-
 function readLocalNotes() {
-  try {
-    return JSON.parse(localStorage.getItem('lfdd.localNotes') ?? '{}');
-  } catch {
-    return {};
-  }
+  return readStorage('lfdd.localNotes', {}, (value) => value && typeof value === 'object' && !Array.isArray(value)
+    && Object.values(value).every(isTableNoteMap));
 }
 
 function writeLocalNotes(notes) {
-  localStorage.setItem('lfdd.localNotes', JSON.stringify(notes));
+  return writeStorage('lfdd.localNotes', notes);
 }
 
 function readUiPreferences() {
-  try {
-    const preferences = JSON.parse(localStorage.getItem('lfdd.uiPreferences.v1') ?? '{}');
-    return typeof preferences === 'object' && preferences ? preferences : {};
-  } catch {
-    return {};
-  }
+  return readStorage('lfdd.uiPreferences.v1', {}, (value) => value !== null && typeof value === 'object'
+    && !Array.isArray(value) && Object.values(value).every((item) => typeof item === 'string'));
 }
 
 function readJsonStorage(key, fallback) {
-  try {
-    const value = JSON.parse(localStorage.getItem(key) ?? 'null');
-    return value ?? fallback;
-  } catch {
-    return fallback;
-  }
+  return readStorage(key, fallback, (value) => Array.isArray(value)
+    && value.every((item) => key.includes('favoriteObjects') ? typeof item === 'string'
+      : item !== null && typeof item === 'object' && typeof item.id === 'string' && typeof item.label === 'string'
+        && typeof item.diagramMode === 'string' && typeof item.diagramEdges === 'string'
+        && Number.isFinite(item.diagramDepth) && Number.isFinite(item.diagramZoom)));
 }
 
 function writeUiPreferences(preferences) {
-  localStorage.setItem('lfdd.uiPreferences.v1', JSON.stringify(preferences));
+  writeStorage('lfdd.uiPreferences.v1', preferences);
 }
 
 function markdownEscape(value) {
@@ -204,249 +175,6 @@ function versionSummaryToMarkdown(productName, version) {
   return `${lines.join('\n')}\n`;
 }
 
-function formatSnapshotDate(value) {
-  if (!value) {
-    return 'Unknown';
-  }
-
-  const normalizedValue = /(?:z|[+-]\d{2}:?\d{2})$/i.test(String(value)) ? value : `${value}Z`;
-  const date = new Date(normalizedValue);
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return new Intl.DateTimeFormat(undefined, {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(date);
-}
-
-function getSnapshotAgeWarning(version) {
-  if (!version.exportedAtUtc) {
-    return 'Export timestamp is missing; confirm the metadata freshness before relying on it.';
-  }
-  const normalizedValue = /(?:z|[+-]\d{2}:?\d{2})$/i.test(String(version.exportedAtUtc))
-    ? version.exportedAtUtc
-    : `${version.exportedAtUtc}Z`;
-  const exportedAt = new Date(normalizedValue);
-  if (Number.isNaN(exportedAt.getTime())) {
-    return 'Export timestamp could not be parsed; confirm the metadata freshness before relying on it.';
-  }
-  const ageDays = Math.floor((Date.now() - exportedAt.getTime()) / 86400000);
-  return ageDays > 180 ? `This metadata export is ${ageDays.toLocaleString()} days old; verify it still matches the target environment.` : '';
-}
-
-function getSnapshotStats(version) {
-  return [
-    {
-      label: 'Exported',
-      value: formatSnapshotDate(version.exportedAtUtc),
-      icon: <CalendarClock size={17} />,
-    },
-    {
-      label: 'Tables',
-      value: version.tables.length.toLocaleString(),
-      icon: <TableProperties size={17} />,
-    },
-    {
-      label: 'Columns',
-      value: version.tables.reduce((total, table) => total + table.columns.length, 0).toLocaleString(),
-      icon: <Columns3 size={17} />,
-    },
-    {
-      label: 'Foreign keys',
-      value: (version.source?.foreignKeys?.length ?? 0).toLocaleString(),
-      icon: <GitBranch size={17} />,
-    },
-    {
-      label: 'Routines',
-      value: (version.source?.routines?.length ?? 0).toLocaleString(),
-      icon: <FileCode2 size={17} />,
-    },
-  ];
-}
-
-const versionTrendColumns = [
-  ['Version', 'Product version for this imported schema snapshot.'],
-  ['Schema size', 'Approximate serialized schema metadata size for the snapshot.'],
-  ['Objects', 'Total exported tables, views, routines, and triggers.'],
-  ['Health', 'Number of schema health warnings detected for this version.'],
-  ['Deps', 'Resolved SQL expression dependencies compared with total exported dependency rows.'],
-  ['Notes', 'Percent of tables with manual notes in this version.'],
-];
-
-function SnapshotFreshnessPanel({ product, productsManifest, productName, version, onDownloadMarkdown, onRequestVersionHistory }) {
-  const stats = getSnapshotStats(version);
-  const [showSnapshotDetails, setShowSnapshotDetails] = useState(false);
-  const source = version.source ?? {};
-  const rows = getSnapshotCompletenessRows(version);
-  const trendRows = getVersionTrendRows(product);
-  const tableCompletionRows = getTableCompletionBySchema(version);
-  const objectCompletionRows = getObjectCompletionByType(version);
-  const freshnessWarning = getSnapshotAgeWarning(version);
-  const importedVersions = product.versions.map((item) => item.version).join(', ');
-  const coverageGaps = getSchemaCoverageGaps(productsManifest, product);
-  const confidenceLegendItems = getConfidenceLegendItems();
-
-  return (
-    <section className="snapshot-panel" aria-label="Product and version metadata freshness">
-      <div className="snapshot-main">
-        <div>
-          <p className="snapshot-kicker">Product/version</p>
-          <h2>{productName} {version.version}</h2>
-          {freshnessWarning && <p className="snapshot-warning">{freshnessWarning}</p>}
-        </div>
-        <div className="snapshot-actions">
-          <button
-            aria-expanded={showSnapshotDetails}
-            className="snapshot-details-button"
-            onClick={() => {
-              setShowSnapshotDetails((current) => {
-                if (!current) {
-                  onRequestVersionHistory?.();
-                }
-                return !current;
-              });
-            }}
-            type="button"
-          >
-            {showSnapshotDetails ? 'Hide details' : 'Metadata details'}
-          </button>
-          <button className="snapshot-details-button" onClick={onDownloadMarkdown} type="button">
-            Markdown
-          </button>
-        </div>
-      </div>
-      <div className="snapshot-stats">
-        {stats.map((stat) => (
-          <div className="snapshot-stat" key={stat.label}>
-            {stat.icon}
-            <span>{stat.label}</span>
-            <strong>{stat.value}</strong>
-          </div>
-        ))}
-      </div>
-      {showSnapshotDetails ? (
-        <div className="snapshot-details" aria-label="Product and version metadata completeness">
-          <div>
-            <h3>Export manifest and coverage</h3>
-            <p>
-              Product and version identity come from the export manifest and static manifests, not the SQL Server
-              database name. Database names can differ by environment.
-            </p>
-          </div>
-
-          <div className="snapshot-details-card-stack">
-            <div className="snapshot-completeness-grid" aria-label="Metadata object counts">
-              {rows.map((row) => (
-                <span key={row.label}>
-                  <strong>{row.value}</strong>
-                  {row.label}
-                </span>
-              ))}
-            </div>
-            <div className="snapshot-completeness-grid" aria-label="Object documentation completion by type">
-              {objectCompletionRows.map((row) => (
-                <span key={row.label}>
-                  <strong>{row.value}</strong>
-                  <span className="snapshot-card-label">
-                    {row.label}
-                    {row.tooltip && <InfoTooltip label={`${row.label}: ${row.tooltip}`}>{row.tooltip}</InfoTooltip>}
-                  </span>
-                </span>
-              ))}
-            </div>
-            <div className="snapshot-completeness-grid" aria-label="Table documentation completion by schema">
-              {tableCompletionRows.slice(0, 10).map((row) => (
-                <span key={row.label}>
-                  <strong>{row.value}</strong>
-                  <span className="snapshot-card-label">
-                    {row.label}
-                    {row.tooltip && <InfoTooltip label={`${row.label}: ${row.tooltip}`}>{row.tooltip}</InfoTooltip>}
-                  </span>
-                </span>
-              ))}
-            </div>
-
-            <dl className="snapshot-manifest-list">
-              <div>
-                <dt>Export format</dt>
-                <dd>{formatCompletenessValue(source.exportFormatVersion)}</dd>
-              </div>
-              <div>
-                <dt>Export script</dt>
-                <dd>{formatCompletenessValue(source.exportScriptVersion)}</dd>
-              </div>
-              <div>
-                <dt>Database role</dt>
-                <dd>
-                  <strong>{formatCompletenessValue(source.databaseRole)}</strong>
-                  <span>{getDatabaseRoleExplanation(source.databaseRole)}</span>
-                </dd>
-              </div>
-              <div>
-                <dt>Imported versions</dt>
-                <dd>{importedVersions || 'None loaded'}</dd>
-              </div>
-            </dl>
-          </div>
-          <div className="snapshot-trend-table">
-            <h3>Version trends</h3>
-            <div>
-              {versionTrendColumns.map(([label, tooltip]) => (
-                <span className="snapshot-trend-heading" key={label}>
-                  {label}
-                  <InfoTooltip label={`${label}: ${tooltip}`}>{tooltip}</InfoTooltip>
-                </span>
-              ))}
-              {trendRows.map((row) => (
-                <Fragment key={row.version}>
-                  <strong>{row.version}</strong>
-                  <span>{row.schemaSize.toLocaleString()}</span>
-                  <span>{row.objectCount.toLocaleString()}</span>
-                  <span>{row.healthIssues.toLocaleString()}</span>
-                  <span>{row.dependencyResolution}</span>
-                  <span>{row.notesCompletion}</span>
-                </Fragment>
-              ))}
-            </div>
-          </div>
-          <div className="snapshot-support-grid">
-            <section className="snapshot-support-panel">
-              <div className="section-title-row">
-                <h3>Confidence legend</h3>
-                <span>{confidenceLegendItems.length}</span>
-              </div>
-              <div className="confidence-legend-list">
-                {confidenceLegendItems.map((item) => (
-                  <div key={item.value}>
-                    <strong>{item.label}</strong>
-                    <p>{item.description}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-            <section className="snapshot-support-panel">
-              <div className="section-title-row">
-                <h3>Coverage gaps</h3>
-                <span>{coverageGaps.length}</span>
-              </div>
-              {coverageGaps.length === 0 ? (
-                <p className="empty-state">No immediate product/version export gaps were detected from the current manifests.</p>
-              ) : (
-                <ul>
-                  {coverageGaps.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          </div>
-        </div>
-      ) : null}
-    </section>
-  );
-}
 
 function getInitialDiagramEdgeType(value) {
   return ['all', 'foreignKey', 'dependency'].includes(value) ? value : 'foreignKey';
@@ -535,6 +263,7 @@ function App() {
   const [relationshipFilter, setRelationshipFilter] = useState('all');
   const [activeView, setActiveView] = useState(preferredView);
   const [objectType, setObjectType] = useState(initialUrlState.objectType || 'views');
+  const [selectedObjectKey, setSelectedObjectKey] = useState(initialUrlState.object);
   const [comparisonFromVersion, setComparisonFromVersion] = useState(initialUrlState.from);
   const [comparisonToVersion, setComparisonToVersion] = useState(initialUrlState.to);
   const [diagramQuery, setDiagramQuery] = useState(initialUrlState.diagramQuery);
@@ -578,6 +307,7 @@ function App() {
   const activeProductManifestRef = useRef(null);
   const historyReadyRef = useRef(false);
   const previousNavigationKeyRef = useRef('');
+  const restoringHistoryRef = useRef(false);
   const canEditNotes = editingEnabled && editingWarningAccepted;
   const canUseImport = canEditNotes;
 
@@ -611,7 +341,7 @@ function App() {
       if (!selectedVersionEntry) {
         throw new DataLoadError(`Product manifest default version is invalid: ${urlVersion}`);
       }
-      const selectedEntry = await loadVersionEntry(selectedVersionEntry);
+      const selectedEntry = await loadVersionEntry(selectedVersionEntry, manifest.productKey);
 
       if (!isCurrent || requestId !== productLoadRequestRef.current) {
         return;
@@ -702,6 +432,7 @@ function App() {
       return null;
     }
     const requestedManifest = activeProductManifest;
+    const requestedProductLoad = productLoadRequestRef.current;
     const missingEntries = [...new Set(versionNames)]
       .filter((versionName) => !loadedVersionEntriesRef.current.has(versionName))
       .map((versionName) => requestedManifest.versions.find((item) => item.version === versionName))
@@ -710,8 +441,8 @@ function App() {
       return buildCatalogProduct(requestedManifest, [...loadedVersionEntriesRef.current.values()]);
     }
     setOperationError('');
-    const results = await Promise.allSettled(missingEntries.map(async (entry) => [entry.version, await loadVersionEntry(entry)]));
-    if (requestedManifest !== activeProductManifestRef.current || productLoadRequestRef.current === 0) {
+    const results = await Promise.allSettled(missingEntries.map(async (entry) => [entry.version, await loadVersionEntry(entry, requestedManifest.productKey)]));
+    if (requestedManifest !== activeProductManifestRef.current || requestedProductLoad !== productLoadRequestRef.current) {
       return null;
     }
     const failures = [];
@@ -743,7 +474,7 @@ function App() {
   }, [activeView, comparisonFromVersion, comparisonToVersion, ensureVersionsLoaded]);
 
   useEffect(() => {
-    if (!product || !selectedVersion) {
+    if (!product || !selectedVersion || restoringHistoryRef.current) {
       return;
     }
 
@@ -756,6 +487,7 @@ function App() {
       comparisonFromVersion,
       comparisonToVersion,
       objectType,
+      selectedObjectKey,
       diagramFocusKey,
     ].join('|');
     const shouldPush = historyReadyRef.current && previousNavigationKeyRef.current !== navigationKey;
@@ -770,6 +502,7 @@ function App() {
       from: comparisonFromVersion,
       to: comparisonToVersion,
       objectType,
+      object: selectedObjectKey,
       objectQuery: columnUsageQuery,
       diagramFocus: diagramFocusKey,
       diagramQuery,
@@ -817,6 +550,7 @@ function App() {
     diagramZoom,
     diagramConnectedOnly,
     objectType,
+    selectedObjectKey,
     product,
     query,
     selectedProductKey,
@@ -829,10 +563,58 @@ function App() {
   ]);
 
   useEffect(() => {
-    const restoreUrlState = () => window.location.reload();
+    async function restoreUrlState() {
+      if (!productsManifest) return;
+      const state = readUrlState();
+      const requestId = ++productLoadRequestRef.current;
+      ++versionSelectionRequestRef.current;
+      restoringHistoryRef.current = true;
+      try {
+        const selectedProduct = productsManifest.products.find((item) => item.productKey === state.product);
+        if (!selectedProduct) throw new Error('The requested product is not available.');
+        const manifest = await fetchJson(selectedProduct.manifestUrl);
+        const entry = manifest.versions.find((item) => item.version === state.version);
+        if (!entry) throw new Error('The requested version is not available.');
+        const loaded = await loadVersionEntry(entry, manifest.productKey);
+        if (requestId !== productLoadRequestRef.current) return;
+        loadedVersionEntriesRef.current = new Map([[entry.version, loaded]]);
+        activeProductManifestRef.current = manifest;
+        setActiveProductManifest(manifest);
+        setProduct(buildCatalogProduct(manifest, [loaded]));
+        setSelectedProductKey(manifest.productKey);
+        setSelectedVersion(entry.version);
+        setSelectedTableId(state.table);
+        setActiveView(state.view || 'tables');
+        setSelectedReportingView(state.reporting || 'overview');
+        setObjectType(state.objectType || 'views');
+        setSelectedObjectKey(state.object);
+        setColumnUsageQuery(state.objectQuery);
+        setQuery(state.q);
+        setTableConfidenceFilter(state.confidence || 'all');
+        setTableNotesFilter(state.notes || 'all');
+        setComparisonFromVersion(state.from);
+        setComparisonToVersion(state.to);
+        setDiagramFocusKey(state.diagramFocus);
+        setDiagramQuery(state.diagramQuery);
+        setDiagramMode(getInitialDiagramMode(state.diagramMode));
+        setDiagramEdgeType(getInitialDiagramEdgeType(state.diagramEdges));
+        setDiagramDepth(getInitialDiagramDepth(state.diagramDepth));
+        setDiagramZoom(getInitialDiagramZoom(state.diagramZoom));
+        setDiagramObjectTypeFilters(getInitialDiagramObjectTypes(state.diagramTypes));
+        setShowDiagramSecondHopEdges(getInitialDiagramSecondHop(state.diagramSecondHop));
+        setDiagramConnectedOnly(getInitialBooleanToggle(state.diagramConnectedOnly));
+        setDataWarnings(loaded.warning ? [loaded.warning] : []);
+        setOperationError('');
+        historyReadyRef.current = false;
+      } catch (error) {
+        if (requestId === productLoadRequestRef.current) setOperationError(`Unable to restore navigation: ${error.message}`);
+      } finally {
+        if (requestId === productLoadRequestRef.current) restoringHistoryRef.current = false;
+      }
+    }
     window.addEventListener('popstate', restoreUrlState);
     return () => window.removeEventListener('popstate', restoreUrlState);
-  }, []);
+  }, [productsManifest]);
 
   const comparison = useMemo(() => {
     if (!product || product.versions.length < 2) {
@@ -848,14 +630,14 @@ function App() {
 
   const activeViewLabels = useMemo(() => ([
     ['tables', 'Tables'],
-    ['compare', 'Compare'],
     ['diagram', 'Diagram'],
+    ['compare', 'Compare'],
+    ['reporting', 'Reporting'],
     ['objects', 'Objects'],
     ['impact', 'Impact'],
-    ['health', 'Health'],
+    ['health', 'Schema checks'],
     ['dependencies', 'Dependencies'],
     ...(editingEnabled ? [['import', 'Import']] : []),
-    ['reporting', 'Reporting'],
   ]), [editingEnabled]);
 
   useEffect(() => {
@@ -873,7 +655,7 @@ function App() {
       action: () => {
         if (item.objectType) {
           setObjectType(item.objectType);
-          setColumnUsageQuery(item.label);
+          setSelectedObjectKey(item.label);
           setActiveView('objects');
           return;
         }
@@ -991,7 +773,8 @@ function App() {
     }
     if (requestId !== versionSelectionRequestRef.current) return;
     setSelectedVersion(nextVersion);
-    setSelectedTableId(nextVersionData?.tables[0]?.id ?? '');
+    setSelectedTableId(nextVersionData?.tables.some((table) => table.id === selectedTableId)
+      ? selectedTableId : nextVersionData?.tables[0]?.id ?? '');
   }
 
   async function handleProductChange(nextProductKey) {
@@ -1010,7 +793,7 @@ function App() {
       if (!defaultVersionEntry) {
         throw new DataLoadError(`Product manifest default version is invalid: ${manifest.defaultVersion}`);
       }
-      const defaultEntry = await loadVersionEntry(defaultVersionEntry);
+      const defaultEntry = await loadVersionEntry(defaultVersionEntry, manifest.productKey);
       if (requestId !== productLoadRequestRef.current) {
         return;
       }
@@ -1051,8 +834,20 @@ function App() {
       return;
     }
 
-    setQuery(tableId);
-    setActiveView('tables');
+    const target = tableId.includes(' -> ') ? tableId.split(' -> ').find((key) => key !== selectedTableId) : tableId;
+    if (target !== tableId && tables.some((table) => table.id === target)) {
+      setSelectedTableId(target);
+      setActiveView('tables');
+      return;
+    }
+    const type = ['views', 'routines', 'triggers'].find((key) => (version.source[key] ?? []).some((item) => item.key === target));
+    if (type) {
+      setObjectType(type);
+      setSelectedObjectKey(target);
+      setActiveView('objects');
+      return;
+    }
+    setOperationError(`No exported details are available for ${target || tableId} in this version.`);
   }
 
   function toggleFavoriteObject(objectKey) {
@@ -1060,7 +855,7 @@ function App() {
       ? favoriteObjects.filter((item) => item !== objectKey)
       : [...favoriteObjects, objectKey].slice(-24);
     setFavoriteObjects(nextFavorites);
-    localStorage.setItem('lfdd.favoriteObjects.v1', JSON.stringify(nextFavorites));
+    if (!writeStorage('lfdd.favoriteObjects.v1', nextFavorites)) setOperationError('Favorites are available for this session but could not be saved in this browser.');
   }
 
   async function copyCurrentDeepLink(label = 'link') {
@@ -1090,7 +885,7 @@ function App() {
     };
     const nextPresets = [preset, ...diagramPresets].slice(0, 10);
     setDiagramPresets(nextPresets);
-    localStorage.setItem('lfdd.diagramPresets.v1', JSON.stringify(nextPresets));
+    if (!writeStorage('lfdd.diagramPresets.v1', nextPresets)) setOperationError('Diagram presets are available for this session but could not be saved in this browser.');
   }
 
   function applyDiagramPreset(presetId) {
@@ -1124,7 +919,7 @@ function App() {
       },
     };
     setLocalNotes(nextNotes);
-    writeLocalNotes(nextNotes);
+    if (!writeLocalNotes(nextNotes)) setOperationError('Notes changed for this session but could not be saved in this browser. Export them before leaving.');
   }
 
   function clearLocalTableNote(tableKey) {
@@ -1136,7 +931,7 @@ function App() {
     delete versionNotes[tableKey];
     const nextNotes = { ...localNotes, [localNotesKey]: versionNotes };
     setLocalNotes(nextNotes);
-    writeLocalNotes(nextNotes);
+    if (!writeLocalNotes(nextNotes)) setOperationError('Notes changed for this session but could not be saved in this browser. Export them before leaving.');
   }
 
   function importLocalNotes(event) {
@@ -1155,6 +950,7 @@ function App() {
       try {
         const parsed = JSON.parse(String(reader.result ?? '{}'));
         const importedTables = parsed.tables ?? parsed[localNotesKey] ?? {};
+        if (!isTableNoteMap(importedTables)) throw new Error('The notes file contains invalid table documentation.');
         const nextNotes = {
           ...localNotes,
           [localNotesKey]: {
@@ -1163,7 +959,7 @@ function App() {
           },
         };
         setLocalNotes(nextNotes);
-        writeLocalNotes(nextNotes);
+        if (!writeLocalNotes(nextNotes)) setOperationError('Imported notes are available for this session but could not be saved in this browser. Export them before leaving.');
       } catch (error) {
         setOperationError(`Unable to import notes: ${error.message}`);
       }
@@ -1220,7 +1016,7 @@ function App() {
     productName,
     version: selectedVersion,
     view: activeView,
-    objectLabel: activeView === 'tables' ? selectedTable.id : '',
+    objectLabel: activeView === 'tables' ? selectedTable.id : activeView === 'reporting' ? selectedReportingView : activeView === 'objects' ? selectedObjectKey : '',
     currentUrl: window.location.href,
   });
 
@@ -1238,7 +1034,7 @@ function App() {
           <h2>Products</h2>
           <label className="sidebar-select">
             <span>Product</span>
-            <select value={selectedProductKey} onChange={(event) => handleProductChange(event.target.value)}>
+            <select aria-label="Product" value={selectedProductKey} onChange={(event) => handleProductChange(event.target.value)}>
               {(productsManifest?.products ?? []).map((item) => (
                 <option
                   disabled={item.status !== 'available'}
@@ -1253,7 +1049,7 @@ function App() {
           </label>
           <label className="sidebar-select">
             <span>Version</span>
-            <select value={selectedVersion} onChange={(event) => handleVersionChange(event.target.value)}>
+            <select aria-label="Version" value={selectedVersion} onChange={(event) => handleVersionChange(event.target.value)}>
               {product.versions.map((item) => (
                 <option value={item.version} key={item.version}>
                   {item.version}
@@ -1266,7 +1062,7 @@ function App() {
         <section className="sidebar-section">
           <h2>Database views</h2>
           <nav className="sidebar-view-nav" aria-label="Dictionary views">
-            {activeViewLabels.map(([value, label]) => (
+            {activeViewLabels.slice(0, 4).map(([value, label]) => (
               <button
                 className={activeView === value ? 'selected' : ''}
                 aria-current={activeView === value ? 'page' : undefined}
@@ -1278,6 +1074,15 @@ function App() {
               </button>
             ))}
           </nav>
+          <details className="sidebar-diagnostics" open={['objects', 'impact', 'health', 'dependencies', 'import'].includes(activeView)}>
+            <summary>Schema tools</summary>
+            <nav className="sidebar-view-nav" aria-label="Schema tools">
+              {activeViewLabels.slice(4).map(([value, label]) => (
+                <button key={value} type="button" className={activeView === value ? 'selected' : ''}
+                  aria-current={activeView === value ? 'page' : undefined} onClick={() => setActiveView(value)}>{label}</button>
+              ))}
+            </nav>
+          </details>
         </section>
         <p className="sidebar-trademark">
           Laserfiche is a registered trademark of Laserfiche in the United States and other countries.
@@ -1295,7 +1100,9 @@ function App() {
 
           <div className="warning-banner topbar-warning" role="note">
             <ShieldAlert size={20} />
-            <p>
+            <details className="community-disclaimer">
+              <summary>Community research aid. Read-only use; validate changes in a test environment.</summary>
+              <p>
               This community research aid documents Laserfiche&reg; product databases for read-only
               reporting, troubleshooting, and education. It is not affiliated with or endorsed by
               Laserfiche. Direct modification of Laserfiche product databases is unsupported; consult
@@ -1310,7 +1117,8 @@ function App() {
                 Known limitations
                 <ExternalLink aria-hidden="true" size={13} />
               </a>
-            </p>
+              </p>
+            </details>
           </div>
 
           <div className="topbar-actions">
@@ -1358,7 +1166,7 @@ function App() {
           </div>
         )}
 
-        <SnapshotFreshnessPanel
+        <ProductMetadataPanel
           product={product}
           productsManifest={productsManifest}
           productName={productName}
@@ -1450,6 +1258,8 @@ function App() {
             />
           ) : activeView === 'objects' ? (
             <ObjectExplorer
+              selectedObjectKey={selectedObjectKey}
+              onSelectedObjectChange={setSelectedObjectKey}
               objectType={objectType}
               onObjectTypeChange={setObjectType}
               columnUsageQuery={columnUsageQuery}

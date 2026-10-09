@@ -148,8 +148,8 @@ function summarizeVersion(schema, notes, versionDictionary) {
       notedTables,
       notedColumns,
     },
-    reportingPaths: getReportingPaths(schema.productKey),
-    reportingQuestions: getReportingQuestions(schema.productKey),
+    reportingPaths: getReportingPaths(schema.productKey).filter((item) => item.tables.every((key) => schema.tables.some((table) => table.key === key))),
+    reportingQuestions: getReportingQuestions(schema.productKey, new Set(schema.tables.map((table) => table.key))),
     generatedReportingExamples,
   };
 }
@@ -448,7 +448,7 @@ function copyDirectory(source, destination) {
 }
 
 function generate() {
-  const productsManifest = readJson(path.join(publicDataRoot, 'products.json'));
+  const productsManifest = readJson(path.join(sourceDataRoot, 'products.json'));
   const sourceOutputRoot = outputRoots[0];
   outputRoots.forEach(emptyDirectory);
 
@@ -466,7 +466,7 @@ function generate() {
     .filter((product) => product.status !== 'pending')
     .forEach((product) => {
       const manifestRelativePath = normalizeManifestPath(product.manifestUrl);
-      const versionsManifest = readJson(path.join(publicDataRoot, manifestRelativePath));
+      const versionsManifest = readJson(path.join(sourceDataRoot, manifestRelativePath));
       const productCatalog = {
         productKey: product.productKey,
         productName: product.productName,
