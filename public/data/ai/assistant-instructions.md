@@ -55,6 +55,7 @@ This documentation supports read-only reporting, troubleshooting, and education.
 - Repository (repository) 12.0.1.237
 - Repository (repository) 12.0.2.343
 - Repository (repository) 12.0.3.423
+- Repository (repository) 12.0.4.433
 - Workflow (workflow) 11.0.2306.898
 - Workflow (workflow) 12.0.2508.3111
 - Workflow (workflow) 12.0.2510.3321

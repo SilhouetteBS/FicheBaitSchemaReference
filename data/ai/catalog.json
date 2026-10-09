@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": "1.0",
-  "sourceSnapshotMaxExportedAtUtc": "2026-10-09T21:46:34",
+  "sourceSnapshotMaxExportedAtUtc": "2026-10-09T21:55:04",
   "purpose": "Machine-readable FicheBait Schema Reference export for AI-assisted read-only SQL generation and review.",
   "supportWarning": "This documentation supports read-only reporting, troubleshooting, and education. Direct modification of Laserfiche product databases is unsupported; consult your applicable license and support agreements. Validate changes in a test environment.",
   "aiRules": [
@@ -331,7 +331,7 @@
     {
       "productKey": "repository",
       "productName": "Repository",
-      "defaultVersion": "12.0.3.423",
+      "defaultVersion": "12.0.4.433",
       "versions": [
         {
           "version": "11.0.2.338",
@@ -435,6 +435,32 @@
             "objects": "/data/ai/repository/12.0.3.423/objects.jsonl",
             "dependencies": "/data/ai/repository/12.0.3.423/dependencies.jsonl",
             "queryContext": "/data/ai/repository/12.0.3.423/query-context.md"
+          }
+        },
+        {
+          "version": "12.0.4.433",
+          "label": "Repository 12.0.4.433",
+          "counts": {
+            "schemas": 11,
+            "tables": 139,
+            "columns": 981,
+            "foreignKeys": 97,
+            "indexes": 253,
+            "views": 4,
+            "routines": 98,
+            "triggers": 1,
+            "dependencies": 352,
+            "notedTables": 139,
+            "notedColumns": 981
+          },
+          "files": {
+            "summary": "/data/ai/repository/12.0.4.433/summary.json",
+            "tables": "/data/ai/repository/12.0.4.433/tables.jsonl",
+            "columns": "/data/ai/repository/12.0.4.433/columns.jsonl",
+            "relationships": "/data/ai/repository/12.0.4.433/relationships.jsonl",
+            "objects": "/data/ai/repository/12.0.4.433/objects.jsonl",
+            "dependencies": "/data/ai/repository/12.0.4.433/dependencies.jsonl",
+            "queryContext": "/data/ai/repository/12.0.4.433/query-context.md"
           }
         }
       ]

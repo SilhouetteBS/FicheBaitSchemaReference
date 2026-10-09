@@ -1,0 +1,71 @@
+{
+  "productKey": "repository",
+  "productName": "Repository",
+  "version": "12.0.4.433",
+  "databaseRole": "repository",
+  "exportedAtUtc": "2026-10-09T21:55:04",
+  "exportFormatVersion": "1.0",
+  "counts": {
+    "schemas": 11,
+    "tables": 139,
+    "columns": 981,
+    "foreignKeys": 97,
+    "indexes": 253,
+    "views": 4,
+    "routines": 98,
+    "triggers": 1,
+    "dependencies": 352,
+    "notedTables": 139,
+    "notedColumns": 981
+  },
+  "reportingPaths": [
+    {
+      "title": "Repository entry inventory",
+      "summary": "Start from TOC entries, then add parent, volume, and template context.",
+      "tables": [
+        "dbo.toc",
+        "dbo.vol",
+        "dbo.propset"
+      ]
+    },
+    {
+      "title": "Field metadata and values",
+      "summary": "Use field definitions with property values to report entry metadata.",
+      "tables": [
+        "dbo.propdef",
+        "dbo.propval",
+        "dbo.toc"
+      ]
+    },
+    {
+      "title": "Document pages and electronic documents",
+      "summary": "Use entry and page tables to review page counts, image sizes, and text inventory.",
+      "tables": [
+        "dbo.toc",
+        "dbo.doc",
+        "dbo.vol"
+      ]
+    }
+  ],
+  "reportingQuestions": [
+    {
+      "question": "Which templates, fields, and document metadata structures exist?",
+      "guidance": "Start with template and field tables, then use relationships to find document or entry associations.",
+      "tables": [
+        "dbo.template",
+        "dbo.propdef",
+        "dbo.toc"
+      ]
+    },
+    {
+      "question": "How are users, trustees, and access-related records represented?",
+      "guidance": "Start with trustee/security tables and verify joins carefully before reporting access state.",
+      "tables": [
+        "dbo.trustee",
+        "dbo.account_cache",
+        "dbo.acl"
+      ]
+    }
+  ],
+  "generatedReportingExamples": []
+}
