@@ -53,7 +53,7 @@ async function capture(name, params, beforeCapture) {
   // Compare connectors and card boundaries independently of OS font rasterization.
   const geometry = await page.locator('.database-diagram').screenshot({
     animations: 'disabled',
-    style: '.database-diagram { position: fixed !important; top: 0 !important; left: 0 !important; } .diagram-box > *, .diagram-lines text, .diagram-highlight-lines text, .diagram-lane-layer, .diagram-mini-map { visibility: hidden !important; }',
+    style: '.database-diagram { position: fixed !important; top: 0 !important; left: 0 !important; width: 986px !important; height: 3541px !important; z-index: 99999 !important; background: white !important; } .diagram-box > *, .diagram-lines text, .diagram-highlight-lines text, .diagram-lane-layer, .diagram-mini-map { visibility: hidden !important; }',
   });
   const baselinePath = path.join(baselineDir, `${name}.png`);
   if (process.env.UPDATE_VISUAL_BASELINES === '1') {
