@@ -18,7 +18,7 @@ import { isTableNoteMap } from '../src/data/notes.js';
 import { buildObjectAliasMap, resolveDependencyKey, classifyDependency, getDependencyResolutionItems } from '../src/data/schemaAnalysis.js';
 
 const readJson = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
-const schema = readJson('data/forms/12.0.2607.40137/schema.json');
+const schema = readJson('data/forms/12.0.2607.40144/schema.json');
 const manifest = readJson('data/forms/versions.json');
 const triggerAliases = buildObjectAliasMap({ source: schema });
 for (const dependency of schema.dependencies.filter((item) => item.referencingObjectTypeDescription === 'SQL_TRIGGER')) {

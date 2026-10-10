@@ -14,7 +14,7 @@ try {
     globalThis.localStorage.setItem('lfdd.localNotes', '[]');
   });
   const start = new URL(base);
-  start.search = new URLSearchParams({ product: 'forms', version: '12.0.2607.40137', view: 'tables', table: 'dbo.__TransactionHistory' });
+  start.search = new URLSearchParams({ product: 'forms', version: '12.0.2607.40144', view: 'tables', table: 'dbo.__TransactionHistory' });
   await page.goto(start.toString(), { waitUntil: 'networkidle' });
   assert.match(await page.locator('.table-context-bar').innerText(), /Load history/);
   await page.getByRole('button', { name: /Stability Load history/ }).click();

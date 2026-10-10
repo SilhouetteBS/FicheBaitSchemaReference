@@ -1,6 +1,6 @@
 {
   "productKey": "forms",
-  "productVersion": "12.0.2607.40137",
+  "productVersion": "12.0.2607.40144",
   "tables": {
     "dbo.__TransactionHistory": {
       "confidence": "inferred",
@@ -31,8 +31,8 @@
           "purpose": "Attributes Grouping Key Gu identifier associated with the report attribute grouping key record."
         },
         "subview_id": {
-          "confidence": "inferred",
-          "purpose": "Report subview identifier."
+          "confidence": "observed",
+          "purpose": "Optional report subview identifier. All 826 grouping keys had NULL here in the reviewed Forms 12.0.2607.40144 dataset; requiring a non-NULL value would exclude them."
         },
         "attributes_grouping_name": {
           "confidence": "inferred",
@@ -44,7 +44,8 @@
       "confidence": "inferred",
       "summary": "Mapping records for report attribute grouping mapping.",
       "safeReportingNotes": [
-        "Use report attribute grouping mapping records for read-only security or relationship reporting."
+        "Use report attribute grouping mapping records for read-only security or relationship reporting.",
+        "All 826 mappings resolved to grouping keys and dataset attributes in the reviewed Forms 12.0.2607.40144 dataset. Observed one-to-one cardinality is not a universal constraint."
       ],
       "columns": {
         "id": {
@@ -207,7 +208,7 @@
       "columns": {
         "weekday_num": {
           "confidence": "inferred",
-          "purpose": "Numeric value for weekday num on the calculation excluded day record."
+          "purpose": "Stored excluded-weekday code. Values 0 and 6 were observed in Forms 12.0.2607.40144; weekday labels and any DATEFIRST relationship remain unverified."
         }
       }
     },
@@ -409,7 +410,7 @@
       "confidence": "inferred",
       "summary": "Metadata records for blob cache entry.",
       "safeReportingNotes": [
-        "Use blob cache entry records for read-only Forms metadata reporting."
+        "Cache bp_id can be NULL. Payload formats, lifetime and persistence behavior remain unverified; avoid exposing cached content."
       ],
       "columns": {
         "guid": {
@@ -486,8 +487,8 @@
           "purpose": "Hash Value stored for the business process attachment record; review contents before reporting."
         },
         "attachment": {
-          "confidence": "inferred",
-          "purpose": "Attachment binary payload or storage reference."
+          "confidence": "observed",
+          "purpose": "Stored attachment binary content. Blob presence was checked without reading contents; all observed attachment rows have a blob, including those with positive repository-entry identifiers."
         },
         "length": {
           "confidence": "inferred",
@@ -498,8 +499,8 @@
           "purpose": "Deleted On for the business process attachment record."
         },
         "lfentry_id": {
-          "confidence": "inferred",
-          "purpose": "Lfentry identifier associated with the business process attachment record."
+          "confidence": "observed",
+          "purpose": "Repository entry identifier metadata, when populated. Positive identifiers coexist with stored attachment blobs in the reviewed data; this value alone does not prove the entry exists or determine storage location."
         },
         "is_deleted": {
           "confidence": "inferred",
@@ -510,8 +511,8 @@
           "purpose": "Storage volume identifier."
         },
         "storage_type": {
-          "confidence": "inferred",
-          "purpose": "Type or category value for storage type on the business process attachment record."
+          "confidence": "unknown",
+          "purpose": "Attachment storage-type code. Only 0 was observed; the enum meaning and retention behavior have not been verified."
         },
         "file_unique_id": {
           "confidence": "inferred",
@@ -896,16 +897,16 @@
           "purpose": "Process data attribute identifier associated with the submitted value."
         },
         "repeat_id": {
-          "confidence": "inferred",
-          "purpose": "Repeat-section or collection instance identifier for repeated values."
+          "confidence": "observed",
+          "purpose": "Repeat identifier stored with the raw variable value. All values were zero in the reviewed data despite repeating-row indices in member_path; do not use this field alone to identify repeating rows."
         },
         "value": {
           "confidence": "inferred",
           "purpose": "Submitted value content; may include sensitive user-entered form data."
         },
         "member_path": {
-          "confidence": "inferred",
-          "purpose": "Path identifying a nested collection member for repeated or structured values."
+          "confidence": "observed",
+          "purpose": "Member path for the variable value. Observed repeating-row paths contain row indices; preserve submission and variable context when interpreting them. Populated nested-repeat behavior remains unverified."
         }
       }
     },
@@ -958,8 +959,8 @@
           "purpose": "XPath-like location for the attribute within Forms data."
         },
         "is_deleted": {
-          "confidence": "inferred",
-          "purpose": "Read-only soft-removal flag for the attribute definition."
+          "confidence": "observed",
+          "purpose": "Deletion flag on the variable definition. Reviewed definitions use NULL or 1, with no observed 0 values; do not assume is_deleted=0 identifies active definitions."
         },
         "is_user_in_summary": {
           "confidence": "inferred",
@@ -1008,7 +1009,8 @@
       "confidence": "inferred",
       "summary": "Mapping records for process data source mapping.",
       "safeReportingNotes": [
-        "Use process data source mapping records for read-only reporting after reviewing whether values include user-entered or sensitive content."
+        "Use process data source mapping records for read-only reporting after reviewing whether values include user-entered or sensitive content.",
+        "Association is not proof of actual datasource execution or usage. Each of 18 mapped processes was associated with all 28 mapped datasources in the reviewed Forms 12.0.2607.40144 dataset."
       ],
       "columns": {
         "bp_id": {
@@ -1083,8 +1085,8 @@
           "purpose": "Approver identifier."
         },
         "resume_id": {
-          "confidence": "inferred",
-          "purpose": "Resumable task assignment identifier."
+          "confidence": "observed",
+          "purpose": "Task resume identifier used to associate archived approver records with archived task records by resume_id. Check join cardinality because archived task resume_id values can repeat."
         },
         "is_group": {
           "confidence": "inferred",
@@ -1095,8 +1097,8 @@
           "purpose": "User snapshot identifier."
         },
         "team_id": {
-          "confidence": "inferred",
-          "purpose": "Team identifier."
+          "confidence": "observed",
+          "purpose": "Associated team identifier, when present. Archived approver records can be team-only, so an inner join requiring a user can omit valid records."
         }
       }
     },
@@ -1141,7 +1143,7 @@
         },
         "ssl": {
           "confidence": "inferred",
-          "purpose": "SSL for the process repository profile record."
+          "purpose": "TLS connection setting. Value 0 matched Use TLS connection = No for the process profiles reviewed in Forms 12.0.2607.40144."
         }
       }
     },
@@ -1626,7 +1628,8 @@
       "confidence": "inferred",
       "summary": "Metadata records for business process step.",
       "safeReportingNotes": [
-        "Use business process step records for read-only Forms metadata reporting."
+        "Use business process step records for read-only Forms metadata reporting.",
+        "Join worker history to steps using both process_id and step_id. A step_id-only join multiplied 803 history rows to 4,866 in the reviewed Forms 12.0.2607.40144 dataset; the composite join retained 803."
       ],
       "columns": {
         "process_id": {
@@ -1642,8 +1645,8 @@
           "purpose": "Flag indicating whether the business process step firststep."
         },
         "definition_json": {
-          "confidence": "unknown",
-          "purpose": "Step-definition text whose name suggests JSON, rather than runtime worker state. Property names and their meanings are not exported; do not derive task status from this payload."
+          "confidence": "observed",
+          "purpose": "Step-definition configuration text, not runtime worker state. All 231 values were non-NULL valid JSON in the reviewed Forms 12.0.2607.40144 dataset. Individual property meanings remain unverified."
         },
         "step_type": {
           "confidence": "inferred",
@@ -1947,12 +1950,12 @@
           "purpose": "Step identifier associated with this history row."
         },
         "start_date": {
-          "confidence": "inferred",
-          "purpose": "Timestamp when the step or worker history segment started."
+          "confidence": "observed",
+          "purpose": "Stored start timestamp for the worker-history event. Forms displays localized time in reviewed samples, including date rollover and season-dependent offsets; do not apply a fixed offset or assume the stored timezone without verification."
         },
         "finish_date": {
-          "confidence": "inferred",
-          "purpose": "Timestamp when the step or worker history segment finished."
+          "confidence": "observed",
+          "purpose": "Stored finish timestamp for the worker-history event. Reviewed Forms displays omit fractional seconds and use season-dependent offsets; named display timezone and storage convention remain unverified."
         },
         "status": {
           "confidence": "observed",
@@ -1971,8 +1974,8 @@
           "purpose": "Serialized or free-form external op data1 payload for the worker instance history record; verify structure before reporting."
         },
         "archived_worker_instnc_to_resume": {
-          "confidence": "inferred",
-          "purpose": "Archived Worker Instnc To Resume for the worker instance history record."
+          "confidence": "observed",
+          "purpose": "Identifier of the archived task record in cf_bp_worker_instnc_to_resume_archive.id associated with this history row; not the task's resume_id."
         },
         "team_id": {
           "confidence": "inferred",
@@ -2145,8 +2148,8 @@
           "purpose": "Team identifier associated with the task assignment."
         },
         "owner_snapshot_id": {
-          "confidence": "inferred",
-          "purpose": "User snapshot identifier for the current task owner."
+          "confidence": "observed",
+          "purpose": "Owner snapshot associated with the current task record. It can differ from the owner recorded on the latest worker-history event; do not substitute latest history ownership without verification."
         },
         "due_date": {
           "confidence": "inferred",
@@ -2189,8 +2192,8 @@
           "purpose": "Primary identifier for the archived resumable task assignment record."
         },
         "resume_id": {
-          "confidence": "inferred",
-          "purpose": "Resumable task assignment identifier."
+          "confidence": "observed",
+          "purpose": "Task resume identifier. Multiple archived records can share this value; do not assume one archive row per resume_id."
         },
         "worker_instance_id": {
           "confidence": "inferred",
@@ -2210,7 +2213,7 @@
         },
         "resume_count": {
           "confidence": "inferred",
-          "purpose": "Count value for resume count on the archived resumable task assignment record."
+          "purpose": "Resume counter stored on the archived task record. It distinguishes records within every repeated resume_id group in the reviewed test data; exact lifecycle semantics and universal uniqueness remain unverified."
         },
         "status": {
           "confidence": "observed",
@@ -2711,7 +2714,7 @@
       "confidence": "inferred",
       "summary": "Metadata records for external data source.",
       "safeReportingNotes": [
-        "Use external data source records for read-only reporting after reviewing whether values include user-entered or sensitive content."
+        "Do not equate datasource row counts with registered database connections. Datasource-type labels and offline behavior remain unverified."
       ],
       "columns": {
         "datasource_id": {
@@ -3100,7 +3103,7 @@
       "summary": "Form draft and submission linkage records.",
       "safeReportingNotes": [
         "Use carefully for read-only draft/submission diagnostics after reviewing privacy impact.",
-        "Use form submission draft linkage records for read-only reporting after reviewing whether values include user-entered or sensitive content."
+        "form_id can be NULL. Use optional form joins to preserve submissions; resolve process_id and step_id together against cf_bp_steps. Draft values can contain sensitive information."
       ],
       "warnings": [
         "Draft password and code fields are security-sensitive; do not expose them in reports."
@@ -3678,7 +3681,7 @@
       "confidence": "inferred",
       "summary": "Configuration records for global Forms option.",
       "safeReportingNotes": [
-        "Use global Forms option records for read-only Forms metadata reporting."
+        "Treat option values as potentially sensitive configuration. Interpret retention durations together with their enablement flags rather than assuming a duration alone activates retention."
       ],
       "columns": {
         "optionname": {
@@ -4008,7 +4011,7 @@
       "confidence": "inferred",
       "summary": "Configuration records for Forms setting.",
       "safeReportingNotes": [
-        "Use Forms setting records for read-only Forms metadata reporting."
+        "Settings contain mixed serialization formats, including valid JSON and non-JSON values. Do not assume every setting is JSON or expose private configuration."
       ],
       "columns": {
         "id": {
@@ -4177,7 +4180,7 @@
       "confidence": "inferred",
       "summary": "Metadata records for message template.",
       "safeReportingNotes": [
-        "Use message template records for read-only Forms metadata reporting."
+        "Template type codes and bizprocess_applied semantics remain unverified. Do not assume a process foreign key from the column name; subject and body can contain sensitive content."
       ],
       "columns": {
         "templates_type": {
@@ -4649,7 +4652,7 @@
       "confidence": "inferred",
       "summary": "Metadata records for user snapshot.",
       "safeReportingNotes": [
-        "Use user snapshot records for read-only security or relationship reporting."
+        "Join snapshot references to cf_user_snapshot.id, then user_id to cf_users.user_id. Multiple snapshots per user were observed; snapshot IDs and user IDs are not interchangeable."
       ],
       "columns": {
         "id": {
@@ -4769,7 +4772,7 @@
       "summary": "Mapping table linking Forms groups to Forms users.",
       "safeReportingNotes": [
         "Use with cf_usergroups and cf_users for read-only group membership reporting.",
-        "Use user group membership mapping records for read-only security or relationship reporting."
+        "Direct user/group mappings resolved in the reviewed sample; do not assume this table enumerates all effective nested or synchronized memberships."
       ],
       "warnings": [
         "Do not update group membership mapping records directly."
@@ -4790,7 +4793,7 @@
       "summary": "Forms user identity records and account metadata.",
       "safeReportingNotes": [
         "Use for read-only identity lookup, account status, and display name reporting when allowed by policy.",
-        "Use Forms user records for read-only security or relationship reporting."
+        "Do not infer effective administrator access solely from is_lfadmin. User-type labels and activation/license semantics remain unverified in the reviewed Forms 12.0.2607.40144 sample."
       ],
       "warnings": [
         "Do not publish credentials, authentication codes, salts, or other security-sensitive values."
@@ -4980,8 +4983,8 @@
           "purpose": "Flag indicating whether the record is marked as removed."
         },
         "include_archived_instance": {
-          "confidence": "inferred",
-          "purpose": "Include Archived Instance for the process view profile record."
+          "confidence": "observed",
+          "purpose": "Controls the report option labeled Include retained instance statistics in the reviewed Forms editors (0 unchecked, 1 checked). This is separate from report deletion state."
         },
         "unique_id": {
           "confidence": "inferred",
@@ -4993,7 +4996,7 @@
       "confidence": "inferred",
       "summary": "Security assignment records for view security assignment.",
       "safeReportingNotes": [
-        "Use view security assignment records for read-only security or relationship reporting."
+        "view_id references cf_view_profile_by_bp.view_id, an application report identifier rather than a SQL view. Security type codes and principal encoding remain unverified."
       ],
       "columns": {
         "user_group_id": {
@@ -5150,7 +5153,7 @@
       "confidence": "inferred",
       "summary": "Security assignment records for dashboard security assignment.",
       "safeReportingNotes": [
-        "Use dashboard security assignment records for read-only security or relationship reporting."
+        "dash_id references dashboards.id. Security type codes and principal encoding remain unverified; rows alone do not establish effective authorization."
       ],
       "columns": {
         "id": {
@@ -5288,7 +5291,7 @@
         },
         "action_name": {
           "confidence": "inferred",
-          "purpose": "Action Name for the email approval resume action record."
+          "purpose": "Email approval action name, when populated. NULL in the reviewed Forms 12.0.2607.40144 sample; row presence alone does not prove an action occurred."
         },
         "action_by": {
           "confidence": "inferred",
@@ -5296,7 +5299,7 @@
         },
         "action_time": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for action time on the email approval resume action record."
+          "purpose": "Email approval action timestamp, when populated. NULL in the reviewed Forms 12.0.2607.40144 sample; timezone and completed-action lifecycle remain unverified."
         }
       }
     },
@@ -5445,7 +5448,7 @@
       "confidence": "inferred",
       "summary": "Metadata records for formula operand.",
       "safeReportingNotes": [
-        "Use formula operand records for read-only Forms metadata reporting."
+        "Resolve formula_id to formulae.id and member_id to members.id. Trigger fields require both trigger_form_id and trigger_field_id against cf_fields; discriminator meanings remain unverified."
       ],
       "columns": {
         "id": {
@@ -5458,7 +5461,7 @@
         },
         "discriminator": {
           "confidence": "inferred",
-          "purpose": "Numeric value for discriminator on the formula operand record."
+          "purpose": "Operand category discriminator. Values 0 and 1 were observed in Forms 12.0.2607.40144; category labels remain unverified."
         },
         "trigger_form_id": {
           "confidence": "inferred",
@@ -5499,7 +5502,7 @@
         },
         "discriminator": {
           "confidence": "inferred",
-          "purpose": "Numeric value for discriminator on the formula definition record."
+          "purpose": "Formula category discriminator. Only 0 was observed in Forms 12.0.2607.40144; its category label remains unverified."
         },
         "order": {
           "confidence": "inferred",
@@ -5507,7 +5510,7 @@
         },
         "transition_process_id": {
           "confidence": "inferred",
-          "purpose": "Transition Process identifier associated with the formula definition record."
+          "purpose": "Optional transition process identifier. Resolve with transition_source_step_id and transition_target_step_id against cf_bp_transitions. NULL throughout the reviewed sample; transition-linked behavior was not observed."
         },
         "transition_source_step_id": {
           "confidence": "inferred",
@@ -5523,7 +5526,7 @@
       "confidence": "inferred",
       "summary": "Security assignment records for global repository profile security assignment.",
       "safeReportingNotes": [
-        "Use global repository profile security assignment records for read-only reporting after reviewing whether values include user-entered or sensitive content."
+        "profile_id references global_lfrepo_profiles.profile_id. Security type codes and principal encoding remain unverified; rows alone do not establish effective authorization."
       ],
       "columns": {
         "id": {
@@ -5577,7 +5580,7 @@
         },
         "ssl": {
           "confidence": "inferred",
-          "purpose": "SSL for the global repository profile record."
+          "purpose": "TLS connection setting. Value 1 matched Use TLS connection = Yes for the system profile reviewed in Forms 12.0.2607.40144."
         }
       }
     },
@@ -5709,8 +5712,8 @@
           "purpose": "Business process instance identifier."
         },
         "bp_data_id": {
-          "confidence": "inferred",
-          "purpose": "Submitted process data value identifier."
+          "confidence": "observed",
+          "purpose": "Raw variable record associated with this list option. Use it to preserve the option's submission and variable context."
         },
         "attribute_id": {
           "confidence": "inferred",
@@ -5721,8 +5724,8 @@
           "purpose": "List Variable Entry name."
         },
         "is_checked": {
-          "confidence": "inferred",
-          "purpose": "Flag indicating whether the list variable entry checked."
+          "confidence": "observed",
+          "purpose": "Indicates whether this list option is selected in the observed checkbox records. Filter selected options and retain bp_data_id context rather than treating every option row as a selected answer."
         },
         "is_other": {
           "confidence": "inferred",
@@ -5743,7 +5746,7 @@
         },
         "name": {
           "confidence": "inferred",
-          "purpose": "List Definition name."
+          "purpose": "Optional list name. NULL throughout the reviewed Forms 12.0.2607.40144 sample; do not assume it supplies a user-visible title."
         }
       }
     },
@@ -5751,7 +5754,7 @@
       "confidence": "inferred",
       "summary": "Metadata records for logo asset.",
       "safeReportingNotes": [
-        "Use logo asset records for read-only Forms metadata reporting."
+        "Resolve unique_id to file_table.unique_id for the stored file association. Image contents and rendering paths were not inspected."
       ],
       "columns": {
         "logo_id": {
@@ -5768,7 +5771,7 @@
       "confidence": "inferred",
       "summary": "Metadata records for process instance extended data.",
       "safeReportingNotes": [
-        "Use process instance extended data records for read-only reporting after reviewing whether values include user-entered or sensitive content."
+        "bp_instance_id references cf_bp_main_instances.bp_instance_id. testing_rules was NULL throughout the reviewed sample; routing and testing payload formats remain unverified."
       ],
       "columns": {
         "bp_instance_id": {
@@ -5838,7 +5841,7 @@
       "confidence": "inferred",
       "summary": "Mapping records for modern form image mapping.",
       "safeReportingNotes": [
-        "Use modern form image mapping records for read-only security or relationship reporting."
+        "Resolve modern_form_id to cf_forms.form_id and logo_id to logo.logo_id. Image payload and UI rendering behavior were not inspected."
       ],
       "columns": {
         "id": {
@@ -5859,7 +5862,7 @@
       "confidence": "inferred",
       "summary": "Mapping records for modern theme image mapping.",
       "safeReportingNotes": [
-        "Use modern theme image mapping records for read-only security or relationship reporting."
+        "Resolve modern_theme_id to cf_theme.id and logo_id to logo.logo_id. Image payload and UI rendering behavior were not inspected."
       ],
       "columns": {
         "id": {
@@ -6047,7 +6050,7 @@
       "confidence": "inferred",
       "summary": "Configuration records for prediction option.",
       "safeReportingNotes": [
-        "Use prediction option records for read-only Forms metadata reporting."
+        "bp_id references cf_business_processes.bp_id. Both flags were enabled throughout the reviewed sample; disabled behavior and prediction calculation rules remain unverified."
       ],
       "columns": {
         "bp_id": {
@@ -6077,7 +6080,7 @@
         },
         "name": {
           "confidence": "inferred",
-          "purpose": "Primitive Data Type name."
+          "purpose": "Stored type label. Observed Forms 12.0.2607.40144 dictionary: 1=text, 2=integer, 3=float, 4=datetime, 5=currency, 6=boolean, 7=list, 8=file, 9=complex, 10=time, 11=richtext. Conversion behavior remains unverified."
         }
       }
     },
@@ -6142,12 +6145,12 @@
           "purpose": "Attributes Grouping Key Gu identifier associated with the report aggregation definition record."
         },
         "aggregation_column_id": {
-          "confidence": "inferred",
-          "purpose": "Report aggregation column identifier."
+          "confidence": "observed",
+          "purpose": "Identifier of the built-in report column being aggregated. Value 7 corresponds to Instance ID in the reviewed Count aggregation."
         },
         "aggregate_type": {
-          "confidence": "inferred",
-          "purpose": "Type or category value for aggregate type on the report aggregation definition record."
+          "confidence": "observed",
+          "purpose": "Aggregation-function code. Value 2 corresponds to Count in the reviewed summarized report; other aggregation codes are unverified."
         },
         "display_name": {
           "confidence": "inferred",
@@ -6179,16 +6182,16 @@
           "purpose": "Attributes Grouping Key Gu identifier associated with the report column definition record."
         },
         "regular_column_id": {
-          "confidence": "inferred",
-          "purpose": "Report regular column identifier."
+          "confidence": "observed",
+          "purpose": "Identifier for a built-in report column, as an alternative to a process-variable grouping key. In the reviewed table report, 12 corresponds to Status and 10 to Start date; other mappings are unverified."
         },
         "display_name": {
           "confidence": "inferred",
           "purpose": "Report Column Definition display name."
         },
         "rank": {
-          "confidence": "inferred",
-          "purpose": "Display rank for the record."
+          "confidence": "observed",
+          "purpose": "Column ordering within a report subview. Observed ranks are one-based and contiguous; the first two columns of the reviewed table report match this order."
         }
       }
     },
@@ -6319,8 +6322,8 @@
           "purpose": "Forms group identifier."
         },
         "modifier": {
-          "confidence": "inferred",
-          "purpose": "Modifier for the report grouping modifier record."
+          "confidence": "unknown",
+          "purpose": "Grouping-modifier code associated with a report grouping key. Values 10 and 16 were observed, but their specific meanings remain unverified."
         }
       }
     },
@@ -6365,12 +6368,12 @@
           "purpose": "Attributes Grouping Key Gu identifier associated with the report sorting definition record."
         },
         "direction": {
-          "confidence": "inferred",
-          "purpose": "Direction setting for the report sorting definition record."
+          "confidence": "observed",
+          "purpose": "Sort-direction code. Value 1 corresponds to Descending in the reviewed table report; other values have not been directly mapped."
         },
         "priority": {
           "confidence": "inferred",
-          "purpose": "Priority value for the record."
+          "purpose": "Priority of a configured sort entry within a report subview. Multiple-sort precedence semantics remain unverified."
         }
       }
     },
@@ -6398,8 +6401,8 @@
           "purpose": "Serialized JSON style configuration."
         },
         "filters": {
-          "confidence": "inferred",
-          "purpose": "Serialized or free-form filters payload for the report subview definition record; verify structure before reporting."
+          "confidence": "observed",
+          "purpose": "Structured JSON filter-expression configuration, not a SQL WHERE clause. The reviewed expression has operand objects and operator/Boolean flags; interpret the full expression rather than mapping operatorType alone."
         }
       }
     },
@@ -6722,7 +6725,7 @@
       "confidence": "inferred",
       "summary": "Mapping records for task metrics mapping.",
       "safeReportingNotes": [
-        "Use task metrics mapping records for read-only security or relationship reporting."
+        "Resolve history_id to worker history, instance_id to worker instances, and process_id plus step_id to cf_bp_steps. Observed statuses were complete, running and terminate; only complete and terminate had finish dates in the reviewed sample. This is not an exhaustive lifecycle contract."
       ],
       "columns": {
         "id": {
@@ -6771,7 +6774,7 @@
         },
         "last_assigned_target_snapshot": {
           "confidence": "inferred",
-          "purpose": "Last Assigned Target Snapshot for the task metrics mapping record."
+          "purpose": "Optional last-assigned target snapshot reference to cf_user_snapshot.id, not cf_users.user_id."
         },
         "last_assigned_team_id": {
           "confidence": "inferred",
@@ -6779,7 +6782,7 @@
         },
         "last_assigned_owner_snapshot_id": {
           "confidence": "inferred",
-          "purpose": "Last Assigned Owner Snapshot identifier associated with the task metrics mapping record."
+          "purpose": "Optional last-assigned owner snapshot reference to cf_user_snapshot.id. Do not substitute a user identifier."
         },
         "bp_id": {
           "confidence": "inferred",
@@ -6882,7 +6885,7 @@
       "confidence": "inferred",
       "summary": "Metadata records for team member.",
       "safeReportingNotes": [
-        "Use team member records for read-only Forms metadata reporting."
+        "Team Management corroborated membership categories, but exact member_rights, admin_rights and type mappings remain unverified. NULL leave_date is not a proven complete active-membership filter."
       ],
       "columns": {
         "id": {
@@ -7071,7 +7074,7 @@
         },
         "history_context_type": {
           "confidence": "inferred",
-          "purpose": "Type or category value for history context type on the worker instance history extended data record."
+          "purpose": "History-context category code. Values 0 and 1 were observed in Forms 12.0.2607.40144; their meanings and payload formats remain unverified."
         }
       }
     },

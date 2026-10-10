@@ -115,6 +115,15 @@ const lfds12 = {
   schema: readJson('public/data/lfds/12.0.2506.370/schema.json'),
   notes: readJson('public/data/lfds/12.0.2506.370/notes.json'),
 };
+const reviewedFormsNotes = readJson('public/data/forms/12.0.2607.40144/notes.json');
+assert.match(reviewedFormsNotes.tables['dbo.lists'].columns.name.purpose, /NULL.*do not assume/, 'List names must not be presented as guaranteed UI titles.');
+assert.match(reviewedFormsNotes.tables['dbo.email_approval_to_resume'].columns.action_name.purpose, /does not prove/, 'Email approval row presence must not imply a completed action.');
+assert.match(reviewedFormsNotes.tables['dbo.cf_user_snapshot'].safeReportingNotes.join(' '), /not interchangeable/, 'Snapshot keys must remain distinct from user identifiers.');
+assert.match(reviewedFormsNotes.tables['dbo.formula_operands'].safeReportingNotes.join(' '), /both trigger_form_id and trigger_field_id/, 'Operand field joins require composite form context.');
+assert.match(reviewedFormsNotes.tables['dbo.worker_instance_history_extended_data'].columns.history_context_type.purpose, /meanings.*unverified/, 'Observed context codes must not acquire invented labels.');
+assert.match(reviewedFormsNotes.tables['dbo.cf_bp_steps'].safeReportingNotes.join(' '), /both process_id and step_id/, 'Generated notes must preserve composite step join guidance.');
+assert.match(reviewedFormsNotes.tables['dbo.attributes_grouping_key'].columns.subview_id.purpose, /NULL/, 'Generated notes must retain nullable grouping context.');
+assert.match(reviewedFormsNotes.tables['dbo.cf_bp_datasource_mapping'].safeReportingNotes.join(' '), /not proof/, 'Datasource associations must not imply actual usage.');
 const minimalExport = readJson('tools/fixtures/minimal-export.json');
 const product = buildSchemaProduct([forms11, forms12]);
 const latestVersion = product.versions.at(-1);
@@ -626,7 +635,7 @@ assert.deepEqual(
     'forms 12.0.2503.10378': { total: 155, resolved: 121 },
     'forms 12.0.2509.20409': { total: 154, resolved: 121 },
     'forms 12.0.2603.30215': { total: 226, resolved: 192 },
-    'forms 12.0.2607.40137': { total: 154, resolved: 121 },
+    'forms 12.0.2607.40144': { total: 154, resolved: 121 },
     'lfds 11.0.2403.2474': { total: 37, resolved: 36 },
     'lfds 12.0.2506.370': { total: 37, resolved: 36 },
     'lfds 12.0.2510.261': { total: 38, resolved: 36 },
