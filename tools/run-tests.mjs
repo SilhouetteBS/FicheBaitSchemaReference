@@ -125,6 +125,14 @@ assert.match(reviewedFormsNotes.tables['dbo.cf_bp_steps'].safeReportingNotes.joi
 assert.match(reviewedFormsNotes.tables['dbo.attributes_grouping_key'].columns.subview_id.purpose, /NULL/, 'Generated notes must retain nullable grouping context.');
 assert.match(reviewedFormsNotes.tables['dbo.cf_bp_datasource_mapping'].safeReportingNotes.join(' '), /not proof/, 'Datasource associations must not imply actual usage.');
 const minimalExport = readJson('tools/fixtures/minimal-export.json');
+const taskMetricNotes = reviewedFormsNotes.tables['dbo.task_metrics_mapping'];
+assert.match(taskMetricNotes.safeReportingNotes.join(' '), /Do not count distinct instance_id as tasks/, 'Task metrics must preserve their history-level grain.');
+assert.match(taskMetricNotes.columns.last_assigned_owner_snapshot_id.purpose, /Not a reliable current task owner/, 'Historical assignment snapshots must not imply current ownership.');
+assert.match(taskMetricNotes.columns.last_assigned_status.purpose, /separate from.*task status/, 'Assignment events and task lifecycle states must remain distinct.');
+for (const key of ['dbo.cf_view_security', 'dbo.dashboard_security']) {
+  assert.match(reviewedFormsNotes.tables[key].safeReportingNotes.join(' '), /ID spaces overlap/, 'Security principal types cannot be inferred from ID existence.');
+}
+assert.match(reviewedFormsNotes.tables['dbo.formula_operands'].columns.discriminator.purpose, /not a verified complete category mapping/, 'Operand population patterns must not become invented enums.');
 const product = buildSchemaProduct([forms11, forms12]);
 const latestVersion = product.versions.at(-1);
 

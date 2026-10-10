@@ -4898,7 +4898,7 @@
         },
         "bizprocess_applied": {
           "confidence": "inferred",
-          "purpose": "Bizprocess Applied for the user role assignment record."
+          "purpose": "Business process association for this role assignment; joined cf_business_processes.bp_id for all 40 reviewed rows. The complete effective-permission rules remain unverified."
         },
         "user_id": {
           "confidence": "inferred",
@@ -4996,7 +4996,8 @@
       "confidence": "inferred",
       "summary": "Security assignment records for view security assignment.",
       "safeReportingNotes": [
-        "view_id references cf_view_profile_by_bp.view_id, an application report identifier rather than a SQL view. Security type codes and principal encoding remain unverified."
+        "view_id references cf_view_profile_by_bp.view_id, an application report identifier rather than a SQL view. Security type codes and principal encoding remain unverified.",
+        "User and group integer ID spaces overlap. Matching user_group_id to an existing cf_users or cf_usergroups row does not establish principal type. The report Manage Access UI supports both users and groups, but the numeric type mapping has not been verified."
       ],
       "columns": {
         "user_group_id": {
@@ -5153,7 +5154,8 @@
       "confidence": "inferred",
       "summary": "Security assignment records for dashboard security assignment.",
       "safeReportingNotes": [
-        "dash_id references dashboards.id. Security type codes and principal encoding remain unverified; rows alone do not establish effective authorization."
+        "dash_id references dashboards.id. Security type codes and principal encoding remain unverified; rows alone do not establish effective authorization.",
+        "User and group integer ID spaces overlap; do not infer principal type solely from an ID match to cf_users or cf_usergroups."
       ],
       "columns": {
         "id": {
@@ -5461,7 +5463,7 @@
         },
         "discriminator": {
           "confidence": "inferred",
-          "purpose": "Operand category discriminator. Values 0 and 1 were observed in Forms 12.0.2607.40144; category labels remain unverified."
+          "purpose": "Operand category discriminator. In the reviewed sample, 34 rows with 0 populated trigger_form_id and trigger_field_id; one row with 1 populated member_id and xpath_expression instead. These are observed storage patterns, not a verified complete category mapping."
         },
         "trigger_form_id": {
           "confidence": "inferred",
@@ -5485,7 +5487,8 @@
       "confidence": "inferred",
       "summary": "Metadata records for formula definition.",
       "safeReportingNotes": [
-        "Use formula definition records for read-only Forms metadata reporting."
+        "Use formula definition records for read-only Forms metadata reporting.",
+        "Transition-linked behavior could not be verified: all reviewed formula transition_process_id values were NULL, and none of the 230 reviewed cf_bp_transitions rows populated dataset_typed_formula_id. Do not assume this optional relationship is used by every process."
       ],
       "columns": {
         "id": {
@@ -6723,9 +6726,13 @@
     },
     "dbo.task_metrics_mapping": {
       "confidence": "inferred",
-      "summary": "Mapping records for task metrics mapping.",
+      "summary": "Task-level reporting metrics associated with worker history, process steps, and assignment snapshots.",
       "safeReportingNotes": [
-        "Resolve history_id to worker history, instance_id to worker instances, and process_id plus step_id to cf_bp_steps. Observed statuses were complete, running and terminate; only complete and terminate had finish dates in the reviewed sample. This is not an exhaustive lifecycle contract."
+        "Resolve history_id to worker history, instance_id to worker instances, and process_id plus step_id to cf_bp_steps. Observed statuses were complete, running and terminate; only complete and terminate had finish dates in the reviewed sample. This is not an exhaustive lifecycle contract.",
+        "Do not count distinct instance_id as tasks: 109 metric rows referenced 105 distinct workers and 109 distinct history records in the reviewed sample. One worker had three task metrics associated with separate history records.",
+        "For current tasks, joining cf_bp_worker_instnc_to_resume on both worker_instance_id = instance_id and resume_id = last_assigned_resume_id matched all 15 active rows in the reviewed sample. Validate this grain and include the appropriate archive source for historical reporting.",
+        "last_assigned_owner_snapshot_id is not a reliable current-owner substitute: it differed from the current resume owner in all 15 active tasks checked. last_assigned_target_snapshot matched those owners in this sample, but this does not establish a universal ownership rule. Resolve snapshot references through cf_user_snapshot rather than treating them as user IDs.",
+        "Metric creation and finish dates were not exact substitutes for linked history start and finish dates. A Monitor task creation time correlated after accounting for the displayed time zone; verify process and user time-zone settings before presenting timestamps."
       ],
       "columns": {
         "id": {
@@ -6758,19 +6765,19 @@
         },
         "last_assigned_start_date": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for last assigned start date on the task metrics mapping record."
+          "purpose": "Start timestamp retained for the last assignment event represented in this metric; not necessarily the task's current execution start."
         },
         "last_assigned_finish_date": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for last assigned finish date on the task metrics mapping record."
+          "purpose": "Finish timestamp retained for the last assignment event represented in this metric; not the task completion timestamp."
         },
         "last_assigned_resume_id": {
           "confidence": "inferred",
-          "purpose": "Last Assigned Resume identifier associated with the task metrics mapping record."
+          "purpose": "Resume record associated with the last assignment. Together with instance_id, matched resume_id and worker_instance_id for all active tasks checked; historical behavior remains unverified."
         },
         "last_assigned_status": {
           "confidence": "inferred",
-          "purpose": "Status value for last assigned status on the task metrics mapping record; verify the value mapping before public reporting."
+          "purpose": "Last assignment event status, separate from the metric's task status. Observed assigned, claimed and reassigned; active running tasks retained reassigned in the reviewed sample. This is not an exhaustive event list."
         },
         "last_assigned_target_snapshot": {
           "confidence": "inferred",
@@ -6782,7 +6789,7 @@
         },
         "last_assigned_owner_snapshot_id": {
           "confidence": "inferred",
-          "purpose": "Optional last-assigned owner snapshot reference to cf_user_snapshot.id. Do not substitute a user identifier."
+          "purpose": "Optional last-assigned owner snapshot reference to cf_user_snapshot.id. Not a reliable current task owner: it differed from current resume ownership in all active tasks checked."
         },
         "bp_id": {
           "confidence": "inferred",
