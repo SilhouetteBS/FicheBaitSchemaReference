@@ -13,10 +13,26 @@ import { getReportingQuestions, getReportingPaths } from '../src/data/reporting.
 import { parseExportJson, runImport } from './import-forms-metadata.mjs';
 import { verifyDataParity } from './verify-data-parity.mjs';
 import { isTableNoteMap } from '../src/data/notes.js';
+import { buildObjectAliasMap, resolveDependencyKey, classifyDependency, getDependencyResolutionItems } from '../src/data/schemaAnalysis.js';
 
 const readJson = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
 const schema = readJson('data/forms/12.0.2607.40137/schema.json');
 const manifest = readJson('data/forms/versions.json');
+const triggerAliases = buildObjectAliasMap({ source: schema });
+for (const dependency of schema.dependencies.filter((item) => item.referencingObjectTypeDescription === 'SQL_TRIGGER')) {
+  assert.ok(resolveDependencyKey(dependency, 'referencing', triggerAliases), 'Qualified trigger references must resolve');
+}
+const ambiguous = buildObjectAliasMap({ source: { tables: [
+  { key: 'a.shared', name: 'shared' }, { key: 'b.shared', name: 'shared' }, { key: 'c.shared', name: 'shared' },
+] } });
+assert.equal(resolveDependencyKey({ referencedEntityName: 'shared' }, 'referenced', ambiguous), '');
+assert.equal(resolveDependencyKey({ referencedObjectKey: 'missing.shared', referencedEntityName: 'shared' }, 'referenced', ambiguous), '');
+assert.equal(resolveDependencyKey({ referencedSchemaName: 'a', referencedEntityName: 'shared' }, 'referenced', ambiguous), 'a.shared');
+assert.equal(classifyDependency({ referencingObjectTypeDescription: 'SQL_TRIGGER', referencedObjectKey: 'inserted' }).pseudoTable, true);
+assert.equal(classifyDependency({ referencingObjectTypeDescription: 'SQL_TRIGGER', referencedObjectKey: 'dbo.inserted', referencedSchemaName: 'dbo' }).pseudoTable, false);
+const incompleteWorkflow = readJson('data/workflow/12.0.2511.266/schema.json');
+assert.equal(getDependencyResolutionItems({ source: incompleteWorkflow }).filter((item) =>
+  item.referencingObjectTypeDescription === 'VIEW' && !item.referencingResolvedKey).length, 45);
 const partial = buildCatalogProduct(manifest, [{ schema, notes: { tables: {} } }]);
 const version = partial.versions.at(-1);
 assert.equal(getTableStability(version, 'dbo.__TransactionHistory').pending, true);

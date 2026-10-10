@@ -1357,8 +1357,8 @@
           "purpose": "Full Name for the business process design process record."
         },
         "description": {
-          "confidence": "unknown",
-          "purpose": "Business Process Design Process description."
+"confidence": "inferred",
+          "purpose": "Description of this process definition or process version; not the title of a running instance."
         },
         "is_global": {
           "confidence": "inferred",
@@ -2460,8 +2460,8 @@
           "purpose": "Archived Business Process Definition name."
         },
         "description": {
-          "confidence": "unknown",
-          "purpose": "Archived Business Process Definition description."
+"confidence": "inferred",
+          "purpose": "Description retained with the archived business process definition; not an instance execution status."
         },
         "updated_by": {
           "confidence": "inferred",

@@ -13,10 +13,10 @@ function addAlias(aliasMap, alias, key) {
   }
 
   const existingKey = aliasMap.get(normalizedAlias);
-  aliasMap.set(normalizedAlias, existingKey && existingKey !== key ? null : key);
+  aliasMap.set(normalizedAlias, aliasMap.has(normalizedAlias) && existingKey !== key ? null : key);
 }
 
-function buildObjectAliasMap(version) {
+export function buildObjectAliasMap(version) {
   const aliases = new Map();
   [
     ...(version.source.tables ?? []).map((object) => ({ ...object, objectKey: object.key })),
@@ -28,14 +28,21 @@ function buildObjectAliasMap(version) {
     addAlias(aliases, object.name, object.objectKey);
     addAlias(aliases, object.label, object.objectKey);
     addAlias(aliases, getObjectLabel(object.objectKey), object.objectKey);
+    if (object.parentObjectKey && object.name && !object.name.includes('.')) {
+      const schema = object.schemaName ?? object.parentObjectKey.slice(0, object.parentObjectKey.lastIndexOf('.'));
+      addAlias(aliases, `${schema}.${object.name}`, object.objectKey);
+    }
   });
   return aliases;
 }
 
-function resolveDependencyKey(dependency, prefix, aliases) {
+export function resolveDependencyKey(dependency, prefix, aliases) {
   const objectKey = dependency[`${prefix}ObjectKey`];
   const schemaName = dependency[`${prefix}SchemaName`];
   const entityName = dependency[`${prefix}EntityName`] ?? dependency[`${prefix}ObjectName`];
+  // Explicit schema names must never fall back to another schema's bare name.
+  if (schemaName && entityName) return aliases.get(normalize(`${schemaName}.${entityName}`)) ?? '';
+  if (String(objectKey ?? '').includes('.')) return aliases.get(normalize(objectKey)) ?? '';
   const candidates = [
     objectKey,
     schemaName && entityName ? `${schemaName}.${entityName}` : '',
@@ -50,6 +57,14 @@ function resolveDependencyKey(dependency, prefix, aliases) {
   }
 
   return '';
+}
+
+export function classifyDependency(dependency) {
+  const constraint = dependency.referencingObjectTypeDescription === 'CHECK_CONSTRAINT';
+  const target = dependency.referencedEntityName ?? dependency.referencedObjectKey ?? '';
+  const pseudoTable = dependency.referencingObjectTypeDescription === 'SQL_TRIGGER' &&
+    !dependency.referencedSchemaName && /^(inserted|deleted)$/i.test(target);
+  return { constraint, pseudoTable };
 }
 
 export function getColumnUsages(version, query) {
@@ -99,6 +114,10 @@ export function getDependencyResolutionItems(version) {
       referencingResolvedKey ? '' : 'referencing',
       referencedResolvedKey ? '' : 'referenced',
     ].filter(Boolean);
+    const classification = classifyDependency(dependency);
+    const expectedNonObjectReference = Boolean(
+      (classification.constraint && referencedResolvedKey && !referencingResolvedKey) ||
+      (classification.pseudoTable && referencingResolvedKey && !referencedResolvedKey));
 
     return {
       index,
@@ -110,10 +129,11 @@ export function getDependencyResolutionItems(version) {
       referencingObjectTypeDescription: dependency.referencingObjectTypeDescription,
       referencedObjectTypeDescription: dependency.referencedObjectTypeDescription,
       referencedEntityName: dependency.referencedEntityName,
+      expectedNonObjectReference,
       isAmbiguous: Boolean(dependency.isAmbiguous),
       isCallerDependent: Boolean(dependency.isCallerDependent),
       isSchemaBoundReference: Boolean(dependency.isSchemaBoundReference),
-      status: missingSides.length === 0
+      status: expectedNonObjectReference ? 'Expected non-object reference' : missingSides.length === 0
         ? 'Resolved'
         : missingSides.length === 2
           ? 'Referencing and referenced objects were not exported'
@@ -130,6 +150,9 @@ function getDependencyLikelyReason(dependency, missingSides) {
   if (missingSides.length === 0) {
     return 'Resolved to exported schema objects.';
   }
+  const classification = classifyDependency(dependency);
+  if (classification.pseudoTable) return 'Trigger references inserted/deleted, SQL Server pseudo-tables rather than exported application tables.';
+  if (classification.constraint && missingSides.includes('referencing')) return 'The referencing object is a check constraint, which is not included in the exported table/view/routine/trigger object sets.';
   if (dependency.isCallerDependent) {
     return 'SQL Server marked the dependency as caller-dependent, so the exact target may only be known at runtime.';
   }
@@ -149,6 +172,9 @@ function getDependencySuggestedFix(dependency, missingSides) {
   if (missingSides.length === 0) {
     return 'No action needed.';
   }
+  const classification = classifyDependency(dependency);
+  if (classification.pseudoTable) return 'No application table is missing for this pseudo-table reference. Review the trigger definition for its behavior.';
+  if (classification.constraint && missingSides.length === 1 && missingSides[0] === 'referencing') return 'No re-export is required solely because check constraints are outside the exported object sets.';
   if (dependency.isCallerDependent || dependency.isAmbiguous) {
     return 'Treat this as a diagram completeness warning. Review the SQL definition manually if the object is important for reporting.';
   }
@@ -160,7 +186,7 @@ function getDependencySuggestedFix(dependency, missingSides) {
 
 export function getUnresolvedDependencyItems(version) {
   return getDependencyResolutionItems(version)
-    .filter((item) => !item.referencingResolvedKey || !item.referencedResolvedKey)
+    .filter((item) => !item.expectedNonObjectReference && (!item.referencingResolvedKey || !item.referencedResolvedKey))
     .sort((left, right) =>
       left.status.localeCompare(right.status) ||
       String(left.referencingObjectKey).localeCompare(String(right.referencingObjectKey)) ||

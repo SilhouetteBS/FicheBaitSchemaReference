@@ -1528,16 +1528,16 @@
       ],
       "columns": {
         "error_id": {
-          "confidence": "unknown",
-          "purpose": "Error identifier for the task error definition record."
+"confidence": "observed",
+          "purpose": "Identity-generated primary key for the task error record. This is a row identifier, not the application error code."
         },
         "error_type": {
           "confidence": "unknown",
           "purpose": "Task error type value."
         },
         "error_message": {
-          "confidence": "unknown",
-          "purpose": "Task error message text."
+"confidence": "inferred",
+          "purpose": "Task error message text stored in nvarchar(255). Review for sensitive details; the schema does not define message wording or error-code mappings."
         },
         "error_code": {
           "confidence": "unknown",

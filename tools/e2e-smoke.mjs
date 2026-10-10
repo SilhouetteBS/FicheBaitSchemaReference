@@ -397,12 +397,8 @@ await page.goto(lfdsDependencyUrl.toString(), { waitUntil: 'networkidle' });
 assert.equal(await page.locator('.diagram-lines path.diagram-edge-dependency').count(), 1);
 assert.ok((await page.locator('.diagram-object-badge-routine').count()) > 0);
 assert.match(await page.locator('.relationship-detail-list').innerText(), /DEPENDED ON BY/i);
-assert.match(await page.locator('.diagram-status-row').innerText(), /Unresolved dependencies/i);
-assert.equal(await page.locator('.diagram-status-pill b').first().innerText(), '1');
-assert.match(
-  await page.locator('.diagram-status-row .info-tooltip').first().getAttribute('aria-label'),
-  /could not be matched to exported tables, views, routines, or triggers/i,
-);
+assert.equal(await page.locator('.diagram-status-row').count(), 0,
+  'An expected check-constraint reference must not display a missing-object warning');
 await page.locator('.relationship-detail').first().hover();
 await page.waitForTimeout(100);
 assert.match(await page.locator('.relationship-selected-detail').innerText(), /Status\s+Inferred/i);

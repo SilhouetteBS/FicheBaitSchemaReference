@@ -414,8 +414,8 @@ const lfdsMixedDiagram = buildDatabaseDiagram(
 assert.equal(lfdsMixedDiagram.edges.filter((edge) => edge.type === 'foreignKey').length, 2);
 assert.equal(lfdsMixedDiagram.edges.filter((edge) => edge.type === 'dependency').length, 1);
 assert.ok(getDependencyResolutionItems(lfdsVersion).length > 0);
-assert.ok(getUnresolvedDependencyItems(lfdsVersion).length > 0);
-assert.ok(getUnresolvedDependencyItems(lfdsVersion).some((item) => item.status.includes('not exported')));
+assert.equal(getUnresolvedDependencyItems(lfdsVersion).length, 0);
+assert.ok(getDependencyResolutionItems(lfdsVersion).some((item) => item.expectedNonObjectReference));
 
 const ambiguousDependencyVersion = {
   source: {
@@ -622,22 +622,22 @@ assert.deepEqual(
     { total: value.total, resolved: value.resolved },
   ])),
   {
-    'forms 11.0.2311.50564': { total: 146, resolved: 104 },
-    'forms 12.0.2503.10378': { total: 155, resolved: 112 },
-    'forms 12.0.2509.20409': { total: 154, resolved: 112 },
-    'forms 12.0.2603.30215': { total: 226, resolved: 181 },
-    'forms 12.0.2607.40137': { total: 154, resolved: 112 },
+    'forms 11.0.2311.50564': { total: 146, resolved: 113 },
+    'forms 12.0.2503.10378': { total: 155, resolved: 121 },
+    'forms 12.0.2509.20409': { total: 154, resolved: 121 },
+    'forms 12.0.2603.30215': { total: 226, resolved: 192 },
+    'forms 12.0.2607.40137': { total: 154, resolved: 121 },
     'lfds 11.0.2403.2474': { total: 37, resolved: 36 },
     'lfds 12.0.2506.370': { total: 37, resolved: 36 },
     'lfds 12.0.2510.261': { total: 38, resolved: 36 },
     'lfds 12.0.2511.289': { total: 42, resolved: 40 },
     'lfds 12.0.2603.369': { total: 41, resolved: 40 },
     'lfds 12.0.2607.421': { total: 37, resolved: 36 },
-    'repository 11.0.2.338': { total: 350, resolved: 240 },
-    'repository 12.0.1.237': { total: 350, resolved: 240 },
-    'repository 12.0.2.343': { total: 360, resolved: 247 },
-    'repository 12.0.3.423': { total: 367, resolved: 257 },
-    'repository 12.0.4.433': { total: 352, resolved: 242 },
+    'repository 11.0.2.338': { total: 350, resolved: 241 },
+    'repository 12.0.1.237': { total: 350, resolved: 241 },
+    'repository 12.0.2.343': { total: 360, resolved: 248 },
+    'repository 12.0.3.423': { total: 367, resolved: 258 },
+    'repository 12.0.4.433': { total: 352, resolved: 243 },
     'workflow 11.0.2306.898': { total: 199, resolved: 198 },
     'workflow 12.0.2508.3111': { total: 200, resolved: 199 },
     'workflow 12.0.2510.3321': { total: 206, resolved: 205 },
@@ -648,7 +648,8 @@ assert.deepEqual(
 assert.ok(dataReport.warningsByScope['repository 12.0.1.237'].length > 0);
 assert.ok(dataReport.warnings.some((warning) => warning.includes('views export is empty')));
 assert.ok(dataReport.warnings.some((warning) => warning.includes('triggers export is empty')));
-assert.ok(dataReport.warnings.some((warning) => warning.includes('missing referencing or referenced schema metadata')));
+assert.ok(!dataReport.warnings.some((warning) => warning.includes('missing referencing or referenced schema metadata')));
+assert.equal(dataReport.warnings.length, 520);
 assert.ok(dataReport.warnings.some((warning) => warning.includes('has no exported primary key')));
 assert.deepEqual(validateAllNotes(), []);
 assert.ok(validateNotesObject({ tables: { 'dbo.bad': { confidence: 'wrong' } } }).some((error) =>

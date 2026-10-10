@@ -1,3 +1,5 @@
+import { resolveDependencyKey, classifyDependency } from './schemaAnalysis.js';
+
 function normalize(value) {
   return String(value ?? '').toLowerCase().trim();
 }
@@ -35,7 +37,7 @@ function addAlias(aliasMap, alias, key) {
   }
 
   const existingKey = aliasMap.get(normalizedAlias);
-  aliasMap.set(normalizedAlias, existingKey && existingKey !== key ? null : key);
+  aliasMap.set(normalizedAlias, aliasMap.has(normalizedAlias) && existingKey !== key ? null : key);
 }
 
 function buildObjectAliasMap(nodes) {
@@ -46,28 +48,12 @@ function buildObjectAliasMap(nodes) {
     addAlias(aliases, node.label, key);
     addAlias(aliases, getObjectLabel(key), key);
     addAlias(aliases, node.schemaName && node.name ? `${node.schemaName}.${node.name}` : '', key);
+    if (node.source?.parentObjectKey && !node.name.includes('.')) {
+      const parent = node.source.parentObjectKey;
+      addAlias(aliases, `${node.schemaName ?? parent.slice(0, parent.lastIndexOf('.'))}.${node.name}`, key);
+    }
   });
   return aliases;
-}
-
-function resolveDependencyKey(dependency, prefix, aliases) {
-  const objectKey = dependency[`${prefix}ObjectKey`];
-  const schemaName = dependency[`${prefix}SchemaName`];
-  const entityName = dependency[`${prefix}EntityName`];
-  const candidates = [
-    objectKey,
-    schemaName && entityName ? `${schemaName}.${entityName}` : '',
-    entityName,
-  ];
-
-  for (const candidate of candidates) {
-    const resolvedKey = aliases.get(normalize(candidate));
-    if (resolvedKey) {
-      return resolvedKey;
-    }
-  }
-
-  return '';
 }
 
 export function buildDatabaseDiagram(
@@ -162,6 +148,8 @@ export function buildDatabaseDiagram(
           status: 'Resolved SQL expression dependency',
         });
       } else {
+        const classification = classifyDependency(dependency);
+        if ((!fromKey && classification.constraint && toKey) || (fromKey && classification.pseudoTable)) return;
         unresolvedDependencies.push({
           id: `dep:${index}:unresolved`,
           referencingObjectKey: dependency.referencingObjectKey,

@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateSchemaSnapshot } from '../src/data/schemaDictionary.js';
+import { buildObjectAliasMap, resolveDependencyKey, classifyDependency } from '../src/data/schemaAnalysis.js';
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -33,61 +34,6 @@ function addDuplicateWarnings(warnings, values, label, scope) {
 
 function normalize(value) {
   return String(value ?? '').toLowerCase().trim();
-}
-
-function addAlias(aliasMap, alias, key) {
-  const normalizedAlias = normalize(alias);
-  if (!normalizedAlias || !key) {
-    return;
-  }
-
-  const existingKey = aliasMap.get(normalizedAlias);
-  aliasMap.set(normalizedAlias, existingKey && existingKey !== key ? null : key);
-}
-
-function getObjectLabel(key) {
-  return key?.replace(/^dbo\./, '') ?? '';
-}
-
-function buildObjectAliasMap(schema) {
-  const aliases = new Map();
-  [
-    ...(schema.tables ?? []).map((object) => ({ ...object, type: 'table' })),
-    ...(schema.views ?? []).map((object) => ({ ...object, type: 'view' })),
-    ...(schema.routines ?? []).map((object) => ({ ...object, type: 'routine' })),
-    ...(schema.triggers ?? []).map((object) => ({
-      ...object,
-      key: object.name,
-      label: object.name,
-      type: 'trigger',
-    })),
-  ].forEach((object) => {
-    addAlias(aliases, object.key, object.key);
-    addAlias(aliases, object.name, object.key);
-    addAlias(aliases, object.label, object.key);
-    addAlias(aliases, getObjectLabel(object.key), object.key);
-  });
-  return aliases;
-}
-
-function resolveDependencyKey(dependency, prefix, aliases) {
-  const objectKey = dependency[`${prefix}ObjectKey`];
-  const schemaName = dependency[`${prefix}SchemaName`];
-  const entityName = dependency[`${prefix}EntityName`];
-  const candidates = [
-    objectKey,
-    schemaName && entityName ? `${schemaName}.${entityName}` : '',
-    entityName,
-  ];
-
-  for (const candidate of candidates) {
-    const resolvedKey = aliases.get(normalize(candidate));
-    if (resolvedKey) {
-      return resolvedKey;
-    }
-  }
-
-  return '';
 }
 
 function validateProductManifest(publicRoot, productsManifest, errors) {
@@ -130,7 +76,7 @@ function validateSchemaReferences(schema, scope, errors, warnings, dependencySta
     ...(schema.routines ?? []).map((routine) => routine.key),
     ...(schema.triggers ?? []).map((trigger) => trigger.name),
   ]);
-  const aliases = buildObjectAliasMap(schema);
+  const aliases = buildObjectAliasMap({ source: schema });
 
   addDuplicateErrors(errors, [...tableKeys], 'table key', scope);
   addDuplicateErrors(errors, (schema.views ?? []).map((view) => view.key), 'view key', scope);
@@ -184,22 +130,24 @@ function validateSchemaReferences(schema, scope, errors, warnings, dependencySta
     unresolvedReferencing: 0,
     unresolvedReferenced: 0,
     ambiguousOrMissingAliases: 0,
+    expectedConstraintReferences: 0,
+    pseudoTableReferences: 0,
   };
 
   (schema.dependencies ?? []).forEach((dependency, index) => {
     stats.total += 1;
-    if (!dependency.referencingSchemaName || !dependency.referencedSchemaName) {
-      warnings.push(`${scope}: dependency ${index} is missing referencing or referenced schema metadata`);
-    }
+    const classification = classifyDependency(dependency);
+    if (classification.constraint) stats.expectedConstraintReferences += 1;
+    if (classification.pseudoTable) stats.pseudoTableReferences += 1;
     const referencingKey = resolveDependencyKey(dependency, 'referencing', aliases);
     const referencedKey = resolveDependencyKey(dependency, 'referenced', aliases);
     if (!referencingKey || !objectKeys.has(referencingKey)) {
       stats.unresolvedReferencing += 1;
-      warnings.push(`${scope}: dependency ${index} referencing object not exported: ${dependency.referencingObjectKey}`);
+      if (!classification.constraint) warnings.push(`${scope}: dependency ${index} referencing object not exported: ${dependency.referencingObjectKey}`);
     }
     if (!referencedKey || !objectKeys.has(referencedKey)) {
       stats.unresolvedReferenced += 1;
-      warnings.push(`${scope}: dependency ${index} referenced object not exported: ${dependency.referencedObjectKey}`);
+      if (!classification.pseudoTable) warnings.push(`${scope}: dependency ${index} referenced object not exported: ${dependency.referencedObjectKey}`);
     }
     if (referencingKey && referencedKey && objectKeys.has(referencingKey) && objectKeys.has(referencedKey)) {
       stats.resolved += 1;
