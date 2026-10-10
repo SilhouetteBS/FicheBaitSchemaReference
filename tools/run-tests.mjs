@@ -125,6 +125,11 @@ assert.match(reviewedFormsNotes.tables['dbo.cf_bp_steps'].safeReportingNotes.joi
 assert.match(reviewedFormsNotes.tables['dbo.attributes_grouping_key'].columns.subview_id.purpose, /NULL/, 'Generated notes must retain nullable grouping context.');
 assert.match(reviewedFormsNotes.tables['dbo.cf_bp_datasource_mapping'].safeReportingNotes.join(' '), /not proof/, 'Datasource associations must not imply actual usage.');
 const minimalExport = readJson('tools/fixtures/minimal-export.json');
+const reviewedLfdsNotes = readJson('data/lfds/12.0.2607.421/notes.json');
+assert.match(reviewedLfdsNotes.tables['dbo.group_membership'].safeReportingNotes.join(' '), /Use LEFT JOIN.*external groups/, 'LFDS member resolution must preserve external groups.');
+assert.match(reviewedLfdsNotes.tables['dbo.account_cache'].safeReportingNotes.join(' '), /different observed category values/, 'LFDS cache codes must not be reused as directory object codes.');
+assert.match(reviewedLfdsNotes.tables['dbo.user_licenses'].safeReportingNotes.join(' '), /Do not calculate total license consumption/, 'Assignment counts must not imply complete license consumption.');
+assert.equal(reviewedLfdsNotes.tables['dbo.directory_objects'].columns.flags.confidence, 'unknown', 'LFDS flag masks remain unverified.');
 const taskMetricNotes = reviewedFormsNotes.tables['dbo.task_metrics_mapping'];
 assert.match(taskMetricNotes.safeReportingNotes.join(' '), /Do not count distinct instance_id as tasks/, 'Task metrics must preserve their history-level grain.');
 assert.match(taskMetricNotes.columns.last_assigned_owner_snapshot_id.purpose, /Not a reliable current task owner/, 'Historical assignment snapshots must not imply current ownership.');

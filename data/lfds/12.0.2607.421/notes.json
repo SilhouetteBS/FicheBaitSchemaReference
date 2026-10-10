@@ -6,7 +6,9 @@
       "confidence": "inferred",
       "summary": "Cached or temporary records for cached account.",
       "safeReportingNotes": [
-        "Use cached account records for read-only LFDS metadata reporting."
+        "Use cached account records for read-only LFDS metadata reporting.",
+        "In the reviewed LFDS 12.0.2607.421 sample, account_cache.sid resolved all seven group_membership.member_sid values, including two external directory groups absent from directory_objects. Cache presence does not establish current directory membership or effective access.",
+        "Do not transfer account_cache.type values to directory_objects.type: these tables use different observed category values. A complete account-cache category mapping remains unverified."
       ],
       "columns": {
         "sid": {
@@ -1037,7 +1039,8 @@
       "confidence": "inferred",
       "summary": "Cached or temporary records for cached directory group.",
       "safeReportingNotes": [
-        "Use cached directory group records for read-only identity, security, and licensing reporting."
+        "Use cached directory group records for read-only identity, security, and licensing reporting.",
+        "In the reviewed LFDS 12.0.2607.421 sample, sid resolved two external group members not present in directory_objects. One cached group name matched an external directory group shown in the LFDS group Members UI. Preserve unresolved SIDs; this cache is not a complete authoritative directory inventory."
       ],
       "columns": {
         "sid": {
@@ -1177,7 +1180,9 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for directory object.",
       "safeReportingNotes": [
-        "Use directory object records for read-only identity, security, and licensing reporting."
+        "Use directory object records for read-only identity, security, and licensing reporting.",
+        "In the reviewed LFDS 12.0.2607.421 sample, all four type-1 names matched the four Groups entries in Accounts. Type-0 records included both directory-backed and native users, but 21 type-0 rows did not equal the 12 users shown with the Active filter. Type alone is not an active-user predicate; flag meanings remain unverified.",
+        "External group members can resolve through directory_groups_cache or account_cache without a directory_objects row. Do not assume this table contains every SID displayed in group membership."
       ],
       "columns": {
         "id": {
@@ -1406,7 +1411,9 @@
       "confidence": "inferred",
       "summary": "Mapping records for group membership.",
       "safeReportingNotes": [
-        "Use group membership records for read-only identity, security, and licensing reporting."
+        "Use group membership records for read-only identity, security, and licensing reporting.",
+        "In the reviewed LFDS 12.0.2607.421 sample, all seven group_sid values resolved to directory_objects.sid, but only five member_sid values did. The other two resolved to external directory groups in directory_groups_cache and account_cache; one matched the group Members UI. Use LEFT JOIN when resolving members so external groups are not silently dropped.",
+        "Stored membership associations are not proof of recursively expanded membership, effective permissions or license consumption. Cache results and nested group expansion require separate verification."
       ],
       "columns": {
         "group_sid": {
@@ -1859,7 +1866,8 @@
       "confidence": "inferred",
       "summary": "License or resource assignment records for license alias.",
       "safeReportingNotes": [
-        "Use license alias records for read-only diagnostics only, and avoid exposing security-sensitive values."
+        "Use license alias records for read-only diagnostics only, and avoid exposing security-sensitive values.",
+        "In the reviewed LFDS 12.0.2607.421 sample, joining user_licenses.type to license_aliases.uuid returned no alias label for the assigned license type. Do not require an alias match or discard assignments with missing labels."
       ],
       "columns": {
         "uuid": {
@@ -3351,7 +3359,10 @@
       "confidence": "inferred",
       "summary": "License or resource assignment records for user license assignment.",
       "safeReportingNotes": [
-        "Use user license assignment records for read-only diagnostics only, and avoid exposing security-sensitive values."
+        "Use user license assignment records for read-only diagnostics only, and avoid exposing security-sensitive values.",
+        "In the reviewed LFDS 12.0.2607.421 sample, all 12 assignment SIDs resolved to directory_objects.sid. Visible matching user entries showed Full license, but this does not establish all license UUID meanings or a complete license-availability calculation.",
+        "The Overview Full license availability implied 17 consumed licenses, while this table contained 12 assignments. Do not calculate total license consumption or availability from user_licenses alone; other allocation sources remain to be verified.",
+        "Resolve labels optionally: the observed assigned type did not match license_aliases.uuid. Preserve assignments when an alias is absent."
       ],
       "columns": {
         "sid": {
