@@ -29,7 +29,8 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for activity event.",
       "safeReportingNotes": [
-        "Use activity event records for read-only LFDS metadata reporting."
+        "Use activity event records for read-only LFDS metadata reporting.",
+        "The reviewed sample contains activity event types 1 through 8. Their meanings were not correlated to UI actions; do not reuse audit_event_types codes or treat activity_events as the Audit Report event header table. Serialized payload contents were not inspected."
       ],
       "columns": {
         "event_id": {
@@ -54,7 +55,8 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for additional claim value.",
       "safeReportingNotes": [
-        "Use additional claim value records for read-only LFDS metadata reporting."
+        "Use additional claim value records for read-only LFDS metadata reporting.",
+        "In the reviewed 12.0.2607.421 sample, every additional_claims.claim_id resolved to claim_defs.id and every additional_claims.sid resolved to directory_objects.sid. Preserve ordinal when reporting multiple occurrences; do not assume one claim value per account. Claim values can contain personal information."
       ],
       "columns": {
         "sid": {
@@ -116,7 +118,8 @@
       "confidence": "inferred",
       "summary": "Cached or temporary records for AD group synchronization claim scratch row.",
       "safeReportingNotes": [
-        "Use AD group synchronization claim scratch row records for read-only LFDS metadata reporting."
+        "Use AD group synchronization claim scratch rows only for transient diagnostics, not as an authoritative claims source.",
+        "All forty-one reviewed SID occurrences resolved to current directory_objects. The synchronization lifecycle and claim payloads were not exercised; use additional_claims with claim_defs for current persisted claim reporting."
       ],
       "columns": {
         "sid": {
@@ -158,7 +161,8 @@
       "confidence": "inferred",
       "summary": "Cached or temporary records for AD group synchronization license scratch row.",
       "safeReportingNotes": [
-        "Use AD group synchronization license scratch row records for read-only diagnostics only, and avoid exposing security-sensitive values."
+        "Use AD group synchronization license scratch row records for read-only diagnostics only, and avoid exposing security-sensitive values.",
+        "All nine reviewed SIDs resolved to directory_objects, but scratch rows are not proof of current license assignment or consumption. The type mapping and synchronization lifecycle remain unverified."
       ],
       "columns": {
         "sid": {
@@ -175,7 +179,8 @@
       "confidence": "inferred",
       "summary": "Cached or temporary records for AD group synchronization reconciliation scratch rows.",
       "safeReportingNotes": [
-        "Use AD group synchronization merge scratch row records for read-only LFDS metadata reporting."
+        "Use AD group synchronization merge scratch rows only for read-only transient diagnostics.",
+        "All nine reviewed SIDs resolved to directory_objects. No synchronization was triggered, so use_new behavior and reconciliation timing remain inferred rather than live verified."
       ],
       "columns": {
         "sid": {
@@ -192,7 +197,8 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for AD group synchronization rule.",
       "safeReportingNotes": [
-        "Use AD group synchronization rule records for read-only LFDS metadata reporting."
+        "Use AD group synchronization rule records for read-only LFDS metadata reporting.",
+        "The two reviewed rules matched Identity Providers > Rules in display_name and ordinal order. The UI states that rules are evaluated top to bottom and the last applicable rule determines license assignment. This is UI-confirmed configuration guidance, not a live synchronization execution test; action and flags mappings remain unverified."
       ],
       "columns": {
         "id": {
@@ -294,7 +300,8 @@
       "confidence": "inferred",
       "summary": "Cached or temporary records for AD group synchronization scratch row.",
       "safeReportingNotes": [
-        "Use AD group synchronization scratch row records for read-only LFDS metadata reporting."
+        "Use AD group synchronization scratch rows only for transient diagnostics, not as a current user inventory.",
+        "All nine reviewed SIDs resolved to directory_objects. No synchronization was triggered; is_enabled behavior and scratch-row retention remain unverified."
       ],
       "columns": {
         "sid": {
@@ -327,7 +334,8 @@
       "confidence": "inferred",
       "summary": "License or resource assignment records for allocated resource.",
       "safeReportingNotes": [
-        "Use allocated resource records for read-only LFDS metadata reporting."
+        "Use allocated resource records for read-only LFDS metadata reporting.",
+        "All seven reviewed application_uuid values resolved to registered_applications.uuid, distributed across two registrations. This establishes application-linked allocation records, not the full Overview availability calculation; reserved_resources and container_limits had no rows in this demo. Resource UUID meanings, flags and consumption rules remain unverified."
       ],
       "columns": {
         "application_uuid": {
@@ -543,7 +551,8 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for attribute definition.",
       "safeReportingNotes": [
-        "Use attribute definition records for read-only LFDS metadata reporting."
+        "Use attribute definition records for read-only LFDS metadata reporting.",
+        "The reviewed definition was the thumbnail attribute with value_type 1, while trustee_attributes had no rows. Definition presence does not prove any account has an assigned value; binary encoding and the complete value_type mapping remain unverified."
       ],
       "columns": {
         "id": {
@@ -589,7 +598,8 @@
       "confidence": "inferred",
       "summary": "Audit records for audit event type.",
       "safeReportingNotes": [
-        "Use audit event type records for read-only audit and change-history reporting."
+        "Use audit event type records for read-only audit and change-history reporting.",
+        "The reviewed sample has multiple type rows for some audit events. Join audit_event_uuid to audit_events.event_uuid, but count distinct event UUIDs when counting events rather than types. Event type 1501 matched three Sign-in rows by timestamp in the 12.0.2607.421 Audit Report; other numeric meanings remain unverified."
       ],
       "columns": {
         "audit_event_uuid": {
@@ -604,9 +614,11 @@
     },
     "dbo.audit_events": {
       "confidence": "inferred",
-      "summary": "Audit records for audit event.",
+      "summary": "Parent event records used by LFDS Audit Reporting, with event time, acting operator, object/class codes and outcome flags.",
       "safeReportingNotes": [
-        "Use audit event records for read-only audit and change-history reporting."
+        "Use audit event records for read-only audit and change-history reporting.",
+        "All nine populated audit-detail families resolved their audit_event_uuid values to this table in the reviewed 12.0.2607.421 sample. An event can have multiple type/detail rows; aggregate each child family before combining them to avoid multiplying events.",
+        "The Audit Report separates Administrator Name/SID from the account described in Event Data. operator_name and operator_sid identify the acting principal, not necessarily the affected user; token_events_audit describes the authentication subject."
       ],
       "columns": {
         "event_uuid": {
@@ -619,11 +631,11 @@
         },
         "operator_name": {
           "confidence": "inferred",
-          "purpose": "Operator Name for the audit event record."
+          "purpose": "Name of the principal performing the audited action, corresponding to Administrator Name in Audit Reporting. This can be a system process rather than the user described in event details."
         },
         "operator_sid": {
           "confidence": "inferred",
-          "purpose": "Security identifier for the audit event operator."
+          "purpose": "SID of the principal performing the audited action, corresponding to Administrator SID. Do not substitute this for an affected account SID from an audit detail table."
         },
         "audit_object": {
           "confidence": "inferred",
@@ -635,7 +647,7 @@
         },
         "is_process_principal": {
           "confidence": "inferred",
-          "purpose": "Flag indicating process principal for the audit event record."
+          "purpose": "Indicates a process principal; reviewed Sign-in events with value 1 displayed System Process = Yes in Audit Reporting."
         },
         "is_failure_event": {
           "confidence": "inferred",
@@ -760,7 +772,8 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for claim definition.",
       "safeReportingNotes": [
-        "Use claim definition records for read-only LFDS metadata reporting."
+        "Use claim definition records for read-only LFDS metadata reporting.",
+        "The reviewed definitions include identity claim URIs and LFDS-specific claim URIs. Some have no additional_claims occurrences. LEFT JOIN additional_claims.claim_id to id when retaining unused definitions; definition counts are not counts of users or assigned values. The complete value_type mapping remains unverified."
       ],
       "columns": {
         "id": {
@@ -997,7 +1010,8 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for database setting.",
       "safeReportingNotes": [
-        "Use database setting records for read-only LFDS metadata reporting."
+        "Inspect setting names only for read-only diagnostics; database settings include security-sensitive values.",
+        "The reviewed setting names include synchronization, notification scheduling, schema version and self-registration configuration, but also tokenSigningKey and NamedPipeSecret. Never export all values or use SELECT * for public reporting; allowlist individually reviewed non-sensitive settings. SchemaVersion is an internal schema setting, not proof of the installed product build."
       ],
       "columns": {
         "name": {
@@ -1006,7 +1020,7 @@
         },
         "value": {
           "confidence": "unknown",
-          "purpose": "Configuration value for the database setting record."
+          "purpose": "Setting-specific configuration payload that can contain signing keys or shared secrets. Do not expose or bulk export; the name determines meaning and sensitivity."
         }
       }
     },
@@ -1358,7 +1372,8 @@
       "confidence": "inferred",
       "summary": "Cached or temporary records for cached group member search result.",
       "safeReportingNotes": [
-        "Use cached group member search result records for read-only identity, security, and licensing reporting."
+        "Use cached group member search results only for bounded read-only diagnostics, not as authoritative group membership.",
+        "Only eight of ten reviewed member_sid values resolved to current directory_objects. Preserve unmatched rows with LEFT JOIN and check external account caches; do not infer deleted users or missing permissions from an unmatched SID. Cached flags and account_type codes remain unverified."
       ],
       "columns": {
         "search_token": {
@@ -1527,9 +1542,10 @@
     },
     "dbo.hosts": {
       "confidence": "inferred",
-      "summary": "SAML or federation configuration records for host.",
+      "summary": "Registered machines associated with LFDS application registrations, as shown under Applications > Machines.",
       "safeReportingNotes": [
-        "Use host records for read-only LFDS metadata reporting."
+        "Use host records for read-only LFDS metadata reporting.",
+        "The reviewed single host matched the Applications > Machines entry, and all nine registered_applications.host_id values resolved to hosts.id. Machines are distinct from Accounts > Devices; do not count hosts as licensed device accounts. Hardware fingerprint formats and flags remain unverified."
       ],
       "columns": {
         "id": {
@@ -1685,7 +1701,8 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for identity provider configuration value.",
       "safeReportingNotes": [
-        "Use identity provider configuration value records for read-only diagnostics only, and avoid exposing security-sensitive values."
+        "Use identity provider configuration value records for read-only diagnostics only, and avoid exposing security-sensitive values.",
+        "The reviewed provider had an EnableSync setting name and the UI displayed Enable Active Directory synchronization. The setting value was deliberately not read, and provider_id plus name must scope configuration meaning; do not bulk export values or infer successful synchronization from configuration presence."
       ],
       "columns": {
         "provider_id": {
@@ -1731,7 +1748,8 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for identity provider.",
       "safeReportingNotes": [
-        "Use identity provider records for read-only diagnostics only, and avoid exposing security-sensitive values."
+        "Use identity provider records for read-only diagnostics only, and avoid exposing security-sensitive values.",
+        "The sole provider in the reviewed 12.0.2607.421 sample matched the Identity Providers UI name and ActiveDirectory type. Its stored type was 1 and authentication_enabled was 1 while Enable Windows Authentication displayed Yes. This validates only that observed provider, not a complete provider enum or SCIM behavior."
       ],
       "columns": {
         "id": {
@@ -1884,7 +1902,8 @@
       "confidence": "inferred",
       "summary": "License or resource assignment records for license type order.",
       "safeReportingNotes": [
-        "Use license type order records for read-only diagnostics only, and avoid exposing security-sensitive values."
+        "Use license type order records for read-only diagnostics only, and avoid exposing security-sensitive values.",
+        "None of the six reviewed UUIDs resolved to license_aliases, which was empty in this demo. Use LEFT JOIN for optional labels and retain unresolved UUIDs; do not discard license types or invent their names from ordinal."
       ],
       "columns": {
         "ordinal": {
@@ -2511,7 +2530,9 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for registered application.",
       "safeReportingNotes": [
-        "Use registered application records for read-only LFDS metadata reporting."
+        "Use registered application records for read-only LFDS metadata reporting.",
+        "The reviewed Applications UI listed eleven product categories, including two with zero registrations, while this table contained nine registrations. Count rows as registrations, not the number of product categories shown by the UI. All host_id values resolved to hosts.id; all allocated_resources.application_uuid values resolved to this table's uuid.",
+        "The version field contained NULL, 11.0 and 12.0 in the reviewed sample. It is an application registration's recorded version, not a reliable installed full build number. Exclude shared_secret from reports."
       ],
       "columns": {
         "uuid": {
@@ -2532,7 +2553,7 @@
         },
         "version": {
           "confidence": "inferred",
-          "purpose": "Version value for the registered application."
+          "purpose": "Version recorded for this application registration. Observed values include major/minor text and NULL; do not use it as the installed product's full build or the LFDS database schema version."
         },
         "comments": {
           "confidence": "inferred",
@@ -3033,7 +3054,8 @@
       "confidence": "inferred",
       "summary": "Cached or temporary records for search result cache entry.",
       "safeReportingNotes": [
-        "Use search result cache entry records for read-only LFDS metadata reporting."
+        "Use search result cache entries only for transient diagnostics, not as a directory-object inventory.",
+        "The reviewed twelve rows belonged to one distinct search_id. A row count is a cached result count, not necessarily a current user count; expiration and cleanup behavior were not exercised."
       ],
       "columns": {
         "id": {
@@ -3054,7 +3076,8 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for search scope filter.",
       "safeReportingNotes": [
-        "Use search scope filter records for read-only LFDS metadata reporting."
+        "Use search scope filter records only for transient search diagnostics.",
+        "The reviewed sample had one scope row and one distinct search_id. Depth codes, expiration and cleanup behavior were not exercised; do not interpret this table as permanent organization membership or permissions."
       ],
       "columns": {
         "container_id": {
@@ -3122,7 +3145,8 @@
       "confidence": "inferred",
       "summary": "Security-sensitive authentication records for session SID mapping.",
       "safeReportingNotes": [
-        "Use session SID mapping records for read-only diagnostics only, and avoid exposing security-sensitive values."
+        "Use session SID mapping records for read-only diagnostics only, and avoid exposing security-sensitive values.",
+        "Only thirteen of forty-eight reviewed SID associations resolved to current directory_objects. Do not assume every session SID is a user account or use an INNER JOIN to infer active-user totals. The remaining SID roles and token lifecycle were not verified. Never expose session_token."
       ],
       "columns": {
         "session_token": {
@@ -3139,7 +3163,8 @@
       "confidence": "inferred",
       "summary": "SAML or federation configuration records for security token service alias.",
       "safeReportingNotes": [
-        "Use security token service alias records for read-only LFDS metadata reporting."
+        "Use security token service alias records for read-only LFDS metadata reporting.",
+        "The reviewed sts_aliases.sts_id resolved to registered_stss.id. Alias behavior, endpoint reachability and show_self_service_link behavior were not exercised; a configured row alone does not prove a working federation flow."
       ],
       "columns": {
         "sts_id": {
@@ -3400,7 +3425,8 @@
       "confidence": "inferred",
       "summary": "LFDS metadata records for user login tracking row.",
       "safeReportingNotes": [
-        "Use user login tracking row records for read-only identity, security, and licensing reporting."
+        "Use user login tracking row records for read-only identity, security, and licensing reporting.",
+        "Four of eighty-seven reviewed rows had no current directory_objects match by sid. Preserve unmatched identities with LEFT JOIN. This is not a complete sign-in event log or a count of current active users; account lifecycle and target_app semantics require separate verification."
       ],
       "columns": {
         "sid": {

@@ -130,6 +130,13 @@ assert.match(reviewedLfdsNotes.tables['dbo.group_membership'].safeReportingNotes
 assert.match(reviewedLfdsNotes.tables['dbo.account_cache'].safeReportingNotes.join(' '), /different observed category values/, 'LFDS cache codes must not be reused as directory object codes.');
 assert.match(reviewedLfdsNotes.tables['dbo.user_licenses'].safeReportingNotes.join(' '), /Do not calculate total license consumption/, 'Assignment counts must not imply complete license consumption.');
 assert.equal(reviewedLfdsNotes.tables['dbo.directory_objects'].columns.flags.confidence, 'unknown', 'LFDS flag masks remain unverified.');
+assert.match(reviewedLfdsNotes.tables['dbo.audit_event_types'].safeReportingNotes.join(' '), /count distinct event UUIDs/, 'Audit type joins must warn about event multiplication.');
+assert.match(reviewedLfdsNotes.tables['dbo.audit_events'].columns.operator_sid.purpose, /Do not substitute.*affected account SID/, 'Audit actors must be distinguished from affected users.');
+assert.match(reviewedLfdsNotes.tables['dbo.db_settings'].safeReportingNotes.join(' '), /Never export all values/, 'LFDS settings must warn against bulk secret exposure.');
+assert.match(reviewedLfdsNotes.tables['dbo.hosts'].summary, /Applications > Machines/, 'Hosts must describe registered machines, not SAML-only configuration.');
+assert.match(reviewedLfdsNotes.tables['dbo.registered_applications'].columns.version.purpose, /do not use it as.*full build/, 'Registration version must not imply the installed full build.');
+assert.match(reviewedLfdsNotes.tables['dbo.session_sids'].safeReportingNotes.join(' '), /Do not assume every session SID is a user account/, 'Session SID mappings must not imply user totals.');
+assert.equal(reviewedLfdsNotes.tables['dbo.adgs_rules'].columns.flags.confidence, 'unknown', 'Observed enabled rules do not verify flag masks.');
 const taskMetricNotes = reviewedFormsNotes.tables['dbo.task_metrics_mapping'];
 assert.match(taskMetricNotes.safeReportingNotes.join(' '), /Do not count distinct instance_id as tasks/, 'Task metrics must preserve their history-level grain.');
 assert.match(taskMetricNotes.columns.last_assigned_owner_snapshot_id.purpose, /Not a reliable current task owner/, 'Historical assignment snapshots must not imply current ownership.');
