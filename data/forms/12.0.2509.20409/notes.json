@@ -340,7 +340,7 @@
         },
         "testing_rules": {
           "confidence": "unknown",
-          "purpose": "Serialized testing configuration; meaning should be verified before reporting."
+          "purpose": "Process-definition testing-rule text. The serialization format, rule evaluation, and relationship to live instance execution are not documented; do not treat it as a testing status."
         },
         "is_triggerpublic": {
           "confidence": "inferred",
@@ -368,15 +368,15 @@
         },
         "style_json": {
           "confidence": "unknown",
-          "purpose": "Serialized JSON style configuration."
+          "purpose": "Process-design styling text whose name suggests JSON. This belongs to the business process definition, not submitted field values; validate its format before parsing."
         },
         "is_savetolf_xml_included": {
           "confidence": "unknown",
-          "purpose": "Flag indicating whether the business process definition savetolf XML included."
+          "purpose": "Smallint setting whose name suggests whether Save to Repository XML is included in this process definition. Boolean encoding and the XML inclusion rules are not established by the export."
         },
         "faq_options": {
           "confidence": "unknown",
-          "purpose": "Numeric FAQ-option setting for this business process definition (int), not a serialized text payload. The export does not establish option values or bit meanings."
+          "purpose": "Numeric FAQ-option setting on the business process definition (int). The export does not identify supported values or flag bits; it is not a serialized payload or process-instance status."
         },
         "faq_group_id": {
           "confidence": "inferred",
@@ -757,7 +757,7 @@
         },
         "json_data": {
           "confidence": "unknown",
-          "purpose": "Serialized form design payload; structure should be verified before reporting."
+          "purpose": "Form-definition text whose name suggests JSON. The internal design schema and version stability are not established; do not assume it contains submitted answers."
         },
         "form_width": {
           "confidence": "inferred",
@@ -780,16 +780,16 @@
           "purpose": "Preview theme identifier assigned to the form."
         },
         "preview_css": {
-          "confidence": "unknown",
-          "purpose": "Serialized or raw preview CSS; treat as internal design content."
+          "confidence": "inferred",
+          "purpose": "CSS text inferred from the name to be associated with previewing this form definition. Do not assume it is the final runtime stylesheet; display as inert text."
         },
         "custom_css": {
-          "confidence": "unknown",
-          "purpose": "Custom CSS configured for the form; treat as design content."
+          "confidence": "inferred",
+          "purpose": "Custom CSS text inferred from the column name to belong to this form definition. Treat it as design content, not submission data; display as inert text rather than injecting it into a page."
         },
         "form_js": {
-          "confidence": "unknown",
-          "purpose": "Custom JavaScript configured for the form; treat as design content."
+          "confidence": "inferred",
+          "purpose": "JavaScript text inferred from the column name to belong to this form definition. Treat it as potentially executable design content; do not run it when displaying or analyzing metadata."
         },
         "is_emailnotifyset": {
           "confidence": "inferred",
@@ -825,11 +825,11 @@
         },
         "component": {
           "confidence": "unknown",
-          "purpose": "Serialized component payload; structure should be verified before reporting."
+          "purpose": "Internal component text associated with the form definition. Payload format and rendering semantics are undocumented; it is not submitted form data."
         },
         "wrapper": {
           "confidence": "unknown",
-          "purpose": "Serialized wrapper payload; structure should be verified before reporting."
+          "purpose": "Internal wrapper text associated with the form definition. Its serialization and rendering rules are undocumented; it is not a reporting join key."
         },
         "preview_logo": {
           "confidence": "inferred",
@@ -861,7 +861,7 @@
         },
         "pagination_options": {
           "confidence": "unknown",
-          "purpose": "Serialized or free-form pagination options payload for the form definition record; verify structure before reporting."
+          "purpose": "Text configuration for form pagination inferred from the name. Encoding and option meanings are undocumented; it is not a count of submitted pages."
         },
         "saveMode": {
           "confidence": "inferred",
@@ -926,11 +926,11 @@
         },
         "choices": {
           "confidence": "unknown",
-          "purpose": "Serialized choice list for choice-based fields."
+          "purpose": "Choice configuration text associated with the field definition. Do not assume these are submitted answers or a simple delimited list; label/value encoding and dynamic-choice behavior need confirmation."
         },
         "subfields": {
           "confidence": "unknown",
-          "purpose": "Serialized subfield configuration for composite fields."
+          "purpose": "Short text setting for subfields on this field definition (nvarchar(50)). The export does not establish whether it stores names, identifiers, or serialized configuration; do not split it into child records without evidence."
         },
         "class_names": {
           "confidence": "inferred",
@@ -950,11 +950,11 @@
         },
         "component": {
           "confidence": "unknown",
-          "purpose": "Serialized component payload for the field."
+          "purpose": "Internal component text for the field definition. Its format and relationship to rendered controls are undocumented; it is not evidence of a submitted field value."
         },
         "wrapper": {
           "confidence": "unknown",
-          "purpose": "Serialized wrapper payload for the field."
+          "purpose": "Internal wrapper text associated with the field definition. Structure and rendering semantics are undocumented; exclude it from normal submission-value reports."
         },
         "hide_section_label": {
           "confidence": "inferred",
@@ -1030,7 +1030,7 @@
         },
         "signature_options": {
           "confidence": "unknown",
-          "purpose": "Numeric signature-option setting for this form field (tinyint), not a serialized text payload. Option values and any bit meanings are not documented; do not infer a mapping."
+          "purpose": "Numeric signature-option setting on the field definition (tinyint). Supported values and any flag bits are undocumented; do not interpret it as signature validity or completion."
         },
         "field_typed_formula_id": {
           "confidence": "observed",
@@ -1376,7 +1376,7 @@
         },
         "draft_contains": {
           "confidence": "unknown",
-          "purpose": "Serialized draft content indicator or payload; verify before reporting."
+          "purpose": "Draft-related text on a form submission record, not a SQL bit flag. Its format and relationship to saved draft contents are undocumented; it may contain sensitive submission context."
         },
         "draft_name": {
           "confidence": "inferred",
@@ -2638,7 +2638,7 @@
         },
         "style_json": {
           "confidence": "unknown",
-          "purpose": "Serialized JSON style configuration."
+          "purpose": "Styling text for this process-definition/version record, inferred from the column name to contain JSON. Do not use it as instance data or assume a stable JSON schema."
         },
         "is_autoTriggered": {
           "confidence": "inferred",
@@ -2895,7 +2895,7 @@
         },
         "definition_json": {
           "confidence": "unknown",
-          "purpose": "Serialized JSON definition payload."
+          "purpose": "Step-definition text whose name suggests JSON, rather than runtime worker state. Property names and their meanings are not exported; do not derive task status from this payload."
         },
         "step_type": {
           "confidence": "inferred",
@@ -2915,7 +2915,7 @@
         },
         "style_json": {
           "confidence": "unknown",
-          "purpose": "Serialized JSON style configuration."
+          "purpose": "Step-design styling text whose name suggests JSON. It describes the definition, not execution timing or completion state; parsing rules are not documented."
         },
         "subprocess_id": {
           "confidence": "inferred",

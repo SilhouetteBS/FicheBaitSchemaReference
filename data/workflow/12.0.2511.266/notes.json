@@ -629,7 +629,7 @@
         },
         "state": {
           "confidence": "unknown",
-          "purpose": "Serialized or encoded runtime state; verify structure before reporting."
+          "purpose": "Binary state payload associated with an instance-completion record (varbinary(max)). Serialization and lifecycle semantics are undocumented; it is not an integer completion-status code."
         }
       }
     },
@@ -1127,11 +1127,11 @@
         },
         "additional_data": {
           "confidence": "unknown",
-          "purpose": "Additional Data payload or value for the search error record; verify contents before reporting."
+          "purpose": "Additional diagnostic text on the search-error record (ntext). Structure is undocumented and may contain sensitive activity or instance context; it is not a stable join key."
         },
         "activity_message_type": {
           "confidence": "unknown",
-          "purpose": "Activity Message Type for the search error record."
+          "purpose": "Numeric activity-message classification on the search-error record (tinyint). Code meanings are undocumented; do not assign severity or activity-type labels without a verified mapping."
         },
         "time": {
           "confidence": "inferred",
@@ -1160,11 +1160,11 @@
         },
         "additional_data": {
           "confidence": "unknown",
-          "purpose": "Additional Data payload or value for the search error history record; verify contents before reporting."
+          "purpose": "Additional diagnostic text on the historical search-error record (ntext). Format is undocumented and may contain sensitive context; do not parse it as a stable structured error contract."
         },
         "activity_message_type": {
           "confidence": "unknown",
-          "purpose": "Activity Message Type for the search error history record."
+          "purpose": "Numeric activity-message classification on the historical search-error record (tinyint). Code meanings are undocumented; do not assume it is a severity or the same enum used by another product."
         },
         "time": {
           "confidence": "inferred",
@@ -1753,8 +1753,8 @@
       ],
       "columns": {
         "condition_id": {
-          "confidence": "unknown",
-          "purpose": "Condition identifier for the wait condition record."
+          "confidence": "observed",
+          "purpose": "Identity-generated bigint primary key of the wait-condition row (wait_condition_pk), not a condition-type code. This snapshot does not export wait_condition_entry_fk; verify that relationship in this exact version before relying on it."
         },
         "instance_id": {
           "confidence": "inferred",
@@ -1774,11 +1774,11 @@
         },
         "condition_type": {
           "confidence": "unknown",
-          "purpose": "Condition Type value for the wait condition record; verify mapping before public reporting when applicable."
+          "purpose": "Numeric type setting on the wait-condition row (int). The export does not identify supported codes or evaluation rules; do not label wait reasons from guessed values."
         },
         "condition": {
           "confidence": "unknown",
-          "purpose": "Condition payload or value for the wait condition record; verify contents before reporting."
+          "purpose": "Text payload defining or describing the wait condition (ntext), inferred from its name. Expression format and evaluation rules are undocumented; do not execute it as SQL or interpret it as a status."
         },
         "time": {
           "confidence": "inferred",
@@ -1920,11 +1920,11 @@
         },
         "designer_code": {
           "confidence": "unknown",
-          "purpose": "Serialized Workflow Designer code payload."
+          "purpose": "Workflow Designer text payload associated with this definition/version (ntext). Serialization and version compatibility are undocumented; it is not a runtime execution log."
         },
         "workflow_assembly": {
           "confidence": "unknown",
-          "purpose": "Compiled workflow assembly payload or reference."
+          "purpose": "Binary image-typed workflow assembly payload associated with this definition/version. Packaging is undocumented; do not execute it or infer successful compilation or runtime state from its presence."
         },
         "last_update": {
           "confidence": "inferred",
@@ -1936,11 +1936,11 @@
         },
         "csharp_assembly": {
           "confidence": "unknown",
-          "purpose": "Compiled C# assembly payload or reference."
+          "purpose": "Binary image-typed payload named for a C# assembly in this workflow definition/version. Its packaging and loading rules are undocumented; do not execute it or assume it is a file path."
         },
         "vb_assembly": {
           "confidence": "unknown",
-          "purpose": "Compiled VB assembly payload or reference."
+          "purpose": "Binary image-typed payload named for a Visual Basic assembly in this workflow definition/version. Format and loading rules are undocumented; do not execute it or assume it is a file path."
         }
       }
     },
@@ -2322,7 +2322,7 @@
         },
         "task_data": {
           "confidence": "unknown",
-          "purpose": "Serialized task payload; verify structure before reporting."
+          "purpose": "Text payload associated with a queued Workflow task (ntext). Serialization is undocumented and may include sensitive task context; it is not a task-status code or safe cross-product join key."
         },
         "task_result": {
           "confidence": "inferred",

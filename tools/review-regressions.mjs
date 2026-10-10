@@ -13,6 +13,7 @@ import { getReportingQuestions, getReportingPaths } from '../src/data/reporting.
 import { parseExportJson, runImport } from './import-forms-metadata.mjs';
 import { verifyDataParity } from './verify-data-parity.mjs';
 import { validateDataReport } from './validate-data.mjs';
+import { reviewDependencyTarget } from './dependency-target-review.mjs';
 import { isTableNoteMap } from '../src/data/notes.js';
 import { buildObjectAliasMap, resolveDependencyKey, classifyDependency, getDependencyResolutionItems } from '../src/data/schemaAnalysis.js';
 
@@ -161,4 +162,50 @@ for (const version of manifest.versions) {
 }
 assert.equal(warningReview.unclassified, 0, 'New warning classes require explicit review.');
 assert.equal(Object.values(warningReview).reduce((sum, count) => sum + count, 0), validateDataReport().warnings.length);
+const typeReviewFixture = { routines: [
+  { key: 'dbo.Caller', parameters: [{ parameterName: '@ids', dataType: 'IdList' }] },
+  { key: 'other.OtherCaller', parameters: [{ parameterName: '@ids', dataType: 'OtherList' }] },
+] };
+assert.equal(reviewDependencyTarget(typeReviewFixture, { referencingObjectKey: 'dbo.Caller', referencedEntityName: 'IdList' }).category, 'parameterTypeNameInCaller');
+assert.equal(reviewDependencyTarget(typeReviewFixture, { referencingObjectKey: 'dbo.Caller', referencedEntityName: 'OtherList' }).category, 'parameterTypeNameElsewhere');
+assert.equal(reviewDependencyTarget({ routines: [] }, { referencingObjectKey: 'dbo.Caller', referencedEntityName: 'IdList' }).category, 'unqualifiedTargetNeedsEvidence');
+assert.equal(reviewDependencyTarget(typeReviewFixture, { referencingObjectKey: 'dbo.Caller', referencedEntityName: 'e' }).category, 'unqualifiedTargetNeedsEvidence');
+assert.equal(reviewDependencyTarget(typeReviewFixture, { referencingObjectKey: 'dbo.Caller', referencedSchemaName: 'dbo', referencedEntityName: 'hr_adsi' }).category, 'qualifiedTargetNeedsEvidence');
+assert.equal(reviewDependencyTarget({}, { referencingObjectKey: 'dbo.sp_upgraddiagrams', referencedObjectKey: 'dbo.dtproperties' }).category, 'diagramSupportReference');
+assert.notEqual(reviewDependencyTarget({}, { referencingObjectKey: 'dbo.CustomRoutine', referencedObjectKey: 'dbo.dtproperties' }).category, 'diagramSupportReference');
+const targetCategories = {};
+for (const product of readJson('data/products.json').products.filter((item) => item.status !== 'pending')) {
+  for (const version of readJson(`data/${product.productKey}/versions.json`).versions) {
+    const versionSchema = readJson(`data${version.schemaUrl.slice('/data'.length)}`);
+    const versionNotes = readJson(`data${version.notesUrl.slice('/data'.length)}`);
+    for (const target of getDependencyResolutionItems({ source: versionSchema }).filter((item) => !item.referencedResolvedKey && !item.expectedNonObjectReference)) {
+      const review = reviewDependencyTarget(versionSchema, versionSchema.dependencies[target.index], target.referencingResolvedKey);
+      targetCategories[review.category] = (targetCategories[review.category] ?? 0) + 1;
+      assert.equal(target.referencedResolvedKey, '', 'Review must not invent resolved objects.');
+    }
+    if (product.productKey === 'repository') {
+      const table = versionSchema.tables.find((item) => item.key === 'dbo.toc');
+      assert.ok(table.keys.some((key) => key.name === 'toc_uuid_unq' && key.columns.length === 1 && key.columns[0].columnName === 'toc_uuid'));
+      assert.equal(versionNotes.tables['dbo.toc'].columns.toc_uuid.confidence, 'observed');
+      assert.equal(versionNotes.tables['dbo.doc'].columns.lft_etag.confidence, 'unknown');
+    }
+    if (product.productKey === 'workflow') {
+      const table = versionSchema.tables.find((item) => item.key === 'dbo.wait_condition');
+      assert.ok(table.columns.find((column) => column.name === 'condition_id').isIdentity);
+      assert.ok(table.keys.some((key) => key.type === 'PK' && key.columns[0].columnName === 'condition_id'));
+      const waitEntryFk = versionSchema.foreignKeys.find((fk) => fk.name === 'wait_condition_entry_fk' && fk.referencedTableKey === table.key && fk.columns.some((column) => column.referencedColumnName === 'condition_id'));
+      assert.match(versionNotes.tables[table.key].columns.condition_id.purpose,
+        waitEntryFk ? /references it through wait_condition_entry_fk/ : /does not export wait_condition_entry_fk/);
+      assert.equal(versionNotes.tables[table.key].columns.condition_id.confidence, 'observed');
+      assert.equal(versionNotes.tables[table.key].columns.condition_type.confidence, 'unknown');
+    }
+    if (product.productKey === 'lfds') {
+      assert.ok(versionSchema.foreignKeys.some((fk) => fk.sourceTableKey === 'dbo.additional_claims' && fk.referencedTableKey === 'dbo.claim_defs' && fk.columns.some((column) => column.sourceColumnName === 'claim_id' && column.referencedColumnName === 'id')));
+      assert.equal(versionNotes.tables['dbo.identity_providers'].columns.scim_type.confidence, 'unknown');
+      assert.equal(versionNotes.tables['dbo.directory_objects'].columns.flags.confidence, 'unknown');
+    }
+  }
+}
+assert.deepEqual(targetCategories, { parameterTypeNameInCaller: 35, unqualifiedTargetNeedsEvidence: 10,
+  parameterTypeNameElsewhere: 10, diagramSupportReference: 4, qualifiedTargetNeedsEvidence: 1 });
 console.log('Review regressions passed: history, storage, corrections, exports, matching, guidance, imports, load retries, and warning accounting.');

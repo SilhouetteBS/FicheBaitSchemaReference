@@ -4,6 +4,9 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Reviewed all 60 unresolved dependency targets with explicit evidence categories; no missing object definitions were invented or warnings suppressed.
+- Clarified all 64 remaining Reporting-priority column notes across 329 versioned entries, including identity/join evidence, opaque-value limitations, and safe handling of design/diagnostic payloads. Recorded review dispositions in `docs/metadata-note-review.md`.
+
 - Clarified 37 versioned column notes on Reporting-related Forms, LFDS, and Workflow tables. Formula references use exported FK evidence; inferred identity/error descriptions remain inferred and undocumented numeric option mappings remain unknown.
 - Accounted for all 520 current metadata warnings and added a deduplicated Reporting-priority notes queue to the ignored maintainer triage report.
 - Documented canonical schema imports, authenticated Sites release verification, and rollback of saved versions without rewriting Git history.

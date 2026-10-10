@@ -23,6 +23,24 @@ Counts are versioned warning occurrences, not unique objects. Expected check-con
 
 The triage report also lists unknown column notes with curated Reporting script titles. This is a table-level relevance queue, not proof that a script reads every column. Review FK/type evidence first; names alone support only an inference. Serialized payload formats, numeric option mappings, permission bits, and cross-product identity joins remain unknown without independent evidence.
 
+## Target Evidence Review
+
+All 60 unresolved target occurrences were reviewed on 2026-10-10. These categories are evidence dispositions, not newly resolved dependencies; the 520-warning baseline is unchanged.
+
+| Evidence category | Occurrences | Required follow-up |
+| --- | ---: | --- |
+| Type name appears in the referencing routine's parameters | 35 | Obtain exact-version type catalog metadata, type schema, and table-type columns/keys where applicable. |
+| Type name appears only in other routines in the same snapshot | 10 | Verify the actual dependency class and qualified type identity; same-name evidence elsewhere is not proof of this target. |
+| Reference originates from dbo.sp_upgraddiagrams | 4 | Review non-product diagram-support provenance; do not infer a Laserfiche product table. |
+| Unqualified target without type evidence | 10 | Privately inspect the exact-version source or sanitized catalog evidence; neither aliases nor external objects are proven. |
+| Qualified target without type evidence | 1 | Review LFDS dbo.LF_UserInfo -> dbo.hr_adsi in 12.0.2511.289 using exact-version catalog evidence. |
+
+The type-name group covers Forms_TaskPredictionData, Forms_IdList, Forms_TaskResumeIds, and Forms_SubmissionIds. Parameter exports do not include type schemas/definitions, so no table structure or callable signature was invented. The other unqualified names are e, entry_lock, and lock_info. No target was confirmed external by the sanitized exports.
+
+Microsoft documents sp_upgraddiagrams as [Database Diagram Designer support](https://learn.microsoft.com/en-us/ssms/visual-db-tools/set-up-database-diagram-designer-visual-database-tools). This supports reviewing its four dtproperties references separately from product dependencies; a matching routine name does not prove the exported definition is stock Microsoft code. Raw records remain unchanged.
+
+For the reviewed Reporting-column notes and remaining evidence gaps, see [Metadata Note Review](metadata-note-review.md).
+
 ## Release-Blocking Warning Changes
 
 Treat these as blockers until reviewed:

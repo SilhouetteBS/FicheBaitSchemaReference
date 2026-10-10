@@ -64,12 +64,12 @@
           "purpose": "Claim definition identifier."
         },
         "str_val": {
-          "confidence": "unknown",
-          "purpose": "String attribute or claim value."
+          "confidence": "inferred",
+          "purpose": "Text value inferred to hold this claim occurrence's string representation. The occurrence is keyed by sid, claim_id, and ordinal; claim_id references dbo.claim_defs.id. Do not assume it is a username or interchangeable with bin_val."
         },
         "bin_val": {
-          "confidence": "unknown",
-          "purpose": "Binary attribute or claim value."
+          "confidence": "inferred",
+          "purpose": "Binary value inferred to hold this claim occurrence's binary representation. The occurrence is keyed by sid, claim_id, and ordinal; claim_id references dbo.claim_defs.id. Encoding is undocumented and values may be sensitive."
         },
         "ordinal": {
           "confidence": "inferred",
@@ -899,8 +899,8 @@
           "purpose": "Primary identifier for the container license/resource limit record."
         },
         "license_uuid": {
-          "confidence": "unknown",
-          "purpose": "UUID for the license type or license resource."
+          "confidence": "inferred",
+          "purpose": "License UUID inferred from the name to distinguish a container's limit by license. The exported primary key is (id, license_uuid, resource_uuid), so this value alone does not identify a limit row or prove a license-table join."
         },
         "resource_uuid": {
           "confidence": "inferred",
@@ -1198,7 +1198,7 @@
         },
         "flags": {
           "confidence": "unknown",
-          "purpose": "Bit flag value for the directory object record."
+          "purpose": "Integer flags on a directory object. Individual bit meanings and their interaction with object type are undocumented; do not infer enabled, disabled, or licensing status from arbitrary masks."
         },
         "comments": {
           "confidence": "inferred",
@@ -1752,16 +1752,16 @@
           "purpose": "Flag indicating authentication enabled for the identity provider record."
         },
         "scim_enabled": {
-          "confidence": "unknown",
-          "purpose": "Flag indicating SCIM enabled for the identity provider record."
+          "confidence": "inferred",
+          "purpose": "Bit setting inferred from the name to indicate whether SCIM is enabled for this identity provider. It does not prove synchronization is healthy or that a particular account has been provisioned."
         },
         "scim_organization_id": {
           "confidence": "unknown",
-          "purpose": "SCIM Organization identifier for the identity provider record."
+          "purpose": "Integer organization identifier associated with this provider's SCIM configuration, inferred from the name. No FK is exported for this column; do not assume it equals a container ID or another product's organization ID."
         },
         "scim_username": {
-          "confidence": "unknown",
-          "purpose": "SCIM Username for the identity provider record."
+          "confidence": "inferred",
+          "purpose": "Username text inferred from the name to belong to this provider's SCIM configuration. It is not a verified end-user identity join key and may identify a service account."
         },
         "scim_password": {
           "confidence": "do_not_rely_on",
@@ -1781,11 +1781,11 @@
         },
         "scim_type": {
           "confidence": "unknown",
-          "purpose": "SCIM Type value for the identity provider record."
+          "purpose": "Numeric SCIM configuration type on the identity provider (tinyint). The export does not supply its value mapping; do not assign provider/vendor labels from guessed codes."
         },
         "scim_group_rules": {
           "confidence": "unknown",
-          "purpose": "SCIM Group Rules for the identity provider record."
+          "purpose": "Text configuration associated with SCIM group rules for this identity provider. Format, matching behavior, and precedence are undocumented; do not treat it as a group-membership list."
         }
       }
     },
@@ -2667,8 +2667,8 @@
       ],
       "columns": {
         "saml_sid": {
-          "confidence": "unknown",
-          "purpose": "SAML security identifier mapped to a Laserfiche SID."
+          "confidence": "inferred",
+          "purpose": "Binary SAML-side identifier inferred from the column name. The unique constraint covers the pair (saml_sid, lf_sid); only lf_sid has an exported FK to dbo.directory_objects.sid. Do not assume saml_sid uses the same encoding or join it directly to Forms user IDs."
         },
         "lf_sid": {
           "confidence": "inferred",

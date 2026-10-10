@@ -353,7 +353,7 @@
         },
         "bitmap": {
           "confidence": "unknown",
-          "purpose": "Bitmap stored for the annotation record; review contents before reporting."
+          "purpose": "Binary image-typed payload on the annotation record. Encoding and the annotation types that use it are undocumented; do not assume every annotation has a renderable bitmap or expose payloads in metadata reports."
         },
         "attach_storeid": {
           "confidence": "inferred",
@@ -369,7 +369,7 @@
         },
         "attach_etag": {
           "confidence": "unknown",
-          "purpose": "Attach ETag for the annotation record."
+          "purpose": "Internal bigint marker associated with an annotation attachment, inferred from the name. Update semantics are undocumented; do not treat it as a modification time or attachment-version number."
         },
         "attach_filename": {
           "confidence": "inferred",
@@ -417,7 +417,7 @@
         },
         "attach_cksum": {
           "confidence": "unknown",
-          "purpose": "Attach Checksum for the annotation record."
+          "purpose": "Binary value named as the annotation-attachment checksum (varbinary(32)). Algorithm and covered content are undocumented; it is not a verified attachment identity key."
         },
         "zorder": {
           "confidence": "inferred",
@@ -1129,7 +1129,7 @@
         },
         "page_flags": {
           "confidence": "unknown",
-          "purpose": "Permission or bit flag value for page flags on the document page record."
+          "purpose": "Integer flags on the page record. Bit meanings are undocumented; do not infer image/text availability, security, or redaction state from guessed masks."
         },
         "page_shared": {
           "confidence": "inferred",
@@ -1153,19 +1153,19 @@
         },
         "img_etag": {
           "confidence": "unknown",
-          "purpose": "Image page ETag."
+          "purpose": "Internal bigint marker associated with this page's image data. Generation and comparison semantics are undocumented; do not treat it as a date or a page-version number."
         },
         "txt_etag": {
           "confidence": "unknown",
-          "purpose": "Text page ETag."
+          "purpose": "Internal bigint marker associated with this page's text data, inferred from the name. Its update rules are undocumented; do not use it alone to infer OCR completion or search-index freshness."
         },
         "loc_etag": {
           "confidence": "unknown",
-          "purpose": "Location payload ETag."
+          "purpose": "Internal bigint marker named loc_etag on the page record. The loc payload's meaning and marker update rules are not established; do not infer a storage path or timestamp."
         },
         "lft_etag": {
           "confidence": "unknown",
-          "purpose": "Laserfiche text payload ETag."
+          "purpose": "Internal bigint marker named lft_etag on the page record. The export does not define lft or its update rules; do not expand the abbreviation into a verified payload type."
         },
         "img_width": {
           "confidence": "inferred",
@@ -1209,7 +1209,7 @@
         },
         "img_cksum": {
           "confidence": "unknown",
-          "purpose": "Image page checksum."
+          "purpose": "Binary value named as the page-image checksum (varbinary(32)). Hash algorithm and covered content are undocumented; do not infer image equality, redaction state, or corruption from this field alone."
         }
       }
     },
@@ -2252,7 +2252,7 @@
         },
         "prop_flags": {
           "confidence": "unknown",
-          "purpose": "Field definition bit flags."
+          "purpose": "Integer flags on the field definition. Individual bits are undocumented; do not infer required, read-only, or multi-value behavior from guessed masks."
         },
         "prop_len": {
           "confidence": "inferred",
@@ -2264,11 +2264,11 @@
         },
         "condition": {
           "confidence": "unknown",
-          "purpose": "Condition for the field definition record."
+          "purpose": "Condition text on the field definition (nvarchar(400)), inferred to be associated with value validation. Its expression language and evaluation rules are undocumented; do not execute it as SQL."
         },
         "condition_err": {
-          "confidence": "unknown",
-          "purpose": "Condition Err for the field definition record."
+          "confidence": "inferred",
+          "purpose": "Error text inferred from the name and adjacent condition column to accompany a field-definition validation condition. It is configuration text, not a log of actual validation failures."
         },
         "prop_format": {
           "confidence": "inferred",
@@ -3679,15 +3679,15 @@
         },
         "toc_flags": {
           "confidence": "unknown",
-          "purpose": "Permission or bit flag value for repository entry flags on the repository entry record."
+          "purpose": "Integer flags on the repository entry. Bit meanings are undocumented; this value alone cannot establish effective permissions, retention state, or entry type."
         },
         "toc_sdctl": {
           "confidence": "inferred",
           "purpose": "Repository Entry Security Descriptor Control for the repository entry record."
         },
         "toc_uuid": {
-          "confidence": "unknown",
-          "purpose": "UUID for the repository entry."
+          "confidence": "observed",
+          "purpose": "UUID-shaped char(36) identifier on the repository entry, constrained unique by toc_uuid_unq. The exported primary key is tocid; uniqueness here does not establish portability or identity across repositories."
         },
         "toc_color": {
           "confidence": "inferred",
@@ -3727,7 +3727,7 @@
         },
         "edoc_etag": {
           "confidence": "unknown",
-          "purpose": "Electronic document ETag."
+          "purpose": "Internal bigint marker associated with the entry's electronic document, inferred from the name. Update and comparison semantics are undocumented; do not treat it as a date or documented document-version number."
         },
         "edoc_mime": {
           "confidence": "inferred",
@@ -3811,11 +3811,11 @@
         },
         "etag": {
           "confidence": "unknown",
-          "purpose": "ETag for the repository entry record."
+          "purpose": "Internal bigint ETag marker on the repository entry. Its generation and update rules are undocumented; do not convert it to a timestamp or use it as a cross-repository identity key."
         },
         "edoc_cksum": {
           "confidence": "unknown",
-          "purpose": "Electronic document checksum."
+          "purpose": "Binary value named as the electronic-document checksum (varbinary(32)). Algorithm, scope, and null semantics are undocumented; matching values do not alone prove documents are identical."
         },
         "edoc_lastmod": {
           "confidence": "inferred",
@@ -4043,7 +4043,7 @@
         },
         "trustee_flags": {
           "confidence": "unknown",
-          "purpose": "Permission or bit flag value for trustee flags on the repository trustee record."
+          "purpose": "Integer flags on the repository trustee. Bit meanings are undocumented; they do not alone establish account-enabled state or effective repository permissions."
         },
         "descrip": {
           "confidence": "inferred",
@@ -5000,7 +5000,7 @@
         },
         "vol_flags": {
           "confidence": "unknown",
-          "purpose": "Repository volume bit flags."
+          "purpose": "Integer flags on the repository volume. Individual bits and operational meanings are undocumented; do not use arbitrary masks to infer availability, write access, or encryption state."
         },
         "localid": {
           "confidence": "inferred",
@@ -5044,7 +5044,7 @@
         },
         "cksum_alg": {
           "confidence": "unknown",
-          "purpose": "Checksum Alg for the repository volume record."
+          "purpose": "Numeric checksum-algorithm setting inferred from the column name. The export contains no code-to-algorithm mapping; do not assume a particular hash algorithm from the value."
         },
         "vol_created": {
           "confidence": "inferred",
@@ -5067,8 +5067,8 @@
           "purpose": "Volume rollover base value."
         },
         "encryption_key_guid": {
-          "confidence": "unknown",
-          "purpose": "Encryption key GUID used by the volume."
+          "confidence": "inferred",
+          "purpose": "GUID-shaped reference inferred to identify an encryption key associated with this volume. It is not the encryption key material, and no FK establishes the target key catalog in this export."
         },
         "full_enc_alg_id": {
           "confidence": "inferred",
