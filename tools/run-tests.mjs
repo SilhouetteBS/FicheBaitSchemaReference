@@ -137,6 +137,11 @@ assert.match(reviewedLfdsNotes.tables['dbo.hosts'].summary, /Applications > Mach
 assert.match(reviewedLfdsNotes.tables['dbo.registered_applications'].columns.version.purpose, /do not use it as.*full build/, 'Registration version must not imply the installed full build.');
 assert.match(reviewedLfdsNotes.tables['dbo.session_sids'].safeReportingNotes.join(' '), /Do not assume every session SID is a user account/, 'Session SID mappings must not imply user totals.');
 assert.equal(reviewedLfdsNotes.tables['dbo.adgs_rules'].columns.flags.confidence, 'unknown', 'Observed enabled rules do not verify flag masks.');
+assert.match(reviewedLfdsNotes.tables['dbo.directory_objects'].columns.namespace_id.purpose, /NULL.*effective_namespace_id/, 'Explicit NULL namespaces must not imply missing effective namespaces.');
+assert.match(reviewedLfdsNotes.tables['dbo.directory_objects'].safeReportingNotes.join(' '), /no Disabled users.*independently identified service-account/, 'Absent account scenarios must remain unverified.');
+assert.match(reviewedLfdsNotes.tables['dbo.directory_objects'].safeReportingNotes.join(' '), /Do not hardcode.*root-only/, 'Root-only observations must not become universal organization rules.');
+assert.match(reviewedLfdsNotes.tables['dbo.allocated_resources'].safeReportingNotes.join(' '), /not a universal license accounting formula/, 'Demo license reconciliation must remain sample scoped.');
+assert.match(reviewedLfdsNotes.tables['dbo.audit_event_types'].safeReportingNotes.join(' '), /individual code-to-label mapping remains unverified/, 'Combined audit labels must not establish individual enum mappings.');
 const taskMetricNotes = reviewedFormsNotes.tables['dbo.task_metrics_mapping'];
 assert.match(taskMetricNotes.safeReportingNotes.join(' '), /Do not count distinct instance_id as tasks/, 'Task metrics must preserve their history-level grain.');
 assert.match(taskMetricNotes.columns.last_assigned_owner_snapshot_id.purpose, /Not a reliable current task owner/, 'Historical assignment snapshots must not imply current ownership.');

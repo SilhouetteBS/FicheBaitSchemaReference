@@ -335,7 +335,8 @@
       "summary": "License or resource assignment records for allocated resource.",
       "safeReportingNotes": [
         "Use allocated resource records for read-only LFDS metadata reporting.",
-        "All seven reviewed application_uuid values resolved to registered_applications.uuid, distributed across two registrations. This establishes application-linked allocation records, not the full Overview availability calculation; reserved_resources and container_limits had no rows in this demo. Resource UUID meanings, flags and consumption rules remain unverified."
+        "All seven reviewed application_uuid values resolved to registered_applications.uuid across two registrations. In the 12.0.2607.421 Applications UI, Server showed 5 Full repository named users, 2 Retrieval repository named users and 1 dual processor public portal; Forms showed 2 authenticated participants and 1 Forms portal. These matched the positive allocation quantities. Zero-quantity resource labels and flag meanings remain unverified.",
+        "Overview availability reconciled in this demo: 12 Full user assignments plus 5 Server allocations accounted for 17 of 50 Full licenses consumed; 2 Server Retrieval allocations and 2 Forms authenticated-participant allocations matched their respective 8-of-10 available totals. This is sample evidence, not a universal license accounting formula; reserved_resources and container_limits were empty."
       ],
       "columns": {
         "application_uuid": {
@@ -599,7 +600,8 @@
       "summary": "Audit records for audit event type.",
       "safeReportingNotes": [
         "Use audit event type records for read-only audit and change-history reporting.",
-        "The reviewed sample has multiple type rows for some audit events. Join audit_event_uuid to audit_events.event_uuid, but count distinct event UUIDs when counting events rather than types. Event type 1501 matched three Sign-in rows by timestamp in the 12.0.2607.421 Audit Report; other numeric meanings remain unverified."
+        "The reviewed sample has multiple type rows for some audit events. Join audit_event_uuid to audit_events.event_uuid, but count distinct event UUIDs when counting events rather than types. Event type 1501 matched three Sign-in rows by timestamp in the 12.0.2607.421 Audit Report.",
+        "Timestamp-correlated 12.0.2607.421 Audit Report samples matched 1002 to Database - Configure AD Sync (with db_settings_audit.name = ADGSLastPollTime) and 197 to User - Set Claim. A combined user event contained codes 103, 104, 106 and 110 and displayed Set License, Modification, Set Provider and Change Organization; the individual code-to-label mapping remains unverified. These observations are not an exhaustive enum reference."
       ],
       "columns": {
         "audit_event_uuid": {
@@ -618,7 +620,8 @@
       "safeReportingNotes": [
         "Use audit event records for read-only audit and change-history reporting.",
         "All nine populated audit-detail families resolved their audit_event_uuid values to this table in the reviewed 12.0.2607.421 sample. An event can have multiple type/detail rows; aggregate each child family before combining them to avoid multiplying events.",
-        "The Audit Report separates Administrator Name/SID from the account described in Event Data. operator_name and operator_sid identify the acting principal, not necessarily the affected user; token_events_audit describes the authentication subject."
+        "The Audit Report separates Administrator Name/SID from the account described in Event Data. operator_name and operator_sid identify the acting principal, not necessarily the affected user; token_events_audit describes the authentication subject.",
+        "Reviewed AD synchronization user-change events had System Process = Yes and is_process_principal = 1. Their directory_object_audit.sid values differed from operator_sid, confirming that the affected account and system actor must remain separate in reporting."
       ],
       "columns": {
         "event_uuid": {
@@ -1196,7 +1199,9 @@
       "safeReportingNotes": [
         "Use directory object records for read-only identity, security, and licensing reporting.",
         "In the reviewed LFDS 12.0.2607.421 sample, all four type-1 names matched the four Groups entries in Accounts. Type-0 records included both directory-backed and native users, but 21 type-0 rows did not equal the 12 users shown with the Active filter. Type alone is not an active-user predicate; flag meanings remain unverified.",
-        "External group members can resolve through directory_groups_cache or account_cache without a directory_objects row. Do not assume this table contains every SID displayed in group membership."
+        "External group members can resolve through directory_groups_cache or account_cache without a directory_objects row. Do not assume this table contains every SID displayed in group membership.",
+        "The 12.0.2607.421 Users search returned 12 Active users and no Disabled users. No disabled sample or independently identified service-account sample was available to establish those flag meanings; do not treat an application-like account name as proof of a service-account category.",
+        "The sole organization in Accounts was Root and its detail URL identified object 1. The matching directory_objects row had type 3, namespace_id 1 and effective_namespace_id 1. Reviewed users and groups had container_id 1, namespace_id NULL and effective_namespace_id 1, resolving to namespaces.name ROOT. Do not hardcode these sample IDs or infer nested-organization behavior from a root-only demo."
       ],
       "columns": {
         "id": {
@@ -1229,11 +1234,11 @@
         },
         "namespace_id": {
           "confidence": "inferred",
-          "purpose": "Namespace identifier associated with the directory object."
+          "purpose": "Explicit namespace reference to namespaces.id. Reviewed users and groups had NULL here while effective_namespace_id resolved to ROOT; NULL does not by itself mean that the object has no effective namespace."
         },
         "effective_namespace_id": {
           "confidence": "inferred",
-          "purpose": "Effective namespace identifier resolved for the directory object."
+          "purpose": "Resolved namespace reference to namespaces.id, distinct from the explicit namespace_id. Reviewed root members resolved to ROOT even with namespace_id NULL; inheritance behavior outside this root-only sample remains unverified."
         },
         "mac_address": {
           "confidence": "inferred",
@@ -3386,7 +3391,7 @@
       "safeReportingNotes": [
         "Use user license assignment records for read-only diagnostics only, and avoid exposing security-sensitive values.",
         "In the reviewed LFDS 12.0.2607.421 sample, all 12 assignment SIDs resolved to directory_objects.sid. Visible matching user entries showed Full license, but this does not establish all license UUID meanings or a complete license-availability calculation.",
-        "The Overview Full license availability implied 17 consumed licenses, while this table contained 12 assignments. Do not calculate total license consumption or availability from user_licenses alone; other allocation sources remain to be verified.",
+        "The reviewed Overview Full license availability implied 17 consumed licenses: 12 assignments here plus 5 Full repository named users allocated to Server in Applications. Do not calculate total license consumption or availability from user_licenses alone; this reconciliation is sample-specific and does not establish all allocation rules.",
         "Resolve labels optionally: the observed assigned type did not match license_aliases.uuid. Preserve assignments when an alias is absent."
       ],
       "columns": {
