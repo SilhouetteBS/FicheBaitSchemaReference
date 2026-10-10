@@ -4996,17 +4996,18 @@
       "confidence": "inferred",
       "summary": "Security assignment records for view security assignment.",
       "safeReportingNotes": [
-        "view_id references cf_view_profile_by_bp.view_id, an application report identifier rather than a SQL view. Security type codes and principal encoding remain unverified.",
-        "User and group integer ID spaces overlap. Matching user_group_id to an existing cf_users or cf_usergroups row does not establish principal type. The report Manage Access UI supports both users and groups, but the numeric type mapping has not been verified."
+        "view_id references cf_view_profile_by_bp.view_id, an application report identifier rather than a SQL view.",
+        "In the reviewed Forms 12.0.2607.40144 report, Manage Access principals matched type 0 = user and type 1 = group. This is observed report evidence, not a verified mapping for dashboard_security or other versions.",
+        "User and group integer ID spaces overlap. Resolve user_group_id to cf_users.user_id when type = 0 and cf_usergroups.group_id when type = 1 for the observed report mapping; ID existence alone does not establish principal type. Other type values and complete effective-permission rules remain unverified."
       ],
       "columns": {
         "user_group_id": {
-          "confidence": "inferred",
-          "purpose": "User or group security principal identifier."
+          "confidence": "observed",
+          "purpose": "Report access principal identifier: cf_users.user_id for observed type 0, or cf_usergroups.group_id for observed type 1 in Forms 12.0.2607.40144. Interpret with type because user and group IDs overlap."
         },
         "type": {
-          "confidence": "inferred",
-          "purpose": "Type or category value for the record."
+          "confidence": "observed",
+          "purpose": "Report access principal category. UI-to-row correlation in Forms 12.0.2607.40144 observed 0 = user and 1 = group; other values and other versions are unverified."
         },
         "view_id": {
           "confidence": "inferred",
@@ -6892,7 +6893,9 @@
       "confidence": "inferred",
       "summary": "Metadata records for team member.",
       "safeReportingNotes": [
-        "Team Management corroborated membership categories, but exact member_rights, admin_rights and type mappings remain unverified. NULL leave_date is not a proven complete active-membership filter."
+        "Team Management UI-to-row correlation in Forms 12.0.2607.40144 observed type 0 = user and type 1 = group. User and group integer IDs overlap; choose the principal table using type rather than ID existence alone.",
+        "Observed member_rights combinations: 0 = neither team member nor team manager, 1 = team member, 2 = team manager, 3 = both. Observed admin_rights: -1 = team administrator, 0 = not a team administrator. These sample combinations are not an exhaustive bitmask or effective-permission contract.",
+        "Administrator-only and manager-only entries were present alongside member entries, so counting every team_members row is not a verified team member count. Group expansion, inherited access and NULL leave_date as a complete active-membership filter remain unverified."
       ],
       "columns": {
         "id": {
@@ -6908,12 +6911,12 @@
           "purpose": "Team identifier."
         },
         "member_rights": {
-          "confidence": "inferred",
-          "purpose": "Member Rights for the team member record."
+          "confidence": "observed",
+          "purpose": "Team member/manager role combination. Forms 12.0.2607.40144 UI correlation observed 0 = neither, 1 = member, 2 = manager, 3 = member and manager. Not a verified exhaustive bitmask contract."
         },
         "admin_rights": {
-          "confidence": "inferred",
-          "purpose": "Numeric value for admin rights on the team member record."
+          "confidence": "observed",
+          "purpose": "Team administrator role indicator. Forms 12.0.2607.40144 UI correlation observed -1 = administrator and 0 = not administrator; other values and effective permissions are unverified."
         },
         "join_date": {
           "confidence": "inferred",
@@ -6932,8 +6935,8 @@
           "purpose": "Timestamp when the record was last changed."
         },
         "type": {
-          "confidence": "inferred",
-          "purpose": "Type or category value for the record."
+          "confidence": "observed",
+          "purpose": "Team principal category. Forms 12.0.2607.40144 UI correlation observed 0 = user and 1 = group; interpret user_group_id using this category. Other values remain unverified."
         }
       }
     },

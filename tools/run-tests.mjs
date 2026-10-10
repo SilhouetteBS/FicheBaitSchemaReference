@@ -133,6 +133,12 @@ for (const key of ['dbo.cf_view_security', 'dbo.dashboard_security']) {
   assert.match(reviewedFormsNotes.tables[key].safeReportingNotes.join(' '), /ID spaces overlap/, 'Security principal types cannot be inferred from ID existence.');
 }
 assert.match(reviewedFormsNotes.tables['dbo.formula_operands'].columns.discriminator.purpose, /not a verified complete category mapping/, 'Operand population patterns must not become invented enums.');
+assert.match(reviewedFormsNotes.tables['dbo.cf_view_security'].columns.type.purpose, /12\.0\.2607\.40144.*0 = user and 1 = group/, 'Report principal mappings must retain their observed build scope.');
+assert.match(reviewedFormsNotes.tables['dbo.cf_view_security'].safeReportingNotes.join(' '), /not a verified mapping for dashboard_security/, 'Report evidence must not silently establish dashboard mappings.');
+const teamMemberNotes = reviewedFormsNotes.tables['dbo.team_members'];
+assert.match(teamMemberNotes.columns.member_rights.purpose, /0 = neither, 1 = member, 2 = manager, 3 = member and manager/, 'Observed team role combinations must be retained.');
+assert.match(teamMemberNotes.columns.member_rights.purpose, /Not a verified exhaustive bitmask/, 'Team samples must not imply a complete permission contract.');
+assert.match(teamMemberNotes.columns.admin_rights.purpose, /-1 = administrator and 0 = not administrator/, 'Observed team administrator values must be retained.');
 const product = buildSchemaProduct([forms11, forms12]);
 const latestVersion = product.versions.at(-1);
 
