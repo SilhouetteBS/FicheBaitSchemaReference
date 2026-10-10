@@ -1072,8 +1072,8 @@
           "purpose": "Activity name."
         },
         "message": {
-          "confidence": "unknown",
-          "purpose": "Message for the search error record."
+          "confidence": "inferred",
+          "purpose": "Search-related error message text. Use with the associated search/error record for diagnostics; messages may contain sensitive context and should not be treated as stable error codes."
         },
         "additional_data": {
           "confidence": "unknown",
@@ -1105,8 +1105,8 @@
           "purpose": "Activity name."
         },
         "message": {
-          "confidence": "unknown",
-          "purpose": "Message for the search error history record."
+          "confidence": "inferred",
+          "purpose": "Search-related error message text. Use with the associated search/error record for diagnostics; messages may contain sensitive context and should not be treated as stable error codes."
         },
         "additional_data": {
           "confidence": "unknown",

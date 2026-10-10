@@ -29,7 +29,7 @@ Use this runbook to keep the public FicheBait Schema Reference useful, safe, and
 4. Confirm `productKey`, `productName`, `productVersion`, and `databaseRole` come from the manifest.
 5. Reject exports that use SQL Server database names as product identity.
 6. Treat duplicate product/version submissions as replacement requests.
-7. Run the Import tab in an editing-enabled local build before copying files into `public/data`.
+7. Preview in an editing-enabled local build, then import into canonical `data` using `npm run import:schema -- --input-dir '<private export folder>'`. Generate `public/data` with `npm run prepare:data`; do not manually maintain the mirror.
 8. Confirm the package was produced by the current sanitized export script and
    contains no source IDs, row counts, owner names, object dates, extended
    descriptions, or SQL module bodies.
@@ -56,15 +56,14 @@ npm run lint
 npm run build
 ```
 
-Run the full local validation before publishing data, diagram, import, routing, or release-process changes:
+Follow the full validation, authenticated verification, and rollback procedure in `docs/release-checklist.md` before publishing data, diagram, import, routing, or release-process changes. Start the local preview server as directed there before browser checks.
 
 ```powershell
-npm run validate
 npm run validate:full
 npm run verify:public-build
 ```
 
-After deployment:
+Only for anonymously accessible hosts (not the current authenticated Sites audience):
 
 ```powershell
 $env:SITE_URL='https://fichebait-schema-reference.blake-smith365062.chatgpt.site/'

@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 
 const defaultChromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const chromePath = process.env.CHROME_PATH ?? (process.platform === 'win32' ? defaultChromePath : '');
-const url = process.argv[2] ?? 'http://127.0.0.1:5173';
+const url = process.argv[2] ?? process.env.APP_URL ?? 'http://127.0.0.1:5173';
 const outDir = process.argv[3] ?? 'tmp/render-check';
 
 await mkdir(outDir, { recursive: true });

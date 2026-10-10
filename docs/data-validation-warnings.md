@@ -4,25 +4,24 @@ The data validator currently passes with warnings. These warnings are reviewed a
 
 ## Current Summary
 
-- Total warnings: 1,944
-- Dependency references resolved: 1,172 of 1,481
+- Total warnings: 520 across 21 product/version snapshots (2026-10-09 review).
+- Dependency references resolved: 3,105 of 3,878. Resolution counts include exported objects, not constraint sources or trigger pseudo-tables.
 - Products covered: Forms, LFDS, Repository, Workflow
-- Versions covered:
-  - Forms: 11.0.2311.50564, 12.0.2503.10378
-  - LFDS: 11.0.2403.2474, 12.0.2506.370
-  - Repository: 11.0.2.338, 12.0.1.237
-  - Workflow: 11.0.2306.898, 12.0.2508.3111
+- Version coverage comes from each canonical `data/<product>/versions.json`, not this document.
+- Regenerate the detailed, ignored maintainer report with `node tools/triage-metadata.mjs` after `npm run prepare:data`. Its category counts must sum to the warning total; unclassified warnings require review.
 
 ## Expected Warning Classes
 
 | Warning class | Count | Release impact |
 | --- | ---: | --- |
-| Dependency rows missing schema metadata | 1,481 | Expected for SQL expression dependency exports. The diagram treats unresolved rows as completeness warnings. |
-| Referencing dependency object not exported | 286 | Expected when SQL Server reports helper, alias, pseudo, or caller-dependent references that are not standalone exported objects. |
-| Referenced dependency object not exported | 35 | Expected when dependencies point to helper objects or names not present in the exported object sets. |
-| Empty views export | 2 | Acceptable for products/versions where the source database exported no views. |
-| Empty triggers export | 4 | Acceptable for products/versions where the source database exported no triggers. |
-| Table has no exported primary key | 136 | Acceptable for product tables that do not declare a SQL primary key. This should remain visible as schema health guidance. |
+| Table has no exported primary key | 397 | Schema observation, not proof of corruption or an import failure. Preserve it; do not invent a key or recommend adding one to a product database. |
+| Referencing dependency object not exported | 45 | Export evidence required: Workflow 12.0.2511.266 has dependencies originating from 10 missing views. Obtain that exact version's views export; never copy another version. |
+| Referenced dependency object not exported | 60 | Keep unresolved. Some Forms names match exported routine parameter types, but type definitions are absent. Other helper/external/alias-like names need evidence before classification. |
+| Empty views or triggers export | 18 | Confirm against the source export. Empty does not prove the product/version has no such objects; the Workflow missing views are a known counterexample. |
+
+Counts are versioned warning occurrences, not unique objects. Expected check-constraint sources and trigger `inserted`/`deleted` pseudo-tables are separately classified, not silently converted into resolved tables. Raw dependency records remain intact.
+
+The triage report also lists unknown column notes with curated Reporting script titles. This is a table-level relevance queue, not proof that a script reads every column. Review FK/type evidence first; names alone support only an inference. Serialized payload formats, numeric option mappings, permission bits, and cross-product identity joins remain unknown without independent evidence.
 
 ## Release-Blocking Warning Changes
 

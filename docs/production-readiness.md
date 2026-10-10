@@ -19,23 +19,22 @@ application shell and user-supplied local-import workflow, not bundled schemas.
 
 - Public deployments must build without `VITE_ENABLE_EDITING=true`.
 - `npm run verify:public-build` must pass before uploading `dist/`.
-- Pages must deploy the exact `dist/` artifact verified by CI; the privileged
-  deployment workflow must not check out or execute repository source.
+- Sites must deploy an artifact built from the exact pushed commit recorded in
+  its saved version. Follow `docs/release-checklist.md`; GitHub push alone is not deployment.
 - Import preview, manual notes editing, notes import, and notes export are local/internal capabilities only.
 - Editing-enabled builds should be used only on trusted local machines or private internal hosts.
 
 ## Required Validation
 
-Run these commands from a clean checkout:
+Follow the preview-server ordering in `docs/release-checklist.md` from a clean checkout:
 
 ```powershell
 npm ci
-npm run validate
 npm run validate:full
 npm run verify:public-build
 ```
 
-For a hosted deployment, verify the deployed URL:
+The anonymous deployed-site verifier below is for a public host. Authenticated Sites returns 401 without sign-in; that is expected, not proof of a broken build. Use signed-in browser checks and separate invited/uninvited accounts as described in the release checklist.
 
 ```powershell
 $env:SITE_URL='https://example.com/FicheBaitSchemaReference/'
@@ -50,7 +49,7 @@ Each published product/version should have:
 - `databaseRole` describing the Laserfiche product database role
 - export timestamp normalized as UTC when available
 - source export script version when available
-- schema and notes files present in `public/data`
+- canonical schema and notes files in `data`, with generated mirrors in `public/data` verified by `npm run verify:data-parity`
 
 Do not use the SQL Server database name as a product or version identifier. Database names vary by customer and environment.
 
@@ -90,4 +89,4 @@ Header status for the current static build:
 - Confirm the publication authorization gate is satisfied and privately documented.
 - Confirm `docs/community-readiness-runbook.md` is current for public issue triage and maintainer release workflow.
 - Confirm data validation warnings have been reviewed against `docs/data-validation-warnings.md`.
-- Confirm the hosted URL passes `npm run verify:deployed-site`.
+- Confirm hosted behavior using checks appropriate to its access policy; preserve the authenticated audience and record any unexercised account tests.

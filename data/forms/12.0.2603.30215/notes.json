@@ -376,7 +376,7 @@
         },
         "faq_options": {
           "confidence": "unknown",
-          "purpose": "Serialized or free-form FAQ options payload for the business process definition record; verify structure before reporting."
+          "purpose": "Numeric FAQ-option setting for this business process definition (int), not a serialized text payload. The export does not establish option values or bit meanings."
         },
         "faq_group_id": {
           "confidence": "inferred",
@@ -1030,11 +1030,11 @@
         },
         "signature_options": {
           "confidence": "unknown",
-          "purpose": "Serialized or free-form signature options payload for the form field definition record; verify structure before reporting."
+          "purpose": "Numeric signature-option setting for this form field (tinyint), not a serialized text payload. Option values and any bit meanings are not documented; do not infer a mapping."
         },
         "field_typed_formula_id": {
-          "confidence": "unknown",
-          "purpose": "Field Typed Formula identifier associated with the form field definition record."
+          "confidence": "observed",
+          "purpose": "References dbo.formulae.id through exported foreign key FK_field_formula. Identifies the formula associated with this field; formula evaluation rules are not established by the relationship."
         },
         "signature_legal_text": {
           "confidence": "inferred",

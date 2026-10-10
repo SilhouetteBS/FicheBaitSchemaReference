@@ -1715,8 +1715,8 @@
           "purpose": "SCIM Organization identifier for the identity provider record."
         },
         "scim_license_type_uuid": {
-          "confidence": "unknown",
-          "purpose": "SCIM License Type Uu identifier for the identity provider record."
+          "confidence": "inferred",
+          "purpose": "UUID inferred to identify the SCIM license type configured for this identity provider. This column alone does not establish a join to a license table."
         },
         "scim_username": {
           "confidence": "unknown",
@@ -1731,8 +1731,8 @@
           "purpose": "Password or credential salt value; do not expose or use for reporting."
         },
         "scim_service_account_sid": {
-          "confidence": "unknown",
-          "purpose": "SCIM Service Account S identifier for the identity provider record."
+          "confidence": "inferred",
+          "purpose": "Binary security identifier (SID) inferred to identify the SCIM service account for this identity provider. Confirm the target identity and join representation before correlating users across products."
         },
         "scim_group_rules": {
           "confidence": "unknown",

@@ -12,6 +12,7 @@ import { objectNamesMatch } from '../src/data/objectNameMatching.js';
 import { getReportingQuestions, getReportingPaths } from '../src/data/reporting.js';
 import { parseExportJson, runImport } from './import-forms-metadata.mjs';
 import { verifyDataParity } from './verify-data-parity.mjs';
+import { validateDataReport } from './validate-data.mjs';
 import { isTableNoteMap } from '../src/data/notes.js';
 import { buildObjectAliasMap, resolveDependencyKey, classifyDependency, getDependencyResolutionItems } from '../src/data/schemaAnalysis.js';
 
@@ -136,4 +137,28 @@ try {
   assert.deepEqual(invalidNotes.notes, { tables: {} });
   assert.match(invalidNotes.warning, /could not be loaded/);
 } finally { globalThis.fetch = originalFetch; }
-console.log('Review regressions passed: history, storage, corrections, exports, matching, guidance, imports, and load retries.');
+const { summarizeMetadataWarnings } = await import('./metadata-warning-review.mjs');
+assert.deepEqual(summarizeMetadataWarnings([
+  'table "dbo.queue" has no exported primary key',
+  'dependency 1 referencing object not exported: dbo.MissingView',
+  'dependency 2 referenced object not exported: dbo.MissingType',
+  'views export is empty; confirm the source database had no exported views',
+  'triggers export is empty; confirm the source database had no exported triggers',
+  'foreign key source table missing: dbo.NewMissingTable',
+]), { primaryKeyObservation: 1, missingSourceEvidence: 1, missingTargetEvidence: 1,
+  emptyExportConfirmation: 2, unclassified: 1 });
+const warningReview = summarizeMetadataWarnings(validateDataReport().warnings);
+for (const version of manifest.versions) {
+  const versionSchema = readJson(`data${version.schemaUrl.slice('/data'.length)}`);
+  const versionNotes = readJson(`data${version.notesUrl.slice('/data'.length)}`);
+  const formulaFk = versionSchema.foreignKeys.find((fk) => fk.name === 'FK_field_formula');
+  assert.equal(formulaFk.sourceTableKey, 'dbo.cf_fields');
+  assert.equal(formulaFk.referencedTableKey, 'dbo.formulae');
+  assert.ok(formulaFk.columns.some((column) => column.sourceColumnName === 'field_typed_formula_id' && column.referencedColumnName === 'id'));
+  assert.equal(versionNotes.tables['dbo.cf_fields'].columns.field_typed_formula_id.confidence, 'observed');
+  assert.equal(versionNotes.tables['dbo.cf_fields'].columns.signature_options.confidence, 'unknown');
+  assert.equal(versionNotes.tables['dbo.cf_business_processes'].columns.faq_options.confidence, 'unknown');
+}
+assert.equal(warningReview.unclassified, 0, 'New warning classes require explicit review.');
+assert.equal(Object.values(warningReview).reduce((sum, count) => sum + count, 0), validateDataReport().warnings.length);
+console.log('Review regressions passed: history, storage, corrections, exports, matching, guidance, imports, load retries, and warning accounting.');

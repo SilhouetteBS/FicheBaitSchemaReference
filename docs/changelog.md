@@ -4,6 +4,10 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Clarified 37 versioned column notes on Reporting-related Forms, LFDS, and Workflow tables. Formula references use exported FK evidence; inferred identity/error descriptions remain inferred and undocumented numeric option mappings remain unknown.
+- Accounted for all 520 current metadata warnings and added a deduplicated Reporting-priority notes queue to the ignored maintainer triage report.
+- Documented canonical schema imports, authenticated Sites release verification, and rollback of saved versions without rewriting Git history.
+
 - Renamed the project to FicheBait Schema Reference to follow Laserfiche trademark and branding guidance.
 - Added descriptive trademark usage and a visible Laserfiche trademark acknowledgement.
 - Added public contribution documentation for schema exports.
