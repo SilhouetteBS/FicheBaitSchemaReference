@@ -134,7 +134,10 @@ for (const key of ['dbo.cf_view_security', 'dbo.dashboard_security']) {
 }
 assert.match(reviewedFormsNotes.tables['dbo.formula_operands'].columns.discriminator.purpose, /not a verified complete category mapping/, 'Operand population patterns must not become invented enums.');
 assert.match(reviewedFormsNotes.tables['dbo.cf_view_security'].columns.type.purpose, /12\.0\.2607\.40144.*0 = user and 1 = group/, 'Report principal mappings must retain their observed build scope.');
-assert.match(reviewedFormsNotes.tables['dbo.cf_view_security'].safeReportingNotes.join(' '), /not a verified mapping for dashboard_security/, 'Report evidence must not silently establish dashboard mappings.');
+assert.match(reviewedFormsNotes.tables['dbo.cf_view_security'].safeReportingNotes.join(' '), /require independent UI correlation/, 'Report evidence must not silently establish other security mappings.');
+assert.match(reviewedFormsNotes.tables['dbo.dashboard_security'].columns.type.purpose, /12\.0\.2607\.40144.*0 = user and 1 = group/, 'Dashboard principal mappings must retain their independently observed build scope.');
+assert.match(reviewedFormsNotes.tables['dbo.dashboard_security'].safeReportingNotes.join(' '), /permission precedence/, 'Dashboard assignments must not imply effective authorization.');
+assert.match(reviewedFormsNotes.tables['dbo.cf_bp_worker_instnc_to_resume_archive'].safeReportingNotes.join(' '), /120 of 155.*Coverage is partial/, 'Archive joins must preserve incomplete metric coverage.');
 const teamMemberNotes = reviewedFormsNotes.tables['dbo.team_members'];
 assert.match(teamMemberNotes.columns.member_rights.purpose, /0 = neither, 1 = member, 2 = manager, 3 = member and manager/, 'Observed team role combinations must be retained.');
 assert.match(teamMemberNotes.columns.member_rights.purpose, /Not a verified exhaustive bitmask/, 'Team samples must not imply a complete permission contract.');

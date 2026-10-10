@@ -2184,7 +2184,9 @@
         "Use archived resumable task assignment records for read-only Forms metadata reporting.",
         "Use archived resumable task assignment records for read-only Forms task availability and assignment history reporting.",
         "The status column uses the same mapping as cf_bp_worker_instnc_to_resume.status: 1 New, 2 Locked, 3 Canceled, 4 Deleted, 5 Ready, 6 Suspended.",
-        "Status value mapping updated from Laserfiche Answers clarification."
+        "Status value mapping updated from Laserfiche Answers clarification.",
+        "In the reviewed Forms 12.0.2607.40144 sample, joining worker_instance_id = task_metrics_mapping.instance_id and resume_id = task_metrics_mapping.last_assigned_resume_id matched 120 of 155 archive rows. Coverage is partial; retain unmatched archive rows and do not assume one archive row per task metric or count joined rows as tasks.",
+        "Archive reason meanings and complete lifecycle transitions remain unverified; observed status combinations do not establish archive_reason labels."
       ],
       "columns": {
         "id": {
@@ -4997,7 +4999,7 @@
       "summary": "Security assignment records for view security assignment.",
       "safeReportingNotes": [
         "view_id references cf_view_profile_by_bp.view_id, an application report identifier rather than a SQL view.",
-        "In the reviewed Forms 12.0.2607.40144 report, Manage Access principals matched type 0 = user and type 1 = group. This is observed report evidence, not a verified mapping for dashboard_security or other versions.",
+        "In the reviewed Forms 12.0.2607.40144 report, Manage Access principals matched type 0 = user and type 1 = group. This is observed report evidence; other security tables require independent UI correlation and other versions remain unverified.",
         "User and group integer ID spaces overlap. Resolve user_group_id to cf_users.user_id when type = 0 and cf_usergroups.group_id when type = 1 for the observed report mapping; ID existence alone does not establish principal type. Other type values and complete effective-permission rules remain unverified."
       ],
       "columns": {
@@ -5152,10 +5154,10 @@
       }
     },
     "dbo.dashboard_security": {
-      "confidence": "inferred",
+      "confidence": "observed",
       "summary": "Security assignment records for dashboard security assignment.",
       "safeReportingNotes": [
-        "dash_id references dashboards.id. Security type codes and principal encoding remain unverified; rows alone do not establish effective authorization.",
+        "dash_id references dashboards.id. In the reviewed Forms 12.0.2607.40144 Process Overview dashboard, Manage Access user and group entries independently matched type 0 = user and type 1 = group. Rows alone do not establish effective authorization, inheritance or permission precedence.",
         "User and group integer ID spaces overlap; do not infer principal type solely from an ID match to cf_users or cf_usergroups."
       ],
       "columns": {
@@ -5164,16 +5166,16 @@
           "purpose": "Primary identifier for the dashboard security assignment record."
         },
         "user_group_id": {
-          "confidence": "inferred",
-          "purpose": "User or group security principal identifier."
+          "confidence": "observed",
+          "purpose": "Dashboard access principal identifier. In the reviewed build, interpret with type: 0 joins cf_users.user_id and 1 joins cf_usergroups.group_id. User and group IDs can overlap; do not join both categories indiscriminately."
         },
         "dash_id": {
           "confidence": "inferred",
           "purpose": "Dashboard identifier."
         },
         "type": {
-          "confidence": "inferred",
-          "purpose": "Type or category value for the record."
+          "confidence": "observed",
+          "purpose": "Dashboard access principal category. Independent UI-to-row correlation in Forms 12.0.2607.40144 observed 0 = user and 1 = group; other values and other versions remain unverified."
         }
       }
     },
