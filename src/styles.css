@@ -2710,10 +2710,16 @@ button {
   padding: 18px 20px 20px;
 }
 
-.diagram-controls {
-  min-width: 320px;
+.diagram-heading {
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) minmax(240px, 1.4fr) 150px 170px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+.diagram-controls {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(220px, 1.5fr) 130px 150px 180px;
   gap: 10px;
   align-items: end;
 }
@@ -2729,6 +2735,8 @@ button {
 
 .diagram-controls input,
 .diagram-controls select {
+  min-width: 0;
+  width: 100%;
   min-height: 36px;
   border: 1px solid var(--line);
   border-radius: 7px;

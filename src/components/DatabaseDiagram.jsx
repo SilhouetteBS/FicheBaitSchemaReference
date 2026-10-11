@@ -811,7 +811,7 @@ export function DatabaseDiagram({
 
   return (
     <section className={highContrastDiagram ? 'detail-surface diagram-high-contrast' : 'detail-surface'}>
-      <div className="detail-heading">
+      <div className="detail-heading diagram-heading">
         <div>
           <h2>Database diagram</h2>
           <p>Visual map of exported SQL foreign keys and SQL expression dependencies.</p>

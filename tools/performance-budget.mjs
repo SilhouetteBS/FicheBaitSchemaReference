@@ -79,6 +79,7 @@ if (appUrl) {
 
     const start = Date.now();
     await page.getByRole('button', { name: 'Diagram', exact: true }).click();
+    await page.getByRole('combobox', { name: 'Select database object' }).selectOption('dbo.cf_bp_worker_instances');
     await page.locator('.diagram-box').first().waitFor({ state: 'visible' });
     result.diagramRenderMs = Date.now() - start;
     assert.ok(result.diagramRenderMs <= 2500, `Diagram render exceeded budget: ${result.diagramRenderMs}ms`);
