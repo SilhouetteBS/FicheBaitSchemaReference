@@ -208,4 +208,16 @@ for (const product of readJson('data/products.json').products.filter((item) => i
 }
 assert.deepEqual(targetCategories, { parameterTypeNameInCaller: 35, unqualifiedTargetNeedsEvidence: 10,
   parameterTypeNameElsewhere: 10, diagramSupportReference: 4, qualifiedTargetNeedsEvidence: 1 });
+const repositoryLiveNotes = readJson('data/repository/12.0.4.433/notes.json').tables;
+assert.match(repositoryLiveNotes['dbo.version_group'].columns.version.purpose, /Link number/);
+assert.match(repositoryLiveNotes['dbo.version_group'].columns.version.purpose, /not the document-history version/);
+assert.match(repositoryLiveNotes['dbo.toc'].columns.pagecount.purpose, /not the page count inside an electronic file/);
+assert.match(repositoryLiveNotes['dbo.doc'].columns.pagenum.purpose, /Zero-based/);
+assert.match(repositoryLiveNotes['dbo.propval'].columns.pos2.purpose, /alone does not identify/);
+assert.match(repositoryLiveNotes['dbo.lup'].columns.prop_id.purpose, /both L-type fields and one S-type field/);
+assert.match(repositoryLiveNotes['dbo.ann'].columns.ann_type.purpose, /2 = Redaction/);
+assert.match(repositoryLiveNotes['dbo.ann'].columns.ann_type.purpose, /including 10, remain unverified/);
+assert.equal(repositoryLiveNotes['dbo.toc'].columns.toc_flags.confidence, 'unknown');
+assert.equal(repositoryLiveNotes['dbo.account_security'].confidence, 'inferred');
+assert.equal(repositoryLiveNotes['dbo.version_group'].lastReviewedAt, '2026-10-10');
 console.log('Review regressions passed: history, storage, corrections, exports, matching, guidance, imports, load retries, and warning accounting.');

@@ -252,7 +252,9 @@
       "confidence": "inferred",
       "summary": "Repository entry, document, page, or annotation records for annotation.",
       "safeReportingNotes": [
-        "Use annotation records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data."
+        "Use annotation records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data.",
+        "These are sample-backed type mappings, not a complete enum. Do not retrieve or expose annotation content or attachments merely to report metadata.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "ann_id": {
@@ -260,16 +262,16 @@
           "purpose": "Annotation identifier."
         },
         "page_id": {
-          "confidence": "inferred",
-          "purpose": "Document page identifier."
+          "confidence": "observed",
+          "purpose": "Annotated Repository image page; joins to doc.page_id, then doc.tocid for the owning entry."
         },
         "item_id": {
           "confidence": "inferred",
           "purpose": "Item identifier for the annotation record."
         },
         "ann_type": {
-          "confidence": "inferred",
-          "purpose": "Annotation type value."
+          "confidence": "observed",
+          "purpose": "Annotation type code. An isolated client sample establishes 2 = Redaction; the named stamp sample establishes 16 = Stamp. Type 0 aligns with Highlight by elimination in a mixed sample, not independent isolation. Other codes, including 10, remain unverified."
         },
         "ann_creator": {
           "confidence": "inferred",
@@ -356,8 +358,8 @@
           "purpose": "Style3 for the annotation record."
         },
         "stamp_id": {
-          "confidence": "inferred",
-          "purpose": "Stamp identifier for the annotation record."
+          "confidence": "observed",
+          "purpose": "Stamp definition identifier for the reviewed Stamp annotation; resolves through stamp. Non-stamp samples have NULL."
         },
         "bitmap": {
           "confidence": "unknown",
@@ -428,10 +430,11 @@
           "purpose": "Zorder for the annotation record."
         },
         "ann_reason_id": {
-          "confidence": "inferred",
-          "purpose": "Annotation reason identifier."
+          "confidence": "observed",
+          "purpose": "Annotation reason identifier resolving to the reason displayed in the client through ann_reason."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.ann_reason": {
       "confidence": "inferred",
@@ -702,7 +705,8 @@
       "confidence": "inferred",
       "summary": "Repository metadata records for business process entity.",
       "safeReportingNotes": [
-        "Use business process entity records for read-only Repository metadata reporting."
+        "Use business process entity records for read-only Repository metadata reporting.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "bpe_id": {
@@ -722,16 +726,16 @@
           "purpose": "Business Process Entity Source identifier for the business process entity record."
         },
         "bpe_status": {
-          "confidence": "inferred",
-          "purpose": "Business Process Entity Status for the business process entity record."
+          "confidence": "observed",
+          "purpose": "Business-process instance status; the reviewed stored Terminated value matches the client Processes tab. This review does not establish a complete status reference."
         },
         "bpe_start_date": {
-          "confidence": "inferred",
-          "purpose": "Timestamp or date value for business process entity start date on the business process entity record."
+          "confidence": "observed",
+          "purpose": "Business-process instance start timestamp; the reviewed start/end difference matches the client duration. Displayed time differs from storage; timezone configuration was not verified."
         },
         "bpe_end_date": {
-          "confidence": "inferred",
-          "purpose": "Timestamp or date value for business process entity end date on the business process entity record."
+          "confidence": "observed",
+          "purpose": "Business-process instance end timestamp; the reviewed terminated instance has an end time matching its displayed duration. Do not apply a guessed fixed timezone offset."
         },
         "bpe_userins": {
           "confidence": "inferred",
@@ -745,7 +749,8 @@
           "confidence": "inferred",
           "purpose": "Timestamp or date value for business process entity lastmod on the business process entity record."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.bizproc_entity_entry": {
       "confidence": "inferred",
@@ -834,7 +839,8 @@
       "confidence": "inferred",
       "summary": "Records management records for cutoff instruction.",
       "safeReportingNotes": [
-        "Use cutoff instruction records for read-only Repository metadata reporting."
+        "Use cutoff instruction records for read-only Repository metadata reporting.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "coff_id": {
@@ -846,16 +852,16 @@
           "purpose": "Cutoff Instruction Name for the cutoff instruction record."
         },
         "coff_type": {
-          "confidence": "inferred",
-          "purpose": "Cutoff Instruction Type value for the cutoff instruction record."
+          "confidence": "observed",
+          "purpose": "Cutoff instruction type: reviewed T matches Time and N matches Time + Event. Other values were not verified."
         },
         "cycle": {
-          "confidence": "inferred",
-          "purpose": "Numeric value for cycle on the cutoff instruction record."
+          "confidence": "observed",
+          "purpose": "Cutoff cycle code: reviewed value 3 matches CY (Calendar Yearly). Other cycle codes remain unverified."
         },
         "any_event": {
-          "confidence": "inferred",
-          "purpose": "Any Event for the cutoff instruction record."
+          "confidence": "observed",
+          "purpose": "Event-combination setting: reviewed value 0 matches All for the Time + Event cutoff. Other values were not verified."
         },
         "trigger_link_id": {
           "confidence": "inferred",
@@ -877,7 +883,8 @@
           "confidence": "inferred",
           "purpose": "Numeric value for interval on the cutoff instruction record."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.coff_events": {
       "confidence": "inferred",
@@ -1059,7 +1066,8 @@
       "confidence": "inferred",
       "summary": "Records management records for disposition schedule.",
       "safeReportingNotes": [
-        "Use disposition schedule records for read-only Repository metadata reporting."
+        "Use disposition schedule records for read-only Repository metadata reporting.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "disp_sched_id": {
@@ -1075,20 +1083,20 @@
           "purpose": "Disposition schedule code."
         },
         "retention": {
-          "confidence": "inferred",
-          "purpose": "Retention value for the disposition schedule or transfer instruction."
+          "confidence": "observed",
+          "purpose": "Retention interval in months in the reviewed schedules: 84 matches seven years and 60 matches five years. Other special values were not verified."
         },
         "final_disp": {
-          "confidence": "inferred",
-          "purpose": "Final disposition action value."
+          "confidence": "observed",
+          "purpose": "Final disposition code: reviewed A matches Accession and D matches Destroy. Other codes were not verified."
         },
         "final_locid": {
           "confidence": "inferred",
           "purpose": "Final disposition location identifier."
         },
         "final_keep": {
-          "confidence": "inferred",
-          "purpose": "Final retention flag or value."
+          "confidence": "observed",
+          "purpose": "Final metadata-retention setting: reviewed K matches Keep metadata = Yes. Other values were not verified."
         },
         "alt_trigger_id": {
           "confidence": "inferred",
@@ -1102,30 +1110,33 @@
           "confidence": "inferred",
           "purpose": "Disposition Sched Descrip for the disposition schedule record."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.doc": {
       "confidence": "inferred",
-      "summary": "Repository entry, document, page, or annotation records for document page.",
+      "summary": "Repository image-page rows associated with entries; a page row is not a document.",
       "safeReportingNotes": [
-        "Use document page records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data."
+        "Use document page records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data.",
+        "Count page rows separately from entries. Internal electronic-file pages need not have corresponding doc rows.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "tocid": {
-          "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "confidence": "observed",
+          "purpose": "Entry owning the page; joins to toc.tocid."
         },
         "pagenum": {
-          "confidence": "inferred",
-          "purpose": "Page number within the document."
+          "confidence": "observed",
+          "purpose": "Zero-based image-page number in the reviewed sample: values 0 through 3 correspond to viewer pages 1 through 4."
         },
         "storeid": {
           "confidence": "inferred",
           "purpose": "Storage object identifier within the repository volume."
         },
         "page_id": {
-          "confidence": "inferred",
-          "purpose": "Document page identifier."
+          "confidence": "observed",
+          "purpose": "Page identifier used by ann.page_id to associate annotations with a Repository image page."
         },
         "page_flags": {
           "confidence": "unknown",
@@ -1211,7 +1222,8 @@
           "confidence": "inferred",
           "purpose": "Original parent repository entry identifier before recycle or deletion."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.document_signature_targets": {
       "confidence": "inferred",
@@ -1316,7 +1328,8 @@
       "confidence": "inferred",
       "summary": "Repository entry, document, page, or annotation records for entry link.",
       "safeReportingNotes": [
-        "Use entry link records for read-only Repository metadata reporting."
+        "Use entry link records for read-only Repository metadata reporting.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "entry_link_id": {
@@ -1328,18 +1341,19 @@
           "purpose": "Link identifier for the entry link record."
         },
         "source_id": {
-          "confidence": "inferred",
-          "purpose": "Source identifier for the entry link record."
+          "confidence": "observed",
+          "purpose": "Source entry identifier in the directed relationship; joins to toc.tocid."
         },
         "target_id": {
-          "confidence": "inferred",
-          "purpose": "Target identifier for the entry link record."
+          "confidence": "observed",
+          "purpose": "Target entry identifier in the directed relationship; joins to toc.tocid."
         },
         "elink_descrip": {
           "confidence": "inferred",
           "purpose": "Elink Descrip for the entry link record."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.entry_link_prop": {
       "confidence": "inferred",
@@ -1366,22 +1380,24 @@
       "confidence": "inferred",
       "summary": "Metadata field, template, or tag records for entry tag assignment.",
       "safeReportingNotes": [
-        "Use entry tag assignment records for read-only Repository metadata reporting."
+        "Use entry tag assignment records for read-only Repository metadata reporting.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "tocid": {
-          "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "confidence": "observed",
+          "purpose": "Entry carrying the tag; joins to toc.tocid."
         },
         "tag_id": {
-          "confidence": "inferred",
-          "purpose": "Entry tag identifier."
+          "confidence": "observed",
+          "purpose": "Assigned tag identifier; joins to tag.tag_id to resolve the name displayed in client Details."
         },
         "et_descrip": {
           "confidence": "inferred",
           "purpose": "Et Descrip for the entry tag assignment record."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.entryacl": {
       "confidence": "inferred",
@@ -1925,7 +1941,9 @@
       "confidence": "inferred",
       "summary": "Repository metadata records for entry link type.",
       "safeReportingNotes": [
-        "Use entry link type records for read-only Repository metadata reporting."
+        "Use entry link type records for read-only Repository metadata reporting.",
+        "Preserve source/target direction when displaying relationship labels; the reviewed Application/Resume pair shows the current entry's role.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "link_id": {
@@ -1933,18 +1951,19 @@
           "purpose": "Link identifier for the entry link type record."
         },
         "source_label": {
-          "confidence": "inferred",
-          "purpose": "Source Label for the entry link type record."
+          "confidence": "observed",
+          "purpose": "Relationship role label shown when viewing the source entry in the reviewed pair; not necessarily the linked target's type."
         },
         "target_label": {
-          "confidence": "inferred",
-          "purpose": "Target Label for the entry link type record."
+          "confidence": "observed",
+          "purpose": "Relationship role label shown when viewing the target entry in the reviewed pair; not necessarily the linked source's type."
         },
         "link_descrip": {
           "confidence": "inferred",
           "purpose": "Link Descrip for the entry link type record."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.loc": {
       "confidence": "inferred",
@@ -2018,24 +2037,27 @@
     },
     "dbo.lup": {
       "confidence": "inferred",
-      "summary": "Repository metadata records for field lookup value.",
+      "summary": "Field list-option definitions linked to propdef, including options associated with a reviewed text-type field.",
       "safeReportingNotes": [
-        "Use field lookup value records for read-only Repository metadata reporting."
+        "Use field lookup value records for read-only Repository metadata reporting.",
+        "Do not restrict list-option reporting to prop_type L: options also exist for an S-type field in this reviewed build.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "prop_id": {
-          "confidence": "inferred",
-          "purpose": "Field definition identifier."
+          "confidence": "observed",
+          "purpose": "Field definition identifier; joins to propdef.prop_id. Live rows reference both L-type fields and one S-type field."
         },
         "list_pos": {
           "confidence": "inferred",
-          "purpose": "Numeric value for list pos on the field lookup value record."
+          "purpose": "List-option position; reviewed field lists have positions beginning at 0. Client option-order correlation was not independently verified."
         },
         "list_val": {
           "confidence": "inferred",
           "purpose": "List Val stored for the field lookup value record; review contents before reporting."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.obj_prop": {
       "confidence": "inferred",
@@ -2233,22 +2255,23 @@
     },
     "dbo.propdef": {
       "confidence": "inferred",
-      "summary": "Metadata field, template, or tag records for field definition.",
+      "summary": "Field definitions used to resolve entry field names and storage types.",
       "safeReportingNotes": [
-        "Use field definition records for read-only Repository metadata reporting."
+        "Use field definition records for read-only Repository metadata reporting.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "prop_id": {
-          "confidence": "inferred",
-          "purpose": "Field definition identifier."
+          "confidence": "observed",
+          "purpose": "Field definition identifier referenced by propval.prop_id, pset_props.prop_id, and lup.prop_id."
         },
         "prop_name": {
           "confidence": "inferred",
           "purpose": "Field name."
         },
         "prop_type": {
-          "confidence": "inferred",
-          "purpose": "Field data type value."
+          "confidence": "observed",
+          "purpose": "Field type code: reviewed text fields use S, list/checklist fields use L, and date fields use D. Numeric-looking text values do not establish numeric storage; other codes were not UI-verified."
         },
         "prop_flags": {
           "confidence": "unknown",
@@ -2310,18 +2333,20 @@
           "confidence": "inferred",
           "purpose": "Source identifier for the field definition record."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.propset": {
       "confidence": "inferred",
-      "summary": "Metadata field, template, or tag records for template definition.",
+      "summary": "Template definitions whose names match the templates assigned to reviewed entries.",
       "safeReportingNotes": [
-        "Use template definition records for read-only Repository metadata reporting."
+        "Use template definition records for read-only Repository metadata reporting.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "pset_id": {
-          "confidence": "inferred",
-          "purpose": "Template identifier."
+          "confidence": "observed",
+          "purpose": "Template identifier referenced by toc.pset_id and pset_props.pset_id."
         },
         "pset_name": {
           "confidence": "inferred",
@@ -2335,30 +2360,33 @@
           "confidence": "inferred",
           "purpose": "Template display color."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.propval": {
       "confidence": "inferred",
-      "summary": "Metadata field, template, or tag records for field value.",
+      "summary": "Entry metadata field values, with repeated values and grouped-field positions.",
       "safeReportingNotes": [
-        "Use field value records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data."
+        "Use field value records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data.",
+        "Use pset_props.group_id and template/group definitions together with value positions; do not infer repeating groups from pos2 alone. Entries can have fields outside their assigned template.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "tocid": {
-          "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "confidence": "observed",
+          "purpose": "Entry to which the field value belongs; joins to toc.tocid."
         },
         "prop_id": {
-          "confidence": "inferred",
-          "purpose": "Field definition identifier."
+          "confidence": "observed",
+          "purpose": "Field definition identifier; joins to propdef.prop_id for its name and type."
         },
         "pos": {
-          "confidence": "inferred",
-          "purpose": "Position or order value."
+          "confidence": "observed",
+          "purpose": "Zero-based value position in reviewed multivalue and repeating-group samples. Preserve it when reporting multiple rows for one entry and field."
         },
         "str_val": {
-          "confidence": "inferred",
-          "purpose": "String field value."
+          "confidence": "observed",
+          "purpose": "Text value used by reviewed text and list/checklist fields, including numeric-looking identifiers stored as text."
         },
         "short_str_val": {
           "confidence": "inferred",
@@ -2369,24 +2397,27 @@
           "purpose": "Numeric field value."
         },
         "date_val": {
-          "confidence": "inferred",
-          "purpose": "Date field value."
+          "confidence": "observed",
+          "purpose": "Date field value matching the reviewed client date controls."
         },
         "bin_val": {
           "confidence": "inferred",
           "purpose": "Binary field value."
         },
         "pos2": {
-          "confidence": "inferred",
-          "purpose": "Secondary position or order value."
+          "confidence": "observed",
+          "purpose": "Secondary position: a reviewed two-row repeating group uses 1 and 2, while ungrouped fields can also use nonzero values. Nonzero pos2 alone does not identify repeating-group membership."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.pset_prop_group": {
       "confidence": "inferred",
       "summary": "Metadata field, template, or tag records for template field group.",
       "safeReportingNotes": [
-        "Use template field group records for read-only Repository metadata reporting."
+        "Use template field group records for read-only Repository metadata reporting.",
+        "The reviewed repeating group displays two related fields across two rows; group membership is identified by pset_id and group_id, not by field-value pos2 alone.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "pset_id": {
@@ -2401,13 +2432,15 @@
           "confidence": "inferred",
           "purpose": "Group Name for the template field group record."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.pset_props": {
       "confidence": "inferred",
       "summary": "Metadata field, template, or tag records for template field assignment.",
       "safeReportingNotes": [
-        "Use template field assignment records for read-only Repository metadata reporting."
+        "Use template field assignment records for read-only Repository metadata reporting.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "pset_id": {
@@ -2419,12 +2452,12 @@
           "purpose": "Field definition identifier."
         },
         "prop_pos": {
-          "confidence": "inferred",
-          "purpose": "Numeric value for field pos on the template field assignment record."
+          "confidence": "observed",
+          "purpose": "Template field display position; values 0 through 4 match the order of five reviewed template fields."
         },
         "group_id": {
-          "confidence": "inferred",
-          "purpose": "Group identifier for the template field assignment record."
+          "confidence": "observed",
+          "purpose": "Field-group identifier within the template; joins with pset_id to pset_prop_group. Reviewed ungrouped fields use 0."
         },
         "flags": {
           "confidence": "unknown",
@@ -2442,7 +2475,8 @@
           "confidence": "inferred",
           "purpose": "Formula Options payload or value for the pset prop record; verify contents before reporting."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.pset_rule": {
       "confidence": "inferred",
@@ -2585,7 +2619,8 @@
       "confidence": "inferred",
       "summary": "Recycle bin or deletion tracking records for recycle bin entry.",
       "safeReportingNotes": [
-        "Use recycle bin entry records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data."
+        "Use recycle bin entry records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "tocid": {
@@ -2593,8 +2628,8 @@
           "purpose": "Repository entry identifier."
         },
         "orig_parent": {
-          "confidence": "inferred",
-          "purpose": "Original parent repository entry identifier before recycle or deletion."
+          "confidence": "observed",
+          "purpose": "Original parent path string in the reviewed row, not a numeric parent entry ID. Client recycle-bin correlation remains unverified."
         },
         "orig_name": {
           "confidence": "inferred",
@@ -2608,7 +2643,8 @@
           "confidence": "inferred",
           "purpose": "Trustee or account that deleted the row."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.recycle_elec": {
       "confidence": "inferred",
@@ -3640,26 +3676,28 @@
     },
     "dbo.toc": {
       "confidence": "inferred",
-      "summary": "Repository entry, document, page, or annotation records for repository entry.",
+      "summary": "Repository entries, including folders and documents, with hierarchy, template, volume, content, and records-management metadata.",
       "safeReportingNotes": [
-        "Use repository entry records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data."
+        "Use repository entry records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data.",
+        "Electronic files and Repository image pages can coexist on an entry. Do not use image-page count alone to identify electronic-file presence.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "tocid": {
-          "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "confidence": "observed",
+          "purpose": "Repository entry identifier matching the entry ID used by the Web Client."
         },
         "parentid": {
-          "confidence": "inferred",
-          "purpose": "Parent repository entry identifier."
+          "confidence": "observed",
+          "purpose": "Parent entry identifier matching the folder hierarchy in the reviewed samples; joins to toc.tocid."
         },
         "name": {
-          "confidence": "inferred",
-          "purpose": "Name of the repository entry."
+          "confidence": "observed",
+          "purpose": "Entry name displayed in the Repository client."
         },
         "etype": {
-          "confidence": "inferred",
-          "purpose": "Repository entry type value."
+          "confidence": "observed",
+          "purpose": "Entry type code: reviewed ordinary folders use 0 and documents use -2. These samples do not establish the complete code mapping."
         },
         "linkto": {
           "confidence": "inferred",
@@ -3698,12 +3736,12 @@
           "purpose": "UUID-shaped char(36) identifier on the repository entry, constrained unique by toc_uuid_unq. The exported primary key is tocid; uniqueness here does not establish portability or identity across repositories."
         },
         "vol_id": {
-          "confidence": "inferred",
-          "purpose": "Repository volume identifier."
+          "confidence": "observed",
+          "purpose": "Volume identifier; joins to vol.vol_id to resolve the volume displayed in advanced entry details."
         },
         "pset_id": {
-          "confidence": "inferred",
-          "purpose": "Template identifier."
+          "confidence": "observed",
+          "purpose": "Assigned template identifier; joins to propset.pset_id. Reviewed entries without an assigned template have NULL."
         },
         "rfid": {
           "confidence": "inferred",
@@ -3714,16 +3752,16 @@
           "purpose": "Records management location identifier."
         },
         "pagecount": {
-          "confidence": "inferred",
-          "purpose": "Number of pages associated with the repository entry."
+          "confidence": "observed",
+          "purpose": "Number of Repository image pages in the reviewed samples, not the page count inside an electronic file. An electronic PDF can have pagecount 0 while containing PDF pages."
         },
         "textcount": {
           "confidence": "inferred",
           "purpose": "Textcount for the repository entry record."
         },
         "edoc_size": {
-          "confidence": "inferred",
-          "purpose": "Electronic document file size."
+          "confidence": "observed",
+          "purpose": "Electronic-file size; nonzero values were observed for electronic documents, including entries that also have Repository image pages."
         },
         "edoc_shared": {
           "confidence": "inferred",
@@ -3738,12 +3776,12 @@
           "purpose": "Internal bigint marker associated with the entry's electronic document, inferred from the name. Update and comparison semantics are undocumented; do not treat it as a date or documented document-version number."
         },
         "edoc_mime": {
-          "confidence": "inferred",
-          "purpose": "Electronic document MIME type."
+          "confidence": "observed",
+          "purpose": "Electronic-file MIME type; reviewed PDF files use application/pdf."
         },
         "edoc_ext": {
-          "confidence": "inferred",
-          "purpose": "Electronic document file extension."
+          "confidence": "observed",
+          "purpose": "Electronic-file extension; reviewed PDF files use pdf."
         },
         "edoc_cksum": {
           "confidence": "unknown",
@@ -3830,8 +3868,8 @@
           "purpose": "Active Sched identifier for the repository entry record."
         },
         "filing_date": {
-          "confidence": "inferred",
-          "purpose": "Timestamp or date value for filing date on the repository entry record."
+          "confidence": "observed",
+          "purpose": "Records-management filing date matching the client date in the reviewed sample. Treat it as a filing date, not automatically as an instant requiring timezone conversion."
         },
         "event_date": {
           "confidence": "inferred",
@@ -3873,7 +3911,8 @@
           "confidence": "inferred",
           "purpose": "Deleted repository entry identifier associated with this row."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.toc_transfers": {
       "confidence": "inferred",
@@ -4244,28 +4283,31 @@
     },
     "dbo.version_group": {
       "confidence": "inferred",
-      "summary": "Repository metadata records for version group.",
+      "summary": "Link Group membership and displayed link numbers for related Repository entries.",
       "safeReportingNotes": [
-        "Use version group records for read-only Repository metadata reporting."
+        "Use version group records for read-only Repository metadata reporting.",
+        "A four-member Link Group matched its member entries and link numbers in the Web Client. Use vhist_toc for separately tracked document history; do not join version_group.version to history versions.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "vgroup_id": {
-          "confidence": "inferred",
-          "purpose": "Vgroup identifier for the version group record."
+          "confidence": "observed",
+          "purpose": "Identifier shared by entries belonging to the same Link Group in the reviewed sample."
         },
         "version": {
-          "confidence": "inferred",
-          "purpose": "Document version number."
+          "confidence": "observed",
+          "purpose": "Link number displayed for this member of a Link Group in the reviewed sample. This is not the document-history version number in vhist_toc."
         },
         "tocid": {
-          "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "confidence": "observed",
+          "purpose": "Link Group member entry; joins to toc.tocid."
         },
         "notes": {
           "confidence": "inferred",
-          "purpose": "Version group notes."
+          "purpose": "Notes associated with the Link Group membership; client comment mapping was not verified."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.vertree": {
       "confidence": "inferred",
@@ -4621,7 +4663,9 @@
       "confidence": "inferred",
       "summary": "Version history records for change summary.",
       "safeReportingNotes": [
-        "Use version history change summary records for read-only Repository metadata reporting."
+        "Use version history change summary records for read-only Repository metadata reporting.",
+        "Reviewed counters align with metadata-only versus page/electronic-file changes. A complete modif_flags bitmask mapping has not been established.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "tocid": {
@@ -4684,7 +4728,8 @@
           "confidence": "unknown",
           "purpose": "Geolocation Changed stored for the version history change summary record; review contents before reporting."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.vhist_doc": {
       "confidence": "inferred",
@@ -4865,7 +4910,9 @@
       "confidence": "inferred",
       "summary": "Version history records for repository entry.",
       "safeReportingNotes": [
-        "Use version history repository entry records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data."
+        "Use version history repository entry records for read-only reporting after reviewing whether values include document content, metadata values, or user-entered data.",
+        "The reviewed document's nine history rows match nine client versions. This history is separate from Link Groups stored in version_group.",
+        "Evidence: read-only live data and Repository Web Client review for Laserfiche Server 12.0.4.433; build confirmed by the system owner. Sample observations are not a complete column or code reference."
       ],
       "columns": {
         "tocid": {
@@ -4940,7 +4987,8 @@
           "confidence": "unknown",
           "purpose": "Permission or bit flag value for modif flags on the version history repository entry record."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.vol": {
       "confidence": "inferred",
