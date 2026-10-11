@@ -257,7 +257,8 @@
       "confidence": "inferred",
       "summary": "Business process runtime or reporting records for business process step.",
       "safeReportingNotes": [
-        "Use business process step records for read-only Workflow metadata reporting."
+        "Use business process step records for read-only Workflow metadata reporting.",
+        "Workflow 12.0.2605.385 read-only Designer correlation matched sampled active and average step durations to the stored millisecond values. This is sample evidence, not exhaustive column verification."
       ],
       "columns": {
         "bps_id": {
@@ -281,8 +282,8 @@
           "purpose": "Timestamp when the business process step ended."
         },
         "bps_active_duration_ms": {
-          "confidence": "inferred",
-          "purpose": "Active duration for the business process step in milliseconds."
+          "confidence": "observed",
+          "purpose": "Active step duration in milliseconds; matched Designer in the reviewed build. NULL on a sampled ongoing step; do not coerce missing duration to zero."
         },
         "bps_due_date": {
           "confidence": "inferred",
@@ -309,8 +310,8 @@
           "purpose": "Bit flags for the business process step."
         },
         "bps_avg_duration_ms": {
-          "confidence": "inferred",
-          "purpose": "Average duration for the business process step in milliseconds."
+          "confidence": "observed",
+          "purpose": "Average step duration in milliseconds; matched Designer in the reviewed sample. Averaging population and calculation rules remain unverified."
         }
       }
     },
@@ -571,7 +572,8 @@
       "confidence": "inferred",
       "summary": "Workflow metadata records for indexed workflow name.",
       "safeReportingNotes": [
-        "Use indexed workflow name records for read-only Workflow metadata reporting."
+        "Use indexed workflow name records for read-only Workflow metadata reporting.",
+        "Read-only Workflow 12.0.2605.385 checks found indexed names without matching current workflows. Preserve lookup records with LEFT JOIN; the cause of unmatched current definitions is unverified."
       ],
       "columns": {
         "workflow_id": {
@@ -637,7 +639,8 @@
       "confidence": "inferred",
       "summary": "Workflow runtime state or queue records for persisted workflow instance state.",
       "safeReportingNotes": [
-        "Use persisted workflow instance state records for read-only diagnostics after reviewing whether payloads contain workflow logic or runtime data."
+        "Use persisted workflow instance state records for read-only diagnostics after reviewing whether payloads contain workflow logic or runtime data.",
+        "Read-only Workflow 12.0.2605.385 checks resolved sampled instance_id values to current search instances. Persistence, locking and owner fields do not independently establish Running or healthy state; binary state and lifecycle behavior were not inspected."
       ],
       "columns": {
         "instance_id": {
@@ -743,7 +746,8 @@
       "confidence": "inferred",
       "summary": "Workflow configuration records for parameter type.",
       "safeReportingNotes": [
-        "Use parameter type records for read-only Workflow metadata reporting."
+        "Use parameter type records for read-only Workflow metadata reporting.",
+        "Workflow 12.0.2605.385 read-only lookup inspection observed parameter_type 1 labeled User Folder. Other values and other builds remain unverified; resolve labels from the table rather than assuming a complete enum."
       ],
       "columns": {
         "parameter_type": {
@@ -751,10 +755,11 @@
           "purpose": "Parameter Type value for the parameter type record; verify mapping before public reporting when applicable."
         },
         "parameter_name": {
-          "confidence": "inferred",
-          "purpose": "Parameter Name for the parameter type record."
+          "confidence": "observed",
+          "purpose": "Parameter-category label for parameter_type. The reviewed Workflow 12.0.2605.385 lookup labeled 1 as User Folder; not an exhaustive cross-version mapping."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.redirects": {
       "confidence": "inferred",
@@ -872,7 +877,8 @@
       "confidence": "inferred",
       "summary": "Workflow search tracking records for search activity.",
       "safeReportingNotes": [
-        "Use search activity records for read-only Workflow metadata reporting."
+        "Use search activity records for read-only Workflow metadata reporting.",
+        "Read-only Workflow 12.0.2605.385 Designer correlation matched sampled Running activities to close_status 0. Populated end_time and NULL work_time do not independently establish completion or running state."
       ],
       "columns": {
         "activity_id": {
@@ -900,16 +906,16 @@
           "purpose": "Timestamp when the row or activity started."
         },
         "close_status": {
-          "confidence": "inferred",
-          "purpose": "Close Status value for the search activity record; verify mapping before public reporting when applicable."
+          "confidence": "observed",
+          "purpose": "Activity state code. Sampled Designer Running activities had 0 in Workflow 12.0.2605.385. Other codes and other builds are unverified; not a complete enum."
         },
         "end_time": {
-          "confidence": "inferred",
-          "purpose": "Timestamp when the row or activity ended."
+          "confidence": "observed",
+          "purpose": "Stored activity end timestamp. Sampled Running activities had populated values, including values earlier than start_time. Do not use its presence alone as completion evidence or calculate running duration from it."
         },
         "work_time": {
-          "confidence": "inferred",
-          "purpose": "Timestamp or date value for work time on the search activity record."
+          "confidence": "unknown",
+          "purpose": "Internal activity work-time value, not a verified timestamp or elapsed-millisecond duration. Units and calculation semantics remain unknown; NULL alone does not identify activity state."
         }
       }
     },
@@ -917,7 +923,8 @@
       "confidence": "inferred",
       "summary": "Workflow search tracking records for search activity history.",
       "safeReportingNotes": [
-        "Use search activity history records for read-only Workflow metadata reporting."
+        "Use search activity history records for read-only Workflow metadata reporting.",
+        "Read-only Workflow 12.0.2605.385 Designer correlation matched sampled Completed activities to close_status 1. A completed activity's elapsed timestamps matched its displayed duration, but work_time did not under a proposed ticks conversion."
       ],
       "columns": {
         "activity_id": {
@@ -945,16 +952,16 @@
           "purpose": "Timestamp when the row or activity started."
         },
         "close_status": {
-          "confidence": "inferred",
-          "purpose": "Close Status value for the search activity history record; verify mapping before public reporting when applicable."
+          "confidence": "observed",
+          "purpose": "Historical activity state code. Sampled Designer Completed activities had 1 in Workflow 12.0.2605.385. Meaning of observed code 2 remains unknown; not a complete enum."
         },
         "end_time": {
           "confidence": "inferred",
           "purpose": "Timestamp when the row or activity ended."
         },
         "work_time": {
-          "confidence": "inferred",
-          "purpose": "Timestamp or date value for work time on the search activity history record."
+          "confidence": "unknown",
+          "purpose": "Internal activity work-time value with unverified units and calculation rules. Completed samples included NULL and zero. A nonzero sample did not equal elapsed duration under a proposed ticks conversion; do not use as elapsed milliseconds."
         }
       }
     },
@@ -962,7 +969,8 @@
       "confidence": "inferred",
       "summary": "Workflow search tracking records for search activity message link.",
       "safeReportingNotes": [
-        "Use search activity message link records for read-only Workflow metadata reporting."
+        "Use search activity message link records for read-only Workflow metadata reporting.",
+        "In the reviewed Workflow 12.0.2605.385 sample, extension_id 0 had no matching search_extension row. Preserve messages with LEFT JOIN; a sentinel meaning is not established and this does not prove corruption."
       ],
       "columns": {
         "search_id": {
@@ -1384,7 +1392,8 @@
       "confidence": "inferred",
       "summary": "Workflow search tracking records for search status.",
       "safeReportingNotes": [
-        "Use search status records for read-only Workflow metadata reporting."
+        "Use search status records for read-only Workflow metadata reporting.",
+        "Read-only Workflow 12.0.2605.385 Designer correlation matched a Running instance to search_status.status 5, while its reporting status was 4. Interpret status codes per table, not across families."
       ],
       "columns": {
         "search_id": {
@@ -1400,8 +1409,8 @@
           "purpose": "Timestamp when the status was recorded."
         },
         "status": {
-          "confidence": "inferred",
-          "purpose": "Status value for the row; verify mapping before public reporting."
+          "confidence": "observed",
+          "purpose": "Instance search-state code. Workflow 12.0.2605.385 Designer sample: 5 corresponded to Running while the same instance had reporting status 4. Other values remain unverified; do not reuse another table's enum."
         },
         "has_errors": {
           "confidence": "unknown",
@@ -1416,16 +1425,18 @@
           "purpose": "Flag indicating informations for the search status record."
         },
         "idle_time": {
-          "confidence": "inferred",
-          "purpose": "Timestamp or date value for idle time on the search status record."
+          "confidence": "unknown",
+          "purpose": "Internal idle-time value. Units and calculation rules are unverified; do not interpret it as a timestamp or elapsed milliseconds."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.search_status_log": {
       "confidence": "inferred",
       "summary": "Workflow search tracking records for search status history.",
       "safeReportingNotes": [
-        "Use search status history records for read-only Workflow metadata reporting."
+        "Use search status history records for read-only Workflow metadata reporting.",
+        "A sampled Completed instance in Designer matched status 1 in Workflow 12.0.2605.385. This does not establish other codes or equivalence with workflow_reporting_log statuses. Stored/displayed time-zone conventions remain unverified."
       ],
       "columns": {
         "search_id": {
@@ -1441,8 +1452,8 @@
           "purpose": "Timestamp when the status was recorded."
         },
         "status": {
-          "confidence": "inferred",
-          "purpose": "Status value for the row; verify mapping before public reporting."
+          "confidence": "observed",
+          "purpose": "Historical instance search-state code. A sampled Completed instance had 1 in Workflow 12.0.2605.385. Other codes and a universal reporting-status equivalence remain unverified."
         },
         "has_errors": {
           "confidence": "unknown",
@@ -1457,16 +1468,18 @@
           "purpose": "Flag indicating informations for the search status history record."
         },
         "idle_time": {
-          "confidence": "inferred",
-          "purpose": "Timestamp or date value for idle time on the search status history record."
+          "confidence": "unknown",
+          "purpose": "Internal historical idle-time value. Units and calculation rules are unverified; do not interpret it as a timestamp or elapsed milliseconds."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.starting_rules": {
       "confidence": "inferred",
       "summary": "Workflow configuration records for starting rule.",
       "safeReportingNotes": [
-        "Use starting rule records for read-only Workflow metadata reporting."
+        "Use starting rule records for read-only Workflow metadata reporting.",
+        "Workflow 12.0.2605.385 Rule Manager samples matched is_active 1 to enabled and 0 to disabled. Entry Created and Entry Changed rules both used rule_type 0; do not decode rule_type as the individual entry trigger. A sampled business-process rule used type 2, not a complete enum."
       ],
       "columns": {
         "rule_id": {
@@ -1494,14 +1507,15 @@
           "purpose": "Description for the Workflow record."
         },
         "is_active": {
-          "confidence": "inferred",
-          "purpose": "Flag indicating active for the starting rule record."
+          "confidence": "observed",
+          "purpose": "Enabled-state indicator. Workflow 12.0.2605.385 Rule Manager samples matched 1 to enabled and 0 to disabled. Enabling rules or executing workflows was not tested."
         },
         "rule_type": {
-          "confidence": "inferred",
-          "purpose": "Starting rule type value."
+          "confidence": "observed",
+          "purpose": "Rule-category code. Sample Entry Created and Entry Changed rules both had 0; a sampled business-process rule had 2. Do not interpret this as an individual trigger code or complete enum."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.subscriber_repository_link": {
       "confidence": "inferred",
@@ -1524,7 +1538,7 @@
         },
         "last_asn": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for last audit sequence number on the subscriber repository link record."
+          "purpose": "Subscriber audit sequence marker. Its progression and encoding are unverified; do not describe it as a timestamp or proof of synchronization health."
         }
       }
     },
@@ -1532,7 +1546,8 @@
       "confidence": "inferred",
       "summary": "Repository connection or integration records for subscriber repository option.",
       "safeReportingNotes": [
-        "Use subscriber repository option records for read-only Workflow metadata reporting."
+        "Use subscriber repository option records for read-only Workflow metadata reporting.",
+        "Read-only Workflow 12.0.2605.385 checks resolved connection_id to connection_profiles and subscriber_name to registered_subscribers. Join coverage does not verify subscription behavior, health or option-value semantics; configuration values were not inspected."
       ],
       "columns": {
         "connection_id": {
@@ -1574,11 +1589,12 @@
       "confidence": "inferred",
       "summary": "Workflow metadata records for task error definition.",
       "safeReportingNotes": [
-        "Use task error definition records for read-only Workflow metadata reporting."
+        "Use task error definition records for read-only Workflow metadata reporting.",
+        "In the reviewed Workflow 12.0.2605.385 sample, error types were exception-name strings and retry_time was populated. A timestamp does not prove a retry occurred or succeeded. Criticality semantics and any task_type relationship remain unverified; error text can contain private details."
       ],
       "columns": {
         "error_id": {
-"confidence": "observed",
+          "confidence": "observed",
           "purpose": "Identity-generated primary key for the task error record. This is a row identifier, not the application error code."
         },
         "error_type": {
@@ -1586,7 +1602,7 @@
           "purpose": "Task error type value."
         },
         "error_message": {
-"confidence": "inferred",
+          "confidence": "inferred",
           "purpose": "Task error message text stored in nvarchar(255). Review for sensitive details; the schema does not define message wording or error-code mappings."
         },
         "error_code": {
@@ -1611,7 +1627,8 @@
       "confidence": "inferred",
       "summary": "Workflow metadata records for task type.",
       "safeReportingNotes": [
-        "Use task type records for read-only Workflow metadata reporting."
+        "Use task type records for read-only Workflow metadata reporting.",
+        "Workflow 12.0.2605.385 read-only lookup inspection found type_name labels for task_type_id, including Email, Forms, Laserfiche, Lfds and AI. Resolve labels from this table instead of hardcoding a universal enum; presence does not prove activity execution behavior."
       ],
       "columns": {
         "task_type_id": {
@@ -1619,10 +1636,11 @@
           "purpose": "Task Type identifier for the task type record."
         },
         "type_name": {
-          "confidence": "inferred",
-          "purpose": "Type Name for the task type record."
+          "confidence": "observed",
+          "purpose": "Task-category label stored for task_type_id. Read-only lookup labels were inspected for Workflow 12.0.2605.385; use stored labels instead of assuming fixed IDs across versions."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.template_code": {
       "confidence": "inferred",
@@ -1695,7 +1713,8 @@
       "confidence": "inferred",
       "summary": "Workflow security and trustee permission records for trustee workflow right.",
       "safeReportingNotes": [
-        "Use trustee workflow right records for read-only security and permission reporting."
+        "Use trustee workflow right records for read-only security and permission reporting.",
+        "The reviewed Workflow 12.0.2605.385 sample included rights rows without a matching current workflow. Use LEFT JOIN for audit coverage; neither this relationship nor stored privilege flags prove effective permissions. Identity and permission values were not reviewed."
       ],
       "columns": {
         "sid": {
@@ -1749,7 +1768,8 @@
       "confidence": "inferred",
       "summary": "Workflow runtime state or queue records for wait condition.",
       "safeReportingNotes": [
-        "Use wait condition records for read-only Workflow metadata reporting."
+        "Use wait condition records for read-only Workflow metadata reporting.",
+        "Read-only Workflow 12.0.2605.385 checks resolved sampled waits to current instances by instance_id and workflows by workflow_id. condition_type codes 0 and 1 were observed without independent meanings; payload language and scheduling semantics remain unknown."
       ],
       "columns": {
         "condition_id": {
@@ -1840,7 +1860,8 @@
       "confidence": "inferred",
       "summary": "Workflow metadata records for workflow definition.",
       "safeReportingNotes": [
-        "Use workflow definition records for read-only Workflow metadata reporting."
+        "Use workflow definition records for read-only Workflow metadata reporting.",
+        "A sampled Workflow 12.0.2605.385 Designer definition version matched current_ver. A running instance used an older definition version; join instance history to workflow_code using the instance version rather than current_ver."
       ],
       "columns": {
         "workflow_id": {
@@ -1911,7 +1932,8 @@
       "confidence": "inferred",
       "summary": "Workflow definition, code, or object metadata records for workflow code payload.",
       "safeReportingNotes": [
-        "Use workflow code payload records for read-only diagnostics after reviewing whether payloads contain workflow logic or runtime data."
+        "Use workflow code payload records for read-only diagnostics after reviewing whether payloads contain workflow logic or runtime data.",
+        "Use workflow_id together with version to resolve a definition revision. Read-only Workflow 12.0.2605.385 checks validated sampled current versions and version-qualified object links, not serialization formats or successful execution. Prefer payload byte counts to exposing code or assemblies."
       ],
       "columns": {
         "workflow_id": {
@@ -1981,7 +2003,8 @@
       "confidence": "inferred",
       "summary": "History or log records for workflow history row.",
       "safeReportingNotes": [
-        "Use workflow history row records for read-only Workflow metadata reporting."
+        "Use workflow history row records for read-only Workflow metadata reporting.",
+        "Read-only Workflow 12.0.2605.385 aggregate checks found history rows without a matching current workflow. Drive history reports from this table and LEFT JOIN current metadata; absence does not prove a deletion cause. Action meanings remain unverified."
       ],
       "columns": {
         "user_id": {
@@ -1989,8 +2012,8 @@
           "purpose": "User identifier for the workflow history row record."
         },
         "action": {
-          "confidence": "inferred",
-          "purpose": "Action value recorded in the history row."
+          "confidence": "unknown",
+          "purpose": "History action code; observed values are not independently mapped to a complete action reference. Do not label an unmatched current workflow as deleted solely from this code."
         },
         "workflow_id": {
           "confidence": "inferred",
@@ -2012,7 +2035,8 @@
           "confidence": "inferred",
           "purpose": "Timestamp when the row was changed."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.workflow_oauth_connection": {
       "confidence": "inferred",
@@ -2099,7 +2123,8 @@
       "confidence": "inferred",
       "summary": "Workflow definition, code, or object metadata records for workflow object link.",
       "safeReportingNotes": [
-        "Use workflow object link records for read-only Workflow metadata reporting."
+        "Use workflow object link records for read-only Workflow metadata reporting.",
+        "In the reviewed Workflow 12.0.2605.385 sample, every link resolved to workflow_code using both workflow_id and workflow_version = version. Object-type meanings and polymorphic target resolution remain unverified; do not assume every object_id references workflow_external_objects."
       ],
       "columns": {
         "link_id": {
@@ -2111,8 +2136,8 @@
           "purpose": "Workflow definition identifier."
         },
         "workflow_version": {
-          "confidence": "inferred",
-          "purpose": "Workflow version number associated with the linked object."
+          "confidence": "observed",
+          "purpose": "Definition revision associated with this object link. Resolve workflow_code using workflow_id and workflow_version = version; this composite join covered all reviewed links in Workflow 12.0.2605.385."
         },
         "object_id": {
           "confidence": "inferred",
@@ -2126,7 +2151,8 @@
           "confidence": "inferred",
           "purpose": "Object Uu identifier for the workflow object link record."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.workflow_options": {
       "confidence": "inferred",
@@ -2153,7 +2179,9 @@
       "confidence": "inferred",
       "summary": "History or log records for workflow reporting log row.",
       "safeReportingNotes": [
-        "Use workflow reporting log row records for read-only Workflow metadata reporting."
+        "Use workflow reporting log row records for read-only Workflow metadata reporting.",
+        "Read-only Workflow 12.0.2605.385 correlation matched a Completed instance to reporting status 1, while current search status 5 corresponded to reporting status 4. Reporting status 3 remains unknown; not a complete enum.",
+        "Reporting rows can lack matching current or historical search detail. User and rule references can be NULL. Use LEFT JOIN for optional detail and labels; missing detail does not establish a retention cause."
       ],
       "columns": {
         "report_id": {
@@ -2181,22 +2209,23 @@
           "purpose": "Timestamp when the row or activity ended."
         },
         "status": {
-          "confidence": "inferred",
-          "purpose": "Status value for the row; verify mapping before public reporting."
+          "confidence": "observed",
+          "purpose": "Reporting-state code. Reviewed Workflow 12.0.2605.385 samples matched 1 to Completed and 4 to a Running instance whose search status was 5. Code 3 remains unknown; this is not a complete enum."
         },
         "user_name_id": {
-          "confidence": "inferred",
-          "purpose": "User Name identifier for the workflow reporting log row record."
+          "confidence": "observed",
+          "purpose": "Optional user-label reference to index_user_name.user_name_id. NULL occurred in reviewed reporting rows; LEFT JOIN preserves unlabeled records. Not a verified LFDS identity mapping."
         },
         "rule_name_id": {
-          "confidence": "inferred",
-          "purpose": "Rule Name identifier for the workflow reporting log row record."
+          "confidence": "observed",
+          "purpose": "Optional rule-label reference to index_rule_name.rule_name_id. NULL occurred in reviewed reporting rows; LEFT JOIN preserves records without a rule label."
         },
         "parent_id": {
           "confidence": "inferred",
           "purpose": "Parent identifier for the workflow reporting log row record."
         }
-      }
+      },
+      "lastReviewedAt": "2026-10-10"
     },
     "dbo.workflow_server_options": {
       "confidence": "inferred",

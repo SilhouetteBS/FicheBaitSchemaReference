@@ -21,8 +21,8 @@ GO
 CREATE OR ALTER VIEW rpt.vw_WorkflowDefinitionHistory
 AS
 SELECT
-    w.workflow_id,
-    w.name AS workflow_name,
+    COALESCE(w.workflow_id, h.workflow_id) AS workflow_id,
+    COALESCE(w.name, h.workflow_name) AS workflow_name,
     w.description,
     w.iname,
     w.current_ver,
@@ -38,8 +38,9 @@ SELECT
     DATALENGTH(c.csharp_assembly) AS csharp_assembly_bytes,
     DATALENGTH(c.vb_assembly) AS vb_assembly_bytes,
     SYSUTCDATETIME() AS reporting_read_utc
-FROM [$(WorkflowDatabase)].dbo.workflow AS w
-LEFT JOIN [$(WorkflowDatabase)].dbo.workflow_history AS h
+-- Preserve history without a current definition and definitions without history.
+FROM [$(WorkflowDatabase)].dbo.workflow_history AS h
+FULL OUTER JOIN [$(WorkflowDatabase)].dbo.workflow AS w
     ON w.workflow_id = h.workflow_id
 LEFT JOIN [$(WorkflowDatabase)].dbo.workflow_code AS c
     ON w.workflow_id = c.workflow_id

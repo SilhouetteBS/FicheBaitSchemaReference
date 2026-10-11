@@ -1,6 +1,6 @@
 # Repository Path and Metadata Lookup Evidence
 
-Product/version: Repository `12.0.3.423`
+Product/version: Repository `12.0.4.433` (current structural checks and sample review; not live tested)
 
 ## Goal
 
@@ -31,6 +31,9 @@ Provide read-only entry, volume, page, template, and field metadata lookup objec
 - [wait condition sticky note](https://answers.laserfiche.com/questions/117562/wait-condition-sticky-note)
 
 ## Cautions
+
+- Read-only Repository `12.0.4.433` UI correlation observed ordinary folders with etype 0 and documents with -2. Unverified codes now remain Unknown rather than assigning unsupported Document/Shortcut labels. Other builds require independent validation.
+- The field-value view retains both pos and pos2. Multiple values can multiply entry rows; nonzero pos2 alone does not establish repeating-group membership. Page inventory counts image-page rows, not pages inside electronic files. These samples do not mean this script was live tested.
 
 - Repository metadata tables can be very large. Use filters, TOP limits, and reporting snapshots for repeated reports.
 - `bin_val` is intentionally excluded from the public pattern because it can contain binary metadata.

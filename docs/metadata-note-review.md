@@ -2,7 +2,9 @@
 
 Reviewed on 2026-10-10 against the 21 canonical schema snapshots. The scope was the 64 distinct unknown columns on curated Reporting-related tables, representing 329 versioned note entries. All received clearer purpose or limitation wording. Table relevance is not proof that each script reads every column.
 
-No row data, live SQL execution, or internal payload decoding was used. Exported keys, identities, FKs, and SQL types establish structure only. Name-based interpretations remain Inferred; undocumented formats and codes remain Unknown. Reappearance in the unknown-note queue does not mean the review was skipped: additional evidence is still required.
+That structural review used no row data, live SQL execution, or internal payload decoding. Exported keys, identities, FKs, and SQL types establish structure only. Name-based interpretations remain Inferred; undocumented formats and codes remain Unknown. Reappearance in the unknown-note queue does not mean the review was skipped: additional evidence is still required.
+
+Subsequent version-specific read-only database/UI observations are documented in [Live Schema Review](live-schema-review.md). They supplement, rather than retroactively broaden, the structural review above. Sample evidence is not exhaustive verification or live testing of the SQL examples.
 
 ## Forms
 

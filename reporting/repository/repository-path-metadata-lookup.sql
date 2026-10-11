@@ -2,7 +2,7 @@
 Repository path and metadata lookup reporting pattern.
 
 Target: reporting database, not the Repository product database.
-Product schema evidence: Repository 12.0.3.423 AI export.
+Product schema evidence: Repository 12.0.4.433 export; read-only sample review.
 
 Usage:
   1. Open in SQL Server Management Studio with SQLCMD Mode enabled.
@@ -28,9 +28,8 @@ SELECT
     t.etype,
     CASE t.etype
         WHEN 0 THEN N'Folder'
-        WHEN 1 THEN N'Document'
-        WHEN 2 THEN N'Shortcut'
-        ELSE N'Other'
+        WHEN -2 THEN N'Document (observed)'
+        ELSE N'Unknown'
     END AS entry_type_name,
     t.created,
     t.modified,
@@ -69,6 +68,7 @@ SELECT
     pd.display_name AS field_display_name,
     pd.prop_type,
     pv.pos,
+    pv.pos2,
     pv.str_val,
     pv.short_str_val,
     pv.num_val,

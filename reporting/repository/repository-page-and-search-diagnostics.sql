@@ -2,7 +2,7 @@
 Repository page and search diagnostics reporting pattern.
 
 Target: reporting database, not the Repository product database.
-Product schema evidence: Repository 12.0.3.423 AI export.
+Product schema evidence: Repository 12.0.4.433 export; read-only sample review.
 
 Usage:
   1. Open in SQL Server Management Studio with SQLCMD Mode enabled.
@@ -28,8 +28,8 @@ SELECT
     t.vol_id,
     v.vol_name,
     COUNT_BIG(d.page_id) AS page_count,
-    SUM(CASE WHEN ISNULL(d.img_bpp, 0) > 1 THEN 1 ELSE 0 END) AS likely_color_page_count,
-    SUM(CASE WHEN ISNULL(d.img_bpp, 0) <= 1 THEN 1 ELSE 0 END) AS likely_black_white_page_count,
+    SUM(CASE WHEN d.page_id IS NOT NULL AND d.img_bpp > 1 THEN 1 ELSE 0 END) AS likely_color_page_count,
+    SUM(CASE WHEN d.page_id IS NOT NULL AND d.img_bpp IN (0, 1) THEN 1 ELSE 0 END) AS likely_black_white_page_count,
     SUM(CONVERT(bigint, ISNULL(d.img_size, 0))) AS image_bytes,
     SUM(CONVERT(bigint, ISNULL(d.txt_size, 0))) AS text_bytes,
     MAX(d.img_bpp) AS max_image_bits_per_pixel,

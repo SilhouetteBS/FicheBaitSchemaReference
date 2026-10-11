@@ -1,6 +1,6 @@
 # Repository Page and Search Diagnostics Evidence
 
-Product/version: Repository `12.0.3.423`
+Product/version: Repository `12.0.4.433` (current structural checks and sample review; not live tested)
 
 ## Goal
 
@@ -21,6 +21,9 @@ Provide read-only page, image-size, active-document, and search-diagnostic conte
 - [ORA-32033 unsupported column aliasing](https://answers.laserfiche.com/questions/78110/sql-statement-returns-ORA32033-unsupported-column-aliasing)
 
 ## Cautions
+
+- Repository `12.0.4.433` review distinguished image pages from electronic-file internal pages. A PDF can have zero image-page rows. Page counts here count `doc` rows, not entries or internal PDF pages.
+- The page classification aggregates exclude the synthetic NULL row from LEFT JOIN and leave NULL bit-depth pages unclassified. Bits-per-pixel is only a heuristic; it does not reliably distinguish grayscale from color. No live execution or performance test of this script was performed.
 
 - `img_bpp` is a practical signal for likely color versus black-and-white pages; validate against actual image storage in your environment.
 - Avoid adding `NOLOCK` unless the report explicitly accepts dirty reads.

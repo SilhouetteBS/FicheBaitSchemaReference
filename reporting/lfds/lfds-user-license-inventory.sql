@@ -2,7 +2,7 @@
 LFDS user and license inventory reporting pattern.
 
 Target: reporting database, not the LFDS product database.
-Product schema evidence: LFDS 12.0.2603.369 AI export.
+Product schema evidence: LFDS 12.0.2607.421 export; read-only sample review.
 
 Usage:
   1. Open in SQL Server Management Studio with SQLCMD Mode enabled.
@@ -62,17 +62,11 @@ CREATE OR ALTER VIEW rpt.vw_LfdsSamlSidMappings
 AS
 SELECT
     saml.saml_sid,
-    saml_user.name AS saml_directory_object_name,
-    saml_provider.name AS saml_identity_provider_name,
     saml.lf_sid,
     lf_user.name AS lf_directory_object_name,
     lf_provider.name AS lf_identity_provider_name,
     SYSUTCDATETIME() AS reporting_read_utc
 FROM [$(LfdsDatabase)].dbo.saml_lf_sid_mappings AS saml
-LEFT JOIN [$(LfdsDatabase)].dbo.directory_objects AS saml_user
-    ON saml.saml_sid = saml_user.sid
-LEFT JOIN [$(LfdsDatabase)].dbo.identity_providers AS saml_provider
-    ON saml_user.provider_id = saml_provider.id
 LEFT JOIN [$(LfdsDatabase)].dbo.directory_objects AS lf_user
     ON saml.lf_sid = lf_user.sid
 LEFT JOIN [$(LfdsDatabase)].dbo.identity_providers AS lf_provider

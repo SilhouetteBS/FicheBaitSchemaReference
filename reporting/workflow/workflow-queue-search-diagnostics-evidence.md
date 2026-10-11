@@ -31,6 +31,12 @@ Provide read-only queue-size, search-activity, and instance-completion diagnosti
 
 ## Cautions
 
+- Read-only database/Designer review for Workflow `12.0.2605.385` correlated current activity `close_status = 0` with Running and historical `close_status = 1` with Completed. This is sample evidence, not a complete enum or live execution test of this script.
+- Current Running samples had populated, sometimes earlier-than-start `end_time` values. Their `elapsed_minutes` is deliberately NULL. Historical elapsed minutes are calculated only for sampled Completed code 1 with nonnegative timestamps; unknown states remain NULL.
+- The retained `usp_WorkflowLongRunningSearchActivities` name reports long elapsed completed historical activities, not a reliable running-instance alarm. No current-clock subtraction is used because timestamp storage conventions are unverified. `work_time` is not a verified elapsed duration, and NULL occurs on completed activities too.
+- Search status and reporting status are separate code families. Reporting rows may lack retained search detail; optional user/rule labels need LEFT JOIN. Missing rows do not prove a retention policy or corruption.
+- Queue and completion tables were empty in the reviewed demo. Their schema is available, but retry/state behavior was not live verified.
+
 - Queue payload columns can contain workflow runtime details; the public view exposes payload sizes, not payload text.
 - Add date filters before running diagnostics against large Workflow databases.
 - Create reporting objects in a separate reporting database.

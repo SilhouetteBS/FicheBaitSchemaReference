@@ -275,7 +275,7 @@ export const communityReportingPatterns = {
       scriptPath: 'reporting/forms/forms-field-value-instance-lookup.sql',
       evidencePath: 'reporting/forms/forms-field-value-instance-lookup-evidence.md',
       sourceCount: 5,
-      tables: ['dbo.cf_bp_data', 'dbo.cf_submissions', 'dbo.cf_bp_main_instances', 'dbo.cf_fields'],
+      tables: ['dbo.cf_bp_data', 'dbo.cf_submissions', 'dbo.cf_bp_main_instances', 'dbo.cf_form_submissions', 'dbo.cf_fields'],
       tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {

@@ -1,6 +1,6 @@
 # LFDS User and License Inventory Evidence
 
-Product/version: LFDS `12.0.2603.369`
+Product/version: LFDS `12.0.2607.421` (current structural checks and sample review; not live tested)
 
 ## Goal
 
@@ -26,6 +26,9 @@ Provide read-only inventory views for LFDS directory users, login activity, lice
 - [LFDS database user_logins table not updated for some Windows users](https://answers.laserfiche.com/questions/236312/LFDS-database-userlogins-table-not-updated-for-some-Windows-users)
 
 ## Cautions
+
+- LFDS `12.0.2607.421` read-only review did not establish disabled/service-account flag decoding or universal license accounting. Do not infer these from raw flags or reuse account_cache type codes for directory_objects.
+- Login rows and license rows can multiply directory objects; this view is not a distinct-user count. Container limits and SAML mappings were empty in the reviewed demo and remain behaviorally unverified. Only lf_sid has a schema-backed directory-object relationship. The speculative saml_sid-to-directory-object join and its labels have been removed; the SAML identifier is retained without inventing an identity contract or cross-product mapping.
 
 - Directory object names and login activity can be personal data.
 - License type values should be interpreted against the installed LFDS version and licensing model.

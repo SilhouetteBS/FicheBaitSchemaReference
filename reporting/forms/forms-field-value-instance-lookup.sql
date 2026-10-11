@@ -2,7 +2,7 @@
 Forms field-value to instance lookup reporting pattern.
 
 Target: reporting database, not the Forms product database.
-Product schema evidence: Forms 12.0.2603.30215 AI export.
+Product schema evidence: Forms 12.0.2607.40144 export; read-only sample review.
 
 Usage:
   1. Open in SQL Server Management Studio with SQLCMD Mode enabled.
@@ -49,7 +49,7 @@ SELECT
     s.status AS submission_status,
     f.form_id,
     f.field_id,
-    f.attribute_id,
+    d.attribute_id,
     f.label AS field_label,
     f.custom_field_name,
     f.type AS field_type,
@@ -62,8 +62,13 @@ LEFT JOIN [$(FormsDatabase)].dbo.cf_submissions AS s
     ON d.submission_id = s.submission_id
 LEFT JOIN [$(FormsDatabase)].dbo.cf_bp_main_instances AS m
     ON s.bp_instance_id = m.bp_instance_id
+-- Resolve field labels only when this submission supplies explicit form context.
+-- A variable can bind to fields on several forms; attribute_id alone multiplies rows.
+LEFT JOIN [$(FormsDatabase)].dbo.cf_form_submissions AS fs
+    ON d.submission_id = fs.submission_id
 LEFT JOIN [$(FormsDatabase)].dbo.cf_fields AS f
-    ON d.attribute_id = f.attribute_id;
+    ON d.attribute_id = f.attribute_id
+    AND fs.form_id = f.form_id;
 GO
 
 CREATE OR ALTER PROCEDURE rpt.usp_FindFormsInstancesByFieldValue

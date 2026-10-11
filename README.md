@@ -109,6 +109,7 @@ Public project pages:
 - `docs/privacy-review-checklist.md`: maintainer checklist before import or publication.
 - `docs/community-readiness-runbook.md`: issue triage, schema review, validation, public build, and maintenance guidance.
 - `docs/reporting-sql-review-workflow.md`: Answers SQL review, schema verification, generated candidates, and promotion workflow.
+- [Live schema review](docs/live-schema-review.md): version-specific evidence levels, reporting cautions, and remaining semantic limits across all four products.
 - `docs/answers-sql-processed-index.md`: index of processed Answers SQL queue batch files.
 - `docs/changelog.md`: imported versions and public-facing changes.
 - `docs/feedback.md`: analytics-free feedback through GitHub Issues.

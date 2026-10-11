@@ -96,7 +96,8 @@ SELECT
     a.end_time,
     a.close_status,
     a.work_time,
-    DATEDIFF(MINUTE, a.start_time, COALESCE(a.end_time, SYSUTCDATETIME())) AS elapsed_minutes,
+    -- Running samples have unreliable end_time; clock/storage conventions are unverified.
+    CAST(NULL AS bigint) AS elapsed_minutes,
     SYSUTCDATETIME() AS reporting_read_utc
 FROM [$(WorkflowDatabase)].dbo.search_activity AS a
 UNION ALL
@@ -111,7 +112,10 @@ SELECT
     al.end_time,
     al.close_status,
     al.work_time,
-    DATEDIFF(MINUTE, al.start_time, COALESCE(al.end_time, SYSUTCDATETIME())) AS elapsed_minutes,
+    -- Only sampled Completed state 1 supports an elapsed-timestamp calculation.
+    CASE WHEN al.close_status = 1 AND al.end_time >= al.start_time
+         THEN DATEDIFF_BIG(SECOND, al.start_time, al.end_time) / 60
+         ELSE NULL END AS elapsed_minutes,
     SYSUTCDATETIME() AS reporting_read_utc
 FROM [$(WorkflowDatabase)].dbo.search_activity_log AS al;
 GO
@@ -225,6 +229,8 @@ CREATE OR ALTER PROCEDURE rpt.usp_WorkflowLongRunningSearchActivities
 AS
 BEGIN
     SET NOCOUNT ON;
+    -- Despite the retained procedure name, this reports long elapsed COMPLETED
+    -- historical activities, not currently running instances. Other states are unknown.
     DECLARE @EffectiveTop int = CASE WHEN @Top BETWEEN 1 AND 10000 THEN @Top ELSE 500 END;
     DECLARE @EffectiveMinimumMinutes int = CASE WHEN @MinimumMinutes BETWEEN 1 AND 10080 THEN @MinimumMinutes ELSE 60 END;
 
