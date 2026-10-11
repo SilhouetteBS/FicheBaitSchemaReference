@@ -229,6 +229,7 @@ const initialRequestedPanelWidth = await page.locator('.diagram-stage').evaluate
   Number.parseInt(globalThis.getComputedStyle(stage).getPropertyValue('--relationship-panel-width'), 10),
 );
 const resizeHandle = page.getByRole('button', { name: /Resize focused relationship panel/ });
+await resizeHandle.scrollIntoViewIfNeeded();
 const resizeHandleBox = await resizeHandle.boundingBox();
 assert.ok(resizeHandleBox);
 await page.mouse.move(resizeHandleBox.x + resizeHandleBox.width / 2, resizeHandleBox.y + resizeHandleBox.height / 2);
