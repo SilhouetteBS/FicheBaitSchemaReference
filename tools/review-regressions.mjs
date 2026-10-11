@@ -186,7 +186,7 @@ for (const product of readJson('data/products.json').products.filter((item) => i
     if (product.productKey === 'repository') {
       const table = versionSchema.tables.find((item) => item.key === 'dbo.toc');
       assert.ok(table.keys.some((key) => key.name === 'toc_uuid_unq' && key.columns.length === 1 && key.columns[0].columnName === 'toc_uuid'));
-      assert.equal(versionNotes.tables['dbo.toc'].columns.toc_uuid.confidence, 'observed');
+      assert.equal(versionNotes.tables['dbo.toc'].columns.toc_uuid.confidence, versionSchema.productVersion === '12.0.4.433' ? 'inferred' : 'observed');
       assert.equal(versionNotes.tables['dbo.doc'].columns.lft_etag.confidence, 'unknown');
     }
     if (product.productKey === 'workflow') {
@@ -196,7 +196,7 @@ for (const product of readJson('data/products.json').products.filter((item) => i
       const waitEntryFk = versionSchema.foreignKeys.find((fk) => fk.name === 'wait_condition_entry_fk' && fk.referencedTableKey === table.key && fk.columns.some((column) => column.referencedColumnName === 'condition_id'));
       assert.match(versionNotes.tables[table.key].columns.condition_id.purpose,
         waitEntryFk ? /references it through wait_condition_entry_fk/ : /does not export wait_condition_entry_fk/);
-      assert.equal(versionNotes.tables[table.key].columns.condition_id.confidence, 'observed');
+      assert.equal(versionNotes.tables[table.key].columns.condition_id.confidence, versionSchema.productVersion === '12.0.2605.385' ? 'inferred' : 'observed');
       assert.equal(versionNotes.tables[table.key].columns.condition_type.confidence, 'unknown');
     }
     if (product.productKey === 'lfds') {

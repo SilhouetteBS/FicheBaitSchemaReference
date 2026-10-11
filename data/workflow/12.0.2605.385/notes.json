@@ -48,7 +48,7 @@
         },
         "bpi_id": {
           "confidence": "inferred",
-          "purpose": "Business process instance identifier."
+          "purpose": "Business process instance identifier. Exported foreign key bp_actlink_bp_instance_fk: bpi_id -> dbo.bp_instance.bpi_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bpi_activity": {
           "confidence": "inferred",
@@ -81,7 +81,7 @@
         },
         "bpi_id": {
           "confidence": "inferred",
-          "purpose": "Business process instance identifier."
+          "purpose": "Business process instance identifier. Exported foreign key bp_data_bp_instance_fk: bpi_id -> dbo.bp_instance.bpi_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bps_id": {
           "confidence": "inferred",
@@ -110,7 +110,7 @@
         },
         "bpi_id": {
           "confidence": "inferred",
-          "purpose": "Business process instance identifier."
+          "purpose": "Business process instance identifier. Exported foreign key bp_event_bp_instance_fk: bpi_id -> dbo.bp_instance.bpi_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "event_type": {
           "confidence": "inferred",
@@ -143,7 +143,7 @@
       "columns": {
         "bpi_id": {
           "confidence": "inferred",
-          "purpose": "Business process instance identifier."
+          "purpose": "Business process instance identifier. Exported foreign key bp_inst_report_fk: bpi_id -> dbo.workflow_reporting_log.report_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bpi_name": {
           "confidence": "inferred",
@@ -192,7 +192,7 @@
         },
         "bps_id": {
           "confidence": "inferred",
-          "purpose": "Business process step identifier."
+          "purpose": "Business process step identifier. Exported foreign key bp_participant_bp_step_fk: bps_id -> dbo.bp_step.bps_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bpr_id": {
           "confidence": "inferred",
@@ -200,7 +200,7 @@
         },
         "bpt_id": {
           "confidence": "inferred",
-          "purpose": "Business process trustee identifier."
+          "purpose": "Business process trustee identifier. Exported foreign key bp_participant_bp_trustee_fk: bpt_id -> dbo.bp_trustee.bpt_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bpp_start_time": {
           "confidence": "inferred",
@@ -237,7 +237,7 @@
         },
         "workflow_id": {
           "confidence": "inferred",
-          "purpose": "Workflow definition identifier."
+          "purpose": "Workflow definition identifier. Exported foreign key bp_role_workflow_fk: workflow_id -> dbo.workflow.workflow_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bpr_name": {
           "confidence": "inferred",
@@ -267,7 +267,7 @@
         },
         "bpi_id": {
           "confidence": "inferred",
-          "purpose": "Business process instance identifier."
+          "purpose": "Business process instance identifier. Exported foreign key bp_step_bp_instance_fk: bpi_id -> dbo.bp_instance.bpi_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bps_name": {
           "confidence": "inferred",
@@ -590,7 +590,8 @@
       "confidence": "inferred",
       "summary": "Workflow runtime state or queue records for instance completion record.",
       "safeReportingNotes": [
-        "Use instance completion record records for read-only Workflow metadata reporting."
+        "Use instance completion record records for read-only Workflow metadata reporting.",
+        "No rows were present in the reviewed test database. Completion status codes, retry scheduling and state payload behavior remain unverified. No exported foreign key establishes instance_id or workflow_id targets for this table."
       ],
       "columns": {
         "instance_completion_id": {
@@ -623,7 +624,7 @@
         },
         "last_try_status": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for last try status on the instance completion record record."
+          "purpose": "Text status or message retained for the last instance-completion attempt. The content convention is unverified; this is not a timestamp."
         },
         "next_try_time": {
           "confidence": "inferred",
@@ -887,7 +888,7 @@
         },
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_activity_instance_fk: search_id -> dbo.search_instance.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "activity_name": {
           "confidence": "inferred",
@@ -933,7 +934,7 @@
         },
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_activity_log_instance_fk: search_id -> dbo.search_instance_log.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "activity_name": {
           "confidence": "inferred",
@@ -975,7 +976,7 @@
       "columns": {
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_activity_messages_instance_fk: search_id -> dbo.search_instance.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "activity_id": {
           "confidence": "inferred",
@@ -1008,7 +1009,7 @@
       "columns": {
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_activity_messages_log_instance_fk: search_id -> dbo.search_instance_log.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "activity_id": {
           "confidence": "inferred",
@@ -1041,11 +1042,11 @@
       "columns": {
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_entry_instance_fk: search_id -> dbo.search_instance.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "repository_id": {
           "confidence": "inferred",
-          "purpose": "Repository identifier."
+          "purpose": "Repository identifier. Exported foreign key search_entry_rep_fk: repository_id -> dbo.search_rep.repository_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "activity_name": {
           "confidence": "inferred",
@@ -1082,11 +1083,11 @@
       "columns": {
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_entry_log_instance_fk: search_id -> dbo.search_instance_log.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "repository_id": {
           "confidence": "inferred",
-          "purpose": "Repository identifier."
+          "purpose": "Repository identifier. Exported foreign key search_entry_log_rep_fk: repository_id -> dbo.search_rep.repository_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "activity_name": {
           "confidence": "inferred",
@@ -1123,7 +1124,7 @@
       "columns": {
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_error_instance_fk: search_id -> dbo.search_instance.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "activity_name": {
           "confidence": "inferred",
@@ -1156,7 +1157,7 @@
       "columns": {
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_error_log_instance_fk: search_id -> dbo.search_instance_log.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "activity_name": {
           "confidence": "inferred",
@@ -1334,7 +1335,7 @@
       "columns": {
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_parameters_fk: search_id -> dbo.search_instance.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "direction": {
           "confidence": "inferred",
@@ -1355,7 +1356,7 @@
       "columns": {
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_parameters_log_fk: search_id -> dbo.search_instance_log.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "direction": {
           "confidence": "inferred",
@@ -1398,7 +1399,7 @@
       "columns": {
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_status_instance_fk: search_id -> dbo.search_instance.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "start_time": {
           "confidence": "inferred",
@@ -1441,7 +1442,7 @@
       "columns": {
         "search_id": {
           "confidence": "inferred",
-          "purpose": "Search instance identifier."
+          "purpose": "Search instance identifier. Exported foreign key search_status_log_instance_fk: search_id -> dbo.search_instance_log.search_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "start_time": {
           "confidence": "inferred",
@@ -1530,7 +1531,7 @@
         },
         "connection_id": {
           "confidence": "inferred",
-          "purpose": "Connection profile identifier."
+          "purpose": "Connection profile identifier. Exported foreign key subscriber_link_fk: connection_id -> dbo.connection_profiles.connection_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "is_subscribed": {
           "confidence": "inferred",
@@ -1552,7 +1553,7 @@
       "columns": {
         "connection_id": {
           "confidence": "inferred",
-          "purpose": "Connection profile identifier."
+          "purpose": "Connection profile identifier. Exported foreign key subscriber_repository_options_fk: connection_id -> dbo.connection_profiles.connection_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "subscriber_name": {
           "confidence": "inferred",
@@ -1577,7 +1578,7 @@
       "columns": {
         "connection_id": {
           "confidence": "inferred",
-          "purpose": "Connection profile identifier."
+          "purpose": "Connection profile identifier. Exported foreign key system_profile_fk: connection_id -> dbo.connection_profiles.connection_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "repository_id": {
           "confidence": "inferred",
@@ -1594,7 +1595,7 @@
       ],
       "columns": {
         "error_id": {
-          "confidence": "observed",
+          "confidence": "inferred",
           "purpose": "Identity-generated primary key for the task error record. This is a row identifier, not the application error code."
         },
         "error_type": {
@@ -1615,7 +1616,7 @@
         },
         "retry_time": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for retry time on the task error definition record."
+          "purpose": "Integer retry-timing value for the task error. Units and scheduling interpretation are unverified."
         },
         "description": {
           "confidence": "inferred",
@@ -1773,7 +1774,7 @@
       ],
       "columns": {
         "condition_id": {
-          "confidence": "observed",
+          "confidence": "inferred",
           "purpose": "Identity-generated bigint primary key of the wait-condition row (wait_condition_pk). dbo.wait_condition_entry.condition_id references it through wait_condition_entry_fk; it is not a condition-type code."
         },
         "instance_id": {
@@ -1924,7 +1925,7 @@
         },
         "workflow_id": {
           "confidence": "inferred",
-          "purpose": "Workflow definition identifier."
+          "purpose": "Workflow definition identifier. Exported foreign key workflow_category_link_workflow_fk: workflow_id -> dbo.workflow.workflow_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1938,7 +1939,7 @@
       "columns": {
         "workflow_id": {
           "confidence": "inferred",
-          "purpose": "Workflow definition identifier."
+          "purpose": "Workflow definition identifier. Exported foreign key workflow_code_workflow_fk: workflow_id -> dbo.workflow.workflow_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "designer_code": {
           "confidence": "unknown",
@@ -2133,7 +2134,7 @@
         },
         "workflow_id": {
           "confidence": "inferred",
-          "purpose": "Workflow definition identifier."
+          "purpose": "Workflow definition identifier. Exported foreign key workflow_obj_link_workflow_code_fk: workflow_id -> dbo.workflow_code.workflow_id; workflow_version -> dbo.workflow_code.version. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "workflow_version": {
           "confidence": "observed",
@@ -2163,7 +2164,7 @@
       "columns": {
         "workflow_id": {
           "confidence": "inferred",
-          "purpose": "Workflow definition identifier."
+          "purpose": "Workflow definition identifier. Exported foreign key workflow_options_workflow_fk: workflow_id -> dbo.workflow.workflow_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "option_name": {
           "confidence": "inferred",
@@ -2257,19 +2258,19 @@
         },
         "timer_type": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for timer type on the workflow server timer record."
+          "purpose": "Numeric timer category code. The category mapping is unverified."
         },
         "timer_name": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for timer name on the workflow server timer record."
+          "purpose": "Name recorded for the Workflow server timer. Naming conventions are unverified."
         },
         "timer_flags": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for timer flags on the workflow server timer record."
+          "purpose": "Numeric flags recorded for the Workflow server timer. Individual bit meanings are unverified."
         },
         "timer_options": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for timer options on the workflow server timer record."
+          "purpose": "Text options recorded for the Workflow server timer. The format and option meanings are unverified."
         },
         "last_run": {
           "confidence": "inferred",
@@ -2277,11 +2278,11 @@
         },
         "last_run_ms": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for last run ms on the workflow server timer record."
+          "purpose": "Numeric last-run metric for the Workflow server timer. Its precise meaning and units are unverified; do not assume it is a SQL timestamp."
         },
         "last_run_msg": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for last run msg on the workflow server timer record."
+          "purpose": "Text message retained for the Workflow server timer last run. The message convention is unverified."
         }
       }
     },
@@ -2289,7 +2290,8 @@
       "confidence": "inferred",
       "summary": "Workflow runtime state or queue records for workflow task queue row.",
       "safeReportingNotes": [
-        "Use workflow task queue row records for read-only diagnostics after reviewing whether payloads contain workflow logic or runtime data."
+        "Use workflow task queue row records for read-only diagnostics after reviewing whether payloads contain workflow logic or runtime data.",
+        "No rows were present in the reviewed test database. Queue status codes, retry behavior and task_type_id lookup semantics remain unverified; no exported foreign key establishes a task-type join."
       ],
       "columns": {
         "task_id": {

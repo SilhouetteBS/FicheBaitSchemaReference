@@ -305,6 +305,17 @@ export function normalizeSchema({
       schemaName: view.schemaName,
       name: view.viewName,
       definitionSha256: view.definitionSha256,
+      columns: (view.columns ?? []).map((column) => cleanObject({
+        name: column.name ?? column.columnName,
+        ordinal: column.ordinal,
+        dataType: column.dataType,
+        typeDefinition: column.typeDefinition,
+        maxLength: column.maxLength,
+        precision: column.precision,
+        scale: column.scale,
+        isNullable: column.isNullable,
+        collationName: column.collationName,
+      })).sort((left, right) => left.ordinal - right.ordinal),
       dependencies: dependenciesByReferencingObject.get(view.viewKey) ?? [],
     })),
     routines: routines.map((routine) => ({

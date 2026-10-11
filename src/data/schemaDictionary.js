@@ -84,6 +84,22 @@ export function validateSchemaSnapshot(schema) {
       }
     });
   }
+  for (const view of schema.views ?? []) {
+    if (view.columns === undefined) continue;
+    if (!Array.isArray(view.columns)) {
+      errors.push(`View ${view.key} columns must be an array.`);
+      continue;
+    }
+    const names = new Set();
+    const ordinals = new Set();
+    for (const column of view.columns) {
+      if (!column.name || names.has(column.name)) errors.push(`View ${view.key} has a missing or duplicate column name.`);
+      if (!column.dataType && !column.typeDefinition) errors.push(`View ${view.key} column ${column.name} is missing data type.`);
+      if (!Number.isInteger(column.ordinal) || column.ordinal < 1 || ordinals.has(column.ordinal)) errors.push(`View ${view.key} column ${column.name} has an invalid or duplicate ordinal.`);
+      names.add(column.name);
+      ordinals.add(column.ordinal);
+    }
+  }
   return errors;
 }
 

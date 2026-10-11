@@ -65,7 +65,7 @@
         },
         "claim_id": {
           "confidence": "inferred",
-          "purpose": "Claim definition identifier."
+          "purpose": "Claim definition identifier. Exported foreign key additional_claims_claim_defs_fk: claim_id -> dbo.claim_defs.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "str_val": {
           "confidence": "inferred",
@@ -231,7 +231,7 @@
         },
         "provider_id": {
           "confidence": "inferred",
-          "purpose": "Identity provider identifier."
+          "purpose": "Identity provider identifier. Exported foreign key adgs_rules_identity_providers_fk: provider_id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "container_id": {
           "confidence": "inferred",
@@ -482,7 +482,7 @@
         },
         "id": {
           "confidence": "inferred",
-          "purpose": "Primary identifier for the attribute definition ACL record."
+          "purpose": "Primary identifier for the attribute definition ACL record. Exported foreign key attribute_def_acls_attribute_defs_fk: id -> dbo.attribute_defs.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "type": {
           "confidence": "inferred",
@@ -705,7 +705,7 @@
         },
         "id": {
           "confidence": "inferred",
-          "purpose": "Primary identifier for the claim definition ACL record."
+          "purpose": "Primary identifier for the claim definition ACL record. Exported foreign key claim_def_acls_claim_defs_fk: id -> dbo.claim_defs.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "type": {
           "confidence": "inferred",
@@ -802,7 +802,7 @@
       "columns": {
         "provider_id": {
           "confidence": "inferred",
-          "purpose": "Identity provider identifier."
+          "purpose": "Identity provider identifier. Exported foreign key claim_mappings_identity_provider_fk: provider_id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "source": {
           "confidence": "inferred",
@@ -1070,7 +1070,7 @@
         },
         "provider_id": {
           "confidence": "inferred",
-          "purpose": "Identity provider identifier."
+          "purpose": "Identity provider identifier. Exported foreign key directory_groups_cache_identity_providers_fk: provider_id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1266,7 +1266,7 @@
         },
         "provider_id": {
           "confidence": "inferred",
-          "purpose": "Identity provider identifier."
+          "purpose": "Identity provider identifier. Exported foreign key directory_objects_providers_fk: provider_id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "mfa_secret": {
           "confidence": "do_not_rely_on",
@@ -1274,7 +1274,7 @@
         },
         "mfa_time_step": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for multi-factor authentication time step on the directory object record."
+          "purpose": "Numeric MFA time-step value associated with the directory object. Units, epoch and security behavior are unverified; do not assume a SQL timestamp contract."
         },
         "path": {
           "confidence": "inferred",
@@ -1328,7 +1328,7 @@
         },
         "provider_id": {
           "confidence": "inferred",
-          "purpose": "Identity provider identifier."
+          "purpose": "Identity provider identifier. Exported foreign key federation_requests_provider_fk: provider_id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "target_url": {
           "confidence": "inferred",
@@ -1459,7 +1459,7 @@
         },
         "id": {
           "confidence": "inferred",
-          "purpose": "Primary identifier for the host ACL record."
+          "purpose": "Primary identifier for the host ACL record. Exported foreign key host_acls_hosts_fk: id -> dbo.hosts.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "type": {
           "confidence": "inferred",
@@ -1600,7 +1600,7 @@
         },
         "id": {
           "confidence": "inferred",
-          "purpose": "Primary identifier for the identity provider ACL record."
+          "purpose": "Primary identifier for the identity provider ACL record. Exported foreign key identity_provider_acls_identity_providers_fk: id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "type": {
           "confidence": "inferred",
@@ -1712,7 +1712,7 @@
       "columns": {
         "provider_id": {
           "confidence": "inferred",
-          "purpose": "Identity provider identifier."
+          "purpose": "Identity provider identifier. Exported foreign key identity_provider_configurations_identity_provider_fk: provider_id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "name": {
           "confidence": "inferred",
@@ -1832,7 +1832,7 @@
         },
         "provider_id": {
           "confidence": "inferred",
-          "purpose": "Identity provider identifier."
+          "purpose": "Identity provider identifier. Exported foreign key issuer_certs_provider_fk: provider_id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "cert_subject": {
           "confidence": "unknown",
@@ -1934,7 +1934,7 @@
         },
         "id": {
           "confidence": "inferred",
-          "purpose": "Primary identifier for the mail notification template ACL record."
+          "purpose": "Primary identifier for the mail notification template ACL record. Exported foreign key mail_notification_template_acls_mail_notification_templates_fk: id -> dbo.mail_notification_templates.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "type": {
           "confidence": "inferred",
@@ -2067,7 +2067,7 @@
         },
         "id": {
           "confidence": "inferred",
-          "purpose": "Primary identifier for the mail server ACL record."
+          "purpose": "Primary identifier for the mail server ACL record. Exported foreign key mail_server_acls_mail_servers_fk: id -> dbo.mail_servers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "type": {
           "confidence": "inferred",
@@ -2388,7 +2388,7 @@
         },
         "provider_id": {
           "confidence": "inferred",
-          "purpose": "Identity provider identifier."
+          "purpose": "Identity provider identifier. Exported foreign key proxy_federation_settings_provider_fk: provider_id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "id_attribute_source": {
           "confidence": "inferred",
@@ -2665,7 +2665,7 @@
       "columns": {
         "provider_id": {
           "confidence": "inferred",
-          "purpose": "Identity provider identifier."
+          "purpose": "Identity provider identifier. Exported foreign key saml_contacts_identity_provider_fk: provider_id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "contact_type": {
           "confidence": "inferred",
@@ -2719,7 +2719,7 @@
       "columns": {
         "provider_id": {
           "confidence": "inferred",
-          "purpose": "Identity provider identifier."
+          "purpose": "Identity provider identifier. Exported foreign key saml_mappings_identity_providers_fk: provider_id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "id": {
           "confidence": "inferred",
@@ -2740,7 +2740,7 @@
       "columns": {
         "provider_id": {
           "confidence": "inferred",
-          "purpose": "Identity provider identifier."
+          "purpose": "Identity provider identifier. Exported foreign key saml_settings_identity_provider_fk: provider_id -> dbo.identity_providers.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "enable_encrypted_assertions": {
           "confidence": "inferred",
@@ -3311,7 +3311,7 @@
         },
         "attr_id": {
           "confidence": "inferred",
-          "purpose": "Attribute definition identifier."
+          "purpose": "Attribute definition identifier. Exported foreign key trustee_attributes_attribute_defs_fk: attr_id -> dbo.attribute_defs.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "str_val": {
           "confidence": "unknown",

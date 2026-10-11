@@ -54,11 +54,11 @@
         },
         "attributes_grouping_key_guid": {
           "confidence": "inferred",
-          "purpose": "Attributes Grouping Key Gu identifier associated with the report attribute grouping mapping record."
+          "purpose": "Attributes Grouping Key Gu identifier associated with the report attribute grouping mapping record. Exported foreign key FK_attributes_grouping_map_attributes_grouping_guid: attributes_grouping_key_guid -> dbo.attributes_grouping_key.attributes_grouping_key_guid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "attribute_id": {
           "confidence": "inferred",
-          "purpose": "Process data attribute identifier."
+          "purpose": "Process data attribute identifier. Exported foreign key FK_attributes_grouping_map_attribute_id: attribute_id -> dbo.cf_bp_dataset.attribute_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -141,11 +141,11 @@
         },
         "bp_instance_id": {
           "confidence": "inferred",
-          "purpose": "Business process instance identifier."
+          "purpose": "Business process instance identifier. Exported foreign key FK_bp_instance_errors_bp_main_instances: bp_instance_id -> dbo.cf_bp_main_instances.bp_instance_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_bp_instance_errors_business_process: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -170,7 +170,7 @@
         },
         "team_id": {
           "confidence": "inferred",
-          "purpose": "Team identifier."
+          "purpose": "Team identifier. Exported foreign key FK_business_rule_team: team_id -> dbo.teams.id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -183,7 +183,7 @@
       "columns": {
         "history_id": {
           "confidence": "inferred",
-          "purpose": "Worker instance history identifier."
+          "purpose": "Worker instance history identifier. Exported foreign key FK_cached_overdue_predictions_history: history_id -> dbo.cf_bp_worker_instance_history.history_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "overdue_chance": {
           "confidence": "inferred",
@@ -225,7 +225,7 @@
         },
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_users_api_basic_auth_users: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "basic_auth_access_key": {
           "confidence": "do_not_rely_on",
@@ -262,7 +262,7 @@
         },
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_api_oauth_user: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "consumer_id": {
           "confidence": "inferred",
@@ -315,7 +315,7 @@
         },
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_api_query_string_auth_user: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "access_id": {
           "confidence": "inferred",
@@ -348,19 +348,19 @@
       "columns": {
         "sess_id": {
           "confidence": "inferred",
-          "purpose": "API session identifier."
+          "purpose": "API session identifier. Exported foreign key FK_cf_api_session_cf_sessions: sess_id -> dbo.cf_sessions.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "oauth_id": {
           "confidence": "inferred",
-          "purpose": "OAuth credential identifier."
+          "purpose": "OAuth credential identifier. Exported foreign key FK_cf_api_session_cf_api_oauth: oauth_id -> dbo.cf_api_oauth.oauth_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "qsa_id": {
           "confidence": "inferred",
-          "purpose": "Query String Authentication identifier associated with the API session record."
+          "purpose": "Query String Authentication identifier associated with the API session record. Exported foreign key FK_cf_api_session_cf_api_query_string_auth: qsa_id -> dbo.cf_api_query_string_auth.query_string_auth_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "basic_id": {
           "confidence": "inferred",
-          "purpose": "Basic identifier associated with the API session record."
+          "purpose": "Basic identifier associated with the API session record. Exported foreign key FK_cf_api_session_cf_api_basic_auth: basic_id -> dbo.cf_api_basic_auth.basic_auth_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "oauth_token": {
           "confidence": "do_not_rely_on",
@@ -381,11 +381,11 @@
       "columns": {
         "attachment_id": {
           "confidence": "inferred",
-          "purpose": "Attachment identifier."
+          "purpose": "Attachment identifier. Exported foreign key FK_cf_attachments_to_migrate_bp_attachment_data: attachment_id -> dbo.cf_bp_attachment_data.attachment_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "migration_id": {
           "confidence": "inferred",
-          "purpose": "Migration job identifier."
+          "purpose": "Migration job identifier. Exported foreign key FK_cf_attachments_to_migrate_volume_migration: migration_id -> dbo.cf_volume_migration.migration_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -423,7 +423,7 @@
         },
         "tenant_id": {
           "confidence": "inferred",
-          "purpose": "Forms tenant identifier."
+          "purpose": "Forms tenant identifier. Exported foreign key FK_blobcache_tenant: tenant_id -> dbo.cf_tenants.tenant_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "date_created": {
           "confidence": "inferred",
@@ -459,11 +459,11 @@
         },
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_cf_blobcache_business_process: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "date_range": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for date range on the blob cache entry record."
+          "purpose": "Integer date-range code for the blob cache record. Category meanings and interpretation are unverified; this is not a SQL date value."
         }
       }
     },
@@ -508,7 +508,7 @@
         },
         "volume_id": {
           "confidence": "inferred",
-          "purpose": "Storage volume identifier."
+          "purpose": "Storage volume identifier. Exported foreign key FK_cf_bp_attachment_data_volumes: volume_id -> dbo.cf_volumes.volume_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "storage_type": {
           "confidence": "unknown",
@@ -524,7 +524,7 @@
         },
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_cf_bp_attachment_data_business_process: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "uploaded_time": {
           "confidence": "inferred",
@@ -565,7 +565,7 @@
         },
         "chart_type": {
           "confidence": "inferred",
-          "purpose": "Type or category value for chart type on the business process chart configuration record."
+          "purpose": "Chart-format code. In the reviewed Forms 12.0.2607.40144 configuration, value 0 corresponds to the Column chart shown in the report editor. Other chart codes and cross-version consistency remain unverified."
         },
         "category_id": {
           "confidence": "inferred",
@@ -577,7 +577,7 @@
         },
         "category_title": {
           "confidence": "inferred",
-          "purpose": "Category Title setting for the business process chart configuration record."
+          "purpose": "Chart category title. The reviewed chart's stored category title matched the grouping label in the Forms report editor; field-reference resolution and other chart configurations remain unverified."
         },
         "group_by_id": {
           "confidence": "inferred",
@@ -605,11 +605,11 @@
         },
         "series_title": {
           "confidence": "inferred",
-          "purpose": "Series Title for the business process chart configuration record."
+          "purpose": "Chart series title. The reviewed chart's stored series title matched the Instance ID measure shown in the Forms report editor. This label alone does not identify a database column or establish the series field-reference mapping."
         },
         "series_operation": {
           "confidence": "inferred",
-          "purpose": "Series Operation setting for the business process chart configuration record."
+          "purpose": "Chart series aggregation-operation code. Value 2 corresponds to Count in the reviewed Forms 12.0.2607.40144 chart. Other operations and cross-version mappings remain unverified."
         },
         "chart_layout": {
           "confidence": "inferred",
@@ -629,7 +629,7 @@
         },
         "chart_title": {
           "confidence": "inferred",
-          "purpose": "Chart Title for the business process chart configuration record."
+          "purpose": "Chart title displayed in the report editor. The stored title matched the reviewed existing chart in Forms 12.0.2607.40144; rendering behavior for other configurations remains unverified."
         },
         "show_data_marker": {
           "confidence": "inferred",
@@ -661,11 +661,11 @@
         },
         "subview_id": {
           "confidence": "inferred",
-          "purpose": "Report subview identifier."
+          "purpose": "Report subview identifier. Exported foreign key FK_cf_bp_chart_config_subview: subview_id -> dbo.report_subview.subview_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_cf_bp_chart_config_business_processes: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "category_use_thousand_delimiter": {
           "confidence": "inferred",
@@ -721,7 +721,7 @@
         },
         "category_date_format": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for category date format on the business process chart configuration record."
+          "purpose": "Integer date-format configuration code for chart categories, not a stored date or timestamp. Numeric format mappings remain unverified."
         },
         "group_by_number_format": {
           "confidence": "inferred",
@@ -733,7 +733,7 @@
         },
         "group_by_date_format": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for group by date format on the business process chart configuration record."
+          "purpose": "Integer date-format configuration code for chart grouping, not a stored date or timestamp. Numeric format mappings remain unverified."
         },
         "series_number_format": {
           "confidence": "inferred",
@@ -745,11 +745,11 @@
         },
         "series_date_format": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for series date format on the business process chart configuration record."
+          "purpose": "Integer date-format configuration code for chart series, not a stored date or timestamp. Numeric format mappings remain unverified."
         },
         "group_by_date_group_by_method": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for group by date group by method on the business process chart configuration record."
+          "purpose": "Integer date-grouping method code for chart grouping, not a stored date or timestamp. Grouping-method meanings remain unverified."
         },
         "group_by_also_by_year": {
           "confidence": "inferred",
@@ -757,7 +757,7 @@
         },
         "category_date_group_by_method": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for category date group by method on the business process chart configuration record."
+          "purpose": "Integer date-grouping method code for chart categories, not a stored date or timestamp. Grouping-method meanings remain unverified."
         },
         "category_also_by_year": {
           "confidence": "inferred",
@@ -774,11 +774,11 @@
       "columns": {
         "attribute_id": {
           "confidence": "inferred",
-          "purpose": "Process data attribute identifier."
+          "purpose": "Process data attribute identifier. Exported foreign key FK_bp_collection_attrs_bp_dataset: attribute_id -> dbo.cf_bp_dataset.attribute_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "collection_id": {
           "confidence": "inferred",
-          "purpose": "Collection identifier associated with the business process collection attribute mapping record."
+          "purpose": "Collection identifier associated with the business process collection attribute mapping record. Exported foreign key FK_bp_coll_attrs_bp_ds_coll: collection_id -> dbo.cf_bp_dataset_collections.attribute_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -853,7 +853,7 @@
       "columns": {
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_cf_bp_custom_errors_cf_business_processes: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "error_id": {
           "confidence": "inferred",
@@ -919,11 +919,11 @@
       "columns": {
         "bp_data_id": {
           "confidence": "inferred",
-          "purpose": "Submitted process data value identifier."
+          "purpose": "Submitted process data value identifier. Exported foreign key FK_bp_da_mapping_data: bp_data_id -> dbo.cf_bp_data.bp_data_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "attachment_id": {
           "confidence": "inferred",
-          "purpose": "Attachment identifier."
+          "purpose": "Attachment identifier. Exported foreign key FK_bp_da_mapping_attachment: attachment_id -> dbo.cf_bp_attachment_data.attachment_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1001,7 +1001,7 @@
         },
         "parent_collection_id": {
           "confidence": "inferred",
-          "purpose": "Parent collection attribute identifier."
+          "purpose": "Parent collection attribute identifier. Exported foreign key FK_bp_ds_coll_bp_ds_coll: parent_collection_id -> dbo.cf_bp_dataset_collections.attribute_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1015,11 +1015,11 @@
       "columns": {
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_cf_bp_cf_ds_map: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "datasource_id": {
           "confidence": "inferred",
-          "purpose": "External data source identifier."
+          "purpose": "External data source identifier. Exported foreign key FK_cf_external_ds_cf_ds_map: datasource_id -> dbo.cf_external_datasources.datasource_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1032,11 +1032,11 @@
       "columns": {
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_cf_bp_glb_lfrp_cf_bp: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "profile_id": {
           "confidence": "inferred",
-          "purpose": "Profile identifier."
+          "purpose": "Profile identifier. Exported foreign key FK_cf_bp_glb_lfrp_lfrp: profile_id -> dbo.global_lfrepo_profiles.profile_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1053,7 +1053,7 @@
         },
         "resume_id": {
           "confidence": "inferred",
-          "purpose": "Resumable task assignment identifier."
+          "purpose": "Resumable task assignment identifier. Exported foreign key FK_cf_bp_instance_approvers_cf_bp_worker_instnc_to_resume: resume_id -> dbo.cf_bp_worker_instnc_to_resume.resume_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "is_group": {
           "confidence": "inferred",
@@ -1061,11 +1061,11 @@
         },
         "user_snapshot_id": {
           "confidence": "inferred",
-          "purpose": "User snapshot identifier."
+          "purpose": "User snapshot identifier. Exported foreign key FK_approver_user_snapshot: user_snapshot_id -> dbo.cf_user_snapshot.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "team_id": {
           "confidence": "inferred",
-          "purpose": "Team identifier."
+          "purpose": "Team identifier. Exported foreign key FK_team_instance_approvers: team_id -> dbo.teams.id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1094,7 +1094,7 @@
         },
         "user_snapshot_id": {
           "confidence": "inferred",
-          "purpose": "User snapshot identifier."
+          "purpose": "User snapshot identifier. Exported foreign key FK_approver_archive_user_snapshot: user_snapshot_id -> dbo.cf_user_snapshot.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "team_id": {
           "confidence": "observed",
@@ -1115,11 +1115,11 @@
         },
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_cf_bp_repos_cf_bp_processes: process_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "scheduling_id": {
           "confidence": "inferred",
-          "purpose": "Report email schedule identifier."
+          "purpose": "Report email schedule identifier. Exported foreign key FK_cf_bp_lfrepo_profiles_report_email_scheduling: scheduling_id -> dbo.report_email_scheduling.scheduling_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "name": {
           "confidence": "inferred",
@@ -1282,7 +1282,7 @@
         },
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_milestone_process: process_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "is_deleted": {
           "confidence": "inferred",
@@ -1302,7 +1302,7 @@
         },
         "ends_at": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for ends at on the process milestone record."
+          "purpose": "Integer ends-at value for the milestone. Its endpoint meaning and interpretation are unverified; this is not a native SQL timestamp."
         }
       }
     },
@@ -1315,7 +1315,7 @@
       "columns": {
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_bp_non_executables_process: process_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "object_id": {
           "confidence": "inferred",
@@ -1344,7 +1344,7 @@
         },
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_bp_processes_biz_process: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "namespace": {
           "confidence": "inferred",
@@ -1359,7 +1359,7 @@
           "purpose": "Full Name for the business process design process record."
         },
         "description": {
-"confidence": "inferred",
+          "confidence": "inferred",
           "purpose": "Description of this process definition or process version; not the title of a running instance."
         },
         "is_global": {
@@ -1368,11 +1368,11 @@
         },
         "parent_process_id": {
           "confidence": "inferred",
-          "purpose": "Parent Process identifier associated with the business process design process record."
+          "purpose": "Parent Process identifier associated with the business process design process record. Exported foreign key FK_bp_processes_parent_process: parent_process_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "root_process_id": {
           "confidence": "inferred",
-          "purpose": "Root Process identifier associated with the business process design process record."
+          "purpose": "Root Process identifier associated with the business process design process record. Exported foreign key FK_bp_processes_bp_processes: root_process_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "is_activated": {
           "confidence": "inferred",
@@ -1404,7 +1404,7 @@
         },
         "start_entity_id": {
           "confidence": "inferred",
-          "purpose": "Start Entity identifier associated with the business process design process record."
+          "purpose": "Start Entity identifier associated with the business process design process record. Exported foreign key FK_bp_processes_entity: start_entity_id -> dbo.entities.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "unique_id": {
           "confidence": "inferred",
@@ -1421,7 +1421,7 @@
       "columns": {
         "attribute_id": {
           "confidence": "inferred",
-          "purpose": "Process data attribute identifier."
+          "purpose": "Process data attribute identifier. Exported foreign key FK_bp_section_attrs_bp_dataset: attribute_id -> dbo.cf_bp_dataset.attribute_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1438,7 +1438,7 @@
         },
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_signal_process: process_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "is_deleted": {
           "confidence": "inferred",
@@ -1524,15 +1524,15 @@
         },
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_cf_bp_step_error_mapping_cf_bp_steps: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "step_id": {
           "confidence": "inferred",
-          "purpose": "Business process step identifier."
+          "purpose": "Business process step identifier. Exported foreign key FK_cf_bp_step_error_mapping_cf_bp_steps: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "custom_error_id": {
           "confidence": "inferred",
-          "purpose": "Custom Error identifier associated with the step error mapping record."
+          "purpose": "Custom Error identifier associated with the step error mapping record. Exported foreign key FK_cf_bp_step_error_mapping_cf_bp_custom_errors: bp_id -> dbo.cf_bp_custom_errors.bp_id; custom_error_id -> dbo.cf_bp_custom_errors.error_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "is_catch_all_errors": {
           "confidence": "inferred",
@@ -1549,15 +1549,15 @@
       "columns": {
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_bp_stp_frm_mappng_bp_step: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "step_id": {
           "confidence": "inferred",
-          "purpose": "Business process step identifier."
+          "purpose": "Business process step identifier. Exported foreign key FK_bp_stp_frm_mappng_bp_step: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "form_id": {
           "confidence": "inferred",
-          "purpose": "Form definition identifier."
+          "purpose": "Form definition identifier. Exported foreign key FK_bp_stp_frm_mappng_form: form_id -> dbo.cf_forms.form_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1570,15 +1570,15 @@
       "columns": {
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_bp_stp_glb_lfrp_bp_stp: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "step_id": {
           "confidence": "inferred",
-          "purpose": "Business process step identifier."
+          "purpose": "Business process step identifier. Exported foreign key FK_bp_stp_glb_lfrp_bp_stp: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "profile_id": {
           "confidence": "inferred",
-          "purpose": "Profile identifier."
+          "purpose": "Profile identifier. Exported foreign key FK_bp_stp_glb_lfrp_lfrp: profile_id -> dbo.global_lfrepo_profiles.profile_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1591,15 +1591,15 @@
       "columns": {
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_bp_stp_pcs_lfrp_bp_stp: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "step_id": {
           "confidence": "inferred",
-          "purpose": "Business process step identifier."
+          "purpose": "Business process step identifier. Exported foreign key FK_bp_stp_pcs_lfrp_bp_stp: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "profile_id": {
           "confidence": "inferred",
-          "purpose": "Profile identifier."
+          "purpose": "Profile identifier. Exported foreign key FK_bp_stp_pcs_lfrp_lfrp: profile_id -> dbo.cf_bp_lfrepo_profiles.id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1612,15 +1612,15 @@
       "columns": {
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_bp_stp_wf_mappng_bp_step: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "step_id": {
           "confidence": "inferred",
-          "purpose": "Business process step identifier."
+          "purpose": "Business process step identifier. Exported foreign key FK_bp_stp_wf_mappng_bp_step: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "workflow_server_id": {
           "confidence": "inferred",
-          "purpose": "Workflow Server identifier associated with the step Workflow mapping record."
+          "purpose": "Workflow Server identifier associated with the step Workflow mapping record. Exported foreign key FK_bp_stp_wf_mappng_workflow: workflow_server_id -> dbo.workflow_server.id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1670,7 +1670,7 @@
         },
         "subprocess_id": {
           "confidence": "inferred",
-          "purpose": "Subprocess identifier associated with the business process step record."
+          "purpose": "Subprocess identifier associated with the business process step record. Exported foreign key FK_bp_steps_bp_subprocess: subprocess_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "attachedToRef": {
           "confidence": "inferred",
@@ -1731,7 +1731,7 @@
         },
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_swimming_lane_process: process_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "is_deleted": {
           "confidence": "inferred",
@@ -1755,7 +1755,7 @@
         },
         "ends_at": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for ends at on the business process swim lane record."
+          "purpose": "Integer ends-at value for the swimming lane. Its endpoint meaning and interpretation are unverified; this is not a native SQL timestamp."
         }
       }
     },
@@ -1813,7 +1813,7 @@
       "columns": {
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_bp_transitions_bp_process: process_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "source_step_id": {
           "confidence": "inferred",
@@ -1862,7 +1862,7 @@
         },
         "trigger_id": {
           "confidence": "inferred",
-          "purpose": "Process trigger identifier."
+          "purpose": "Process trigger identifier. Exported foreign key FK_bp_trigger_history_triggers: trigger_id -> dbo.cf_bp_triggers.trigger_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "trigger_date": {
           "confidence": "inferred",
@@ -1895,7 +1895,7 @@
         },
         "resume_id": {
           "confidence": "inferred",
-          "purpose": "Resumable task assignment identifier."
+          "purpose": "Resumable task assignment identifier. Exported foreign key FK_bp_triggers_workr_inst_res: resume_id -> dbo.cf_bp_worker_instnc_to_resume.resume_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "due_date": {
           "confidence": "inferred",
@@ -1967,7 +1967,7 @@
         },
         "external_op": {
           "confidence": "inferred",
-          "purpose": "External Op for the worker instance history record."
+          "purpose": "External-operation reference. In the reviewed Forms 12.0.2607.40144 dataset, 140 workflow-mapped history rows contain GUID-convertible values; one exactly matches a current Workflow search_instance.instance_id. This is a database-sample correlation, not a completed Invoke Workflow UI trace or a universal cross-product join contract."
         },
         "external_op_data1": {
           "confidence": "inferred",
@@ -1979,7 +1979,7 @@
         },
         "team_id": {
           "confidence": "inferred",
-          "purpose": "Team identifier."
+          "purpose": "Team identifier. Exported foreign key FK_team_worker_instance_history: team_id -> dbo.teams.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "owner_snapshot_id": {
           "confidence": "inferred",
@@ -2052,7 +2052,7 @@
         },
         "bp_instance_id": {
           "confidence": "inferred",
-          "purpose": "Parent Forms process instance identifier."
+          "purpose": "Parent Forms process instance identifier. Exported foreign key FK_bp_worker_insts_bp_m_inst: bp_instance_id -> dbo.cf_bp_main_instances.bp_instance_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "current_process_id": {
           "confidence": "inferred",
@@ -2199,7 +2199,7 @@
         },
         "worker_instance_id": {
           "confidence": "inferred",
-          "purpose": "Worker instance identifier."
+          "purpose": "Worker instance identifier. Exported foreign key FK_bp_insts_to_resume_archive_w_inst: worker_instance_id -> dbo.cf_bp_worker_instances.instance_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "step_id": {
           "confidence": "inferred",
@@ -2227,7 +2227,7 @@
         },
         "team_id": {
           "confidence": "inferred",
-          "purpose": "Team identifier."
+          "purpose": "Team identifier. Exported foreign key FK_team_worker_instnc_to_resume_archive: team_id -> dbo.teams.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "owner_snapshot_id": {
           "confidence": "inferred",
@@ -2247,7 +2247,7 @@
         },
         "submission_id": {
           "confidence": "inferred",
-          "purpose": "Form submission identifier."
+          "purpose": "Form submission identifier. Exported foreign key FK_submission_worker_instnc_to_resume_archive: submission_id -> dbo.cf_submissions.submission_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       },
       "warnings": [
@@ -2465,7 +2465,7 @@
           "purpose": "Archived Business Process Definition name."
         },
         "description": {
-"confidence": "inferred",
+          "confidence": "inferred",
           "purpose": "Description retained with the archived business process definition; not an instance execution status."
         },
         "updated_by": {
@@ -2543,7 +2543,7 @@
       "columns": {
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_cf_canvas_thumbnail_cf_business_processes: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "thumbnail": {
           "confidence": "inferred",
@@ -2564,15 +2564,15 @@
       "columns": {
         "submission_id": {
           "confidence": "inferred",
-          "purpose": "Submission identifier."
+          "purpose": "Submission identifier. Exported foreign key FK_data_subms_subms: submission_id -> dbo.cf_submissions.submission_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_data_submissions_bp_step: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "step_id": {
           "confidence": "inferred",
-          "purpose": "Step identifier."
+          "purpose": "Step identifier. Exported foreign key FK_data_submissions_bp_step: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -2651,7 +2651,7 @@
         },
         "database_id": {
           "confidence": "inferred",
-          "purpose": "External connection identifier."
+          "purpose": "External connection identifier. Exported foreign key FK_cf_external_database_security_databases: database_id -> dbo.cf_external_databases.database_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "user_group_id": {
           "confidence": "inferred",
@@ -2742,11 +2742,11 @@
       "columns": {
         "datasource_id": {
           "confidence": "inferred",
-          "purpose": "External data source identifier."
+          "purpose": "External data source identifier. Exported foreign key FK_ext_dbtable_ext_datasource: datasource_id -> dbo.cf_external_datasources.datasource_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "database_id": {
           "confidence": "inferred",
-          "purpose": "External connection identifier."
+          "purpose": "External connection identifier. Exported foreign key FK_ext_dbtables_ext_database: database_id -> dbo.cf_external_databases.database_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "table_name": {
           "confidence": "inferred",
@@ -2767,11 +2767,11 @@
       "columns": {
         "datasource_id": {
           "confidence": "inferred",
-          "purpose": "External data source identifier."
+          "purpose": "External data source identifier. Exported foreign key FK_ext_sp_ext_datasource: datasource_id -> dbo.cf_external_datasources.datasource_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "database_id": {
           "confidence": "inferred",
-          "purpose": "External connection identifier."
+          "purpose": "External connection identifier. Exported foreign key FK_ext_sp_ext_database: database_id -> dbo.cf_external_databases.database_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "stored_procedure_name": {
           "confidence": "inferred",
@@ -2788,7 +2788,7 @@
       "columns": {
         "datasource_id": {
           "confidence": "inferred",
-          "purpose": "External data source identifier."
+          "purpose": "External data source identifier. Exported foreign key FK_ext_webservice_ext_dsource: datasource_id -> dbo.cf_external_datasources.datasource_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "url": {
           "confidence": "inferred",
@@ -2809,15 +2809,15 @@
       "columns": {
         "attribute_id": {
           "confidence": "inferred",
-          "purpose": "Process data attribute identifier."
+          "purpose": "Process data attribute identifier. Exported foreign key FK_fld_attr_mappng_bp_dataset: attribute_id -> dbo.cf_bp_dataset.attribute_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "form_id": {
           "confidence": "inferred",
-          "purpose": "Form definition identifier."
+          "purpose": "Form definition identifier. Exported foreign key FK_fld_attr_mappng_cf_field: form_id -> dbo.cf_fields.form_id; field_id -> dbo.cf_fields.field_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "field_id": {
           "confidence": "inferred",
-          "purpose": "Form field identifier."
+          "purpose": "Form field identifier. Exported foreign key FK_fld_attr_mappng_cf_field: form_id -> dbo.cf_fields.form_id; field_id -> dbo.cf_fields.field_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -2830,15 +2830,15 @@
       "columns": {
         "lookup_rule_id": {
           "confidence": "inferred",
-          "purpose": "Lookup rule identifier."
+          "purpose": "Lookup rule identifier. Exported foreign key FK_fld_col_mappng_lookup_rule: lookup_rule_id -> dbo.cf_lookup_rules.lookup_rule_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "form_id": {
           "confidence": "inferred",
-          "purpose": "Form definition identifier."
+          "purpose": "Form definition identifier. Exported foreign key FK_field_column_mapping_field: form_id -> dbo.cf_fields.form_id; field_id -> dbo.cf_fields.field_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "field_id": {
           "confidence": "inferred",
-          "purpose": "Form field identifier."
+          "purpose": "Form field identifier. Exported foreign key FK_field_column_mapping_field: form_id -> dbo.cf_fields.form_id; field_id -> dbo.cf_fields.field_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "external_datasource_column": {
           "confidence": "inferred",
@@ -3092,11 +3092,11 @@
       "columns": {
         "form_id": {
           "confidence": "inferred",
-          "purpose": "Form definition identifier."
+          "purpose": "Form definition identifier. Exported foreign key FK_form_proc_mappng_form: form_id -> dbo.cf_forms.form_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_form_proc_mappng_bp_proc: process_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -3444,7 +3444,7 @@
       "columns": {
         "form_id": {
           "confidence": "inferred",
-          "purpose": "Form definition identifier."
+          "purpose": "Form definition identifier. Exported foreign key FK_cf_forms_updated_info_cf_forms: form_id -> dbo.cf_forms.form_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "page_type": {
           "confidence": "inferred",
@@ -3580,7 +3580,7 @@
         },
         "mapping_id": {
           "confidence": "inferred",
-          "purpose": "Mapping row identifier."
+          "purpose": "Mapping row identifier. Exported foreign key FK_lu_parnt_fld_fld_col_mappng: mapping_id -> dbo.cf_field_column_mapping.mapping_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -3593,7 +3593,7 @@
       "columns": {
         "mapping_id": {
           "confidence": "inferred",
-          "purpose": "Mapping row identifier."
+          "purpose": "Mapping row identifier. Exported foreign key FK_lu_poplt_fld_fld_col_mappng: mapping_id -> dbo.cf_field_column_mapping.mapping_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -3610,7 +3610,7 @@
         },
         "external_datasource_id": {
           "confidence": "inferred",
-          "purpose": "External Datasource identifier associated with the lookup rule record."
+          "purpose": "External Datasource identifier associated with the lookup rule record. Exported foreign key FK_lookup_rules_ext_datasource: external_datasource_id -> dbo.cf_external_datasources.datasource_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "created_by": {
           "confidence": "inferred",
@@ -3651,11 +3651,11 @@
       "columns": {
         "lookup_rule_id": {
           "confidence": "inferred",
-          "purpose": "Lookup rule identifier."
+          "purpose": "Lookup rule identifier. Exported foreign key FK_cf_lookup_tokens_rule: lookup_rule_id -> dbo.cf_lookup_rules.lookup_rule_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "form_id": {
           "confidence": "inferred",
-          "purpose": "Form definition identifier."
+          "purpose": "Form definition identifier. Exported foreign key FK_cf_lookup_tokens_form: form_id -> dbo.cf_forms.form_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "token_type": {
           "confidence": "inferred",
@@ -3705,7 +3705,7 @@
       "columns": {
         "tenant_id": {
           "confidence": "inferred",
-          "purpose": "Forms tenant identifier."
+          "purpose": "Forms tenant identifier. Exported foreign key FK_tenant_options: tenant_id -> dbo.cf_tenants.tenant_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "optionname": {
           "confidence": "inferred",
@@ -3750,7 +3750,7 @@
         },
         "submission_id": {
           "confidence": "inferred",
-          "purpose": "Form submission identifier."
+          "purpose": "Form submission identifier. Exported foreign key FK_cf_payment_history: submission_id -> dbo.cf_submissions.submission_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "merchant_id": {
           "confidence": "inferred",
@@ -3758,7 +3758,7 @@
         },
         "payment_gateway_id": {
           "confidence": "inferred",
-          "purpose": "Payment gateway identifier."
+          "purpose": "Payment gateway identifier. Exported foreign key FK_payment_gateway_cf_payment_history: payment_gateway_id -> dbo.payment_gateway.id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -3771,11 +3771,11 @@
       "columns": {
         "authorization_object_id": {
           "confidence": "inferred",
-          "purpose": "Authorization Object identifier associated with the role authorization object mapping record."
+          "purpose": "Authorization Object identifier associated with the role authorization object mapping record. Exported foreign key FK_role_profile_auth_object: authorization_object_id -> dbo.cf_authorization_objects.authorization_object_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "role_id": {
           "confidence": "inferred",
-          "purpose": "Forms role identifier."
+          "purpose": "Forms role identifier. Exported foreign key FK_role_profile_role: role_id -> dbo.cf_roles.role_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -3829,7 +3829,7 @@
         },
         "rule_id": {
           "confidence": "inferred",
-          "purpose": "Form rule identifier."
+          "purpose": "Form rule identifier. Exported foreign key FK_rule_criterion: rule_id -> dbo.cf_rules.rule_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "field_id": {
           "confidence": "inferred",
@@ -3862,7 +3862,7 @@
       "columns": {
         "rule_id": {
           "confidence": "inferred",
-          "purpose": "Form rule identifier."
+          "purpose": "Form rule identifier. Exported foreign key FK_rule_target: rule_id -> dbo.cf_rules.rule_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "field_id": {
           "confidence": "inferred",
@@ -3915,7 +3915,7 @@
         },
         "form_id": {
           "confidence": "inferred",
-          "purpose": "Form definition identifier."
+          "purpose": "Form definition identifier. Exported foreign key FK_rules_form: form_id -> dbo.cf_forms.form_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "category": {
           "confidence": "inferred",
@@ -3952,7 +3952,7 @@
         },
         "sess_id": {
           "confidence": "inferred",
-          "purpose": "API session identifier."
+          "purpose": "API session identifier. Exported foreign key FK_cf_session_variables_session: sess_id -> dbo.cf_sessions.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "variable_name": {
           "confidence": "inferred",
@@ -3981,11 +3981,11 @@
         },
         "tenant_id": {
           "confidence": "inferred",
-          "purpose": "Forms tenant identifier."
+          "purpose": "Forms tenant identifier. Exported foreign key FK_cf_sessions_tenant: tenant_id -> dbo.cf_tenants.tenant_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_cf_sessions_user: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "ip_address": {
           "confidence": "inferred",
@@ -4039,7 +4039,7 @@
         },
         "sr_id": {
           "confidence": "inferred",
-          "purpose": "Static report identifier."
+          "purpose": "Static report identifier. Exported foreign key FK_cf_static_report_data_cf_bp_static_reports: sr_id -> dbo.cf_bp_static_reports.sr_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "data": {
           "confidence": "unknown",
@@ -4060,7 +4060,7 @@
         },
         "session_id": {
           "confidence": "inferred",
-          "purpose": "Session identifier."
+          "purpose": "Session identifier. Exported foreign key FK_stl_access_tokens_session: session_id -> dbo.cf_sessions.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "value": {
           "confidence": "inferred",
@@ -4212,11 +4212,11 @@
       "columns": {
         "role_id": {
           "confidence": "inferred",
-          "purpose": "Forms role identifier."
+          "purpose": "Forms role identifier. Exported foreign key FK_tenant_group_in_role_role: role_id -> dbo.cf_roles.role_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "tenant_group_id": {
           "confidence": "inferred",
-          "purpose": "Tenant group identifier."
+          "purpose": "Tenant group identifier. Exported foreign key FK_tenant_group_in_role_mapping: tenant_group_id -> dbo.cf_tenant_group_mapping.tenant_group_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "date_updated": {
           "confidence": "inferred",
@@ -4237,11 +4237,11 @@
       "columns": {
         "tenant_id": {
           "confidence": "inferred",
-          "purpose": "Forms tenant identifier."
+          "purpose": "Forms tenant identifier. Exported foreign key FK_tenant_group_mapping_tenant: tenant_id -> dbo.cf_tenants.tenant_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "group_id": {
           "confidence": "inferred",
-          "purpose": "Forms group identifier."
+          "purpose": "Forms group identifier. Exported foreign key FK_tenant_group_mapping_group: group_id -> dbo.cf_usergroups.group_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "tenant_group_id": {
           "confidence": "inferred",
@@ -4258,11 +4258,11 @@
       "columns": {
         "cf_tenant_user_id": {
           "confidence": "inferred",
-          "purpose": "Tenant user mapping identifier."
+          "purpose": "Tenant user mapping identifier. Exported foreign key FK_cf_tenant_user_in_role_user: cf_tenant_user_id -> dbo.cf_tenant_user_mapping.cf_tenant_user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "role_id": {
           "confidence": "inferred",
-          "purpose": "Forms role identifier."
+          "purpose": "Forms role identifier. Exported foreign key FK_cf_tenant_user_in_role_role: role_id -> dbo.cf_roles.role_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "date_updated": {
           "confidence": "inferred",
@@ -4283,11 +4283,11 @@
       "columns": {
         "tenant_id": {
           "confidence": "inferred",
-          "purpose": "Forms tenant identifier."
+          "purpose": "Forms tenant identifier. Exported foreign key FK_tenant_user_mapping_tenant: tenant_id -> dbo.cf_tenants.tenant_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_tenant_user_mapping_user: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "cf_tenant_user_id": {
           "confidence": "inferred",
@@ -4361,7 +4361,7 @@
         },
         "logo_id": {
           "confidence": "inferred",
-          "purpose": "Logo asset identifier."
+          "purpose": "Logo asset identifier. Exported foreign key FK_theme_logo: logo_id -> dbo.logo.logo_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -4374,7 +4374,7 @@
       "columns": {
         "form_id": {
           "confidence": "inferred",
-          "purpose": "Form definition identifier."
+          "purpose": "Form definition identifier. Exported foreign key FK_thumbnail_form: form_id -> dbo.cf_forms.form_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "thumbnail": {
           "confidence": "inferred",
@@ -4391,7 +4391,7 @@
       "columns": {
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_cf_timers_business_processes: process_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "status": {
           "confidence": "inferred",
@@ -4440,7 +4440,7 @@
         },
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_user_profile_users: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "fav_bp_list": {
           "confidence": "inferred",
@@ -4642,11 +4642,11 @@
         },
         "sid": {
           "confidence": "inferred",
-          "purpose": "S identifier associated with the user process profile record."
+          "purpose": "S identifier associated with the user process profile record. Exported foreign key FK_user_profile_by_bp_users: sid -> dbo.cf_users.sid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_user_profile_biz_processes: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -4663,7 +4663,7 @@
         },
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_user_snapshot_user: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "username": {
           "confidence": "inferred",
@@ -4753,11 +4753,11 @@
         },
         "group_id": {
           "confidence": "inferred",
-          "purpose": "Forms group identifier."
+          "purpose": "Forms group identifier. Exported foreign key FK_usergroups_in_role_usrgroup: group_id -> dbo.cf_usergroups.group_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "role_id": {
           "confidence": "inferred",
-          "purpose": "Forms role identifier."
+          "purpose": "Forms role identifier. Exported foreign key FK_usergroups_in_role_role: role_id -> dbo.cf_roles.role_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "date_updated": {
           "confidence": "inferred",
@@ -4782,11 +4782,11 @@
       "columns": {
         "group_id": {
           "confidence": "inferred",
-          "purpose": "Forms group identifier."
+          "purpose": "Forms group identifier. Exported foreign key FK_group_user_mapping_group: group_id -> dbo.cf_usergroups.group_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_group_user_mapping_user: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -4904,11 +4904,11 @@
         },
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_users_in_role_user: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "role_id": {
           "confidence": "inferred",
-          "purpose": "Forms role identifier."
+          "purpose": "Forms role identifier. Exported foreign key FK_users_in_role_role: role_id -> dbo.cf_roles.role_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "date_updated": {
           "confidence": "inferred",
@@ -4945,11 +4945,11 @@
         },
         "tenant_id": {
           "confidence": "inferred",
-          "purpose": "Forms tenant identifier."
+          "purpose": "Forms tenant identifier. Exported foreign key FK_users_sign_up_tenant: tenant_id -> dbo.cf_tenants.tenant_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "role_id": {
           "confidence": "inferred",
-          "purpose": "Forms role identifier."
+          "purpose": "Forms role identifier. Exported foreign key FK_users_sign_up_role: role_id -> dbo.cf_roles.role_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -5013,7 +5013,7 @@
         },
         "view_id": {
           "confidence": "inferred",
-          "purpose": "View identifier."
+          "purpose": "View identifier. Exported foreign key FK_cf_view_security_viewid: view_id -> dbo.cf_view_profile_by_bp.view_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "secu_id": {
           "confidence": "inferred",
@@ -5087,7 +5087,7 @@
       "columns": {
         "volume_id": {
           "confidence": "inferred",
-          "purpose": "Storage volume identifier."
+          "purpose": "Storage volume identifier. Exported foreign key FK_cf_volume_security_volumes: volume_id -> dbo.cf_volumes.volume_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "user_group_id": {
           "confidence": "inferred",
@@ -5145,11 +5145,11 @@
       "columns": {
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_dashboard_favs_users: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "dash_id": {
           "confidence": "inferred",
-          "purpose": "Dashboard identifier."
+          "purpose": "Dashboard identifier. Exported foreign key FK_dashboard_favs_dashboards: dash_id -> dbo.dashboards.id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -5171,7 +5171,7 @@
         },
         "dash_id": {
           "confidence": "inferred",
-          "purpose": "Dashboard identifier."
+          "purpose": "Dashboard identifier. Exported foreign key FK_dashboard_security_dashboards: dash_id -> dbo.dashboards.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "type": {
           "confidence": "observed",
@@ -5192,7 +5192,7 @@
         },
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_dashboards_business_processes: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "type": {
           "confidence": "inferred",
@@ -5209,11 +5209,11 @@
       "columns": {
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_dashboards_by_user_cf_users: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "dashboard_id": {
           "confidence": "inferred",
-          "purpose": "Dashboard identifier."
+          "purpose": "Dashboard identifier. Exported foreign key FK_dashboards_by_user_dashboards: dashboard_id -> dbo.dashboards.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "settings_json": {
           "confidence": "unknown",
@@ -5230,11 +5230,11 @@
       "columns": {
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_dist_order_user: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "round_robin_id": {
           "confidence": "inferred",
-          "purpose": "Round Robin identifier associated with the round-robin distribution order record."
+          "purpose": "Round Robin identifier associated with the round-robin distribution order record. Exported foreign key FK_dist_order_round_robin: round_robin_id -> dbo.round_robin_distributions.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "order": {
           "confidence": "inferred",
@@ -5255,7 +5255,7 @@
         },
         "submission_id": {
           "confidence": "inferred",
-          "purpose": "Form submission identifier."
+          "purpose": "Form submission identifier. Exported foreign key FK_draft_lockout_data_cf_form_submissions: submission_id -> dbo.cf_form_submissions.submission_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "form_id": {
           "confidence": "inferred",
@@ -5321,7 +5321,7 @@
         },
         "scheduling_id": {
           "confidence": "inferred",
-          "purpose": "Report email schedule identifier."
+          "purpose": "Report email schedule identifier. Exported foreign key FK_email_report_timer_report_email_scheduling: scheduling_id -> dbo.report_email_scheduling.scheduling_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -5354,7 +5354,7 @@
         },
         "top_level_process_id": {
           "confidence": "inferred",
-          "purpose": "Top Level Process identifier associated with the simulation or design entity record."
+          "purpose": "Top Level Process identifier associated with the simulation or design entity record. Exported foreign key FK_entities_process: top_level_process_id -> dbo.cf_bp_processes.process_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -5367,11 +5367,11 @@
       "columns": {
         "tenant_id": {
           "confidence": "inferred",
-          "purpose": "Forms tenant identifier."
+          "purpose": "Forms tenant identifier. Exported foreign key FK_entities_in_tenant_cf_tenants: tenant_id -> dbo.cf_tenants.tenant_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "entity_id": {
           "confidence": "inferred",
-          "purpose": "Entity identifier."
+          "purpose": "Entity identifier. Exported foreign key FK_entities_in_tenant_entities: entity_id -> dbo.entities.id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -5417,15 +5417,15 @@
       "columns": {
         "bp_data_id": {
           "confidence": "inferred",
-          "purpose": "Submitted process data value identifier."
+          "purpose": "Submitted process data value identifier. Exported foreign key FK_formatted_variables_bp_data: bp_data_id -> dbo.cf_bp_data.bp_data_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "attribute_id": {
           "confidence": "inferred",
-          "purpose": "Process data attribute identifier."
+          "purpose": "Process data attribute identifier. Exported foreign key FK_formatted_variables_bp_dataset: attribute_id -> dbo.cf_bp_dataset.attribute_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bp_instance_id": {
           "confidence": "inferred",
-          "purpose": "Business process instance identifier."
+          "purpose": "Business process instance identifier. Exported foreign key FK_formatted_variables_main_instance: bp_instance_id -> dbo.cf_bp_main_instances.bp_instance_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "value_string": {
           "confidence": "inferred",
@@ -5437,7 +5437,7 @@
         },
         "value_time": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for value time on the formatted submitted variable value record."
+          "purpose": "SQL time-of-day representation of the formatted variable value. This column does not include a date or time-zone offset."
         },
         "value_datetime": {
           "confidence": "inferred",
@@ -5461,8 +5461,8 @@
           "purpose": "Primary identifier for the formula operand record."
         },
         "formula_id": {
-          "confidence": "unknown",
-          "purpose": "Formula identifier."
+          "confidence": "inferred",
+          "purpose": "Parent formula reference to dbo.formulae.id through exported foreign key FK_formula_operands_formula. The relationship establishes the target, not expression evaluation or operand ordering."
         },
         "discriminator": {
           "confidence": "inferred",
@@ -5470,11 +5470,11 @@
         },
         "trigger_form_id": {
           "confidence": "inferred",
-          "purpose": "Trigger form identifier."
+          "purpose": "Form component of the composite reference to dbo.cf_fields(form_id, field_id), paired with trigger_field_id through FK_operand_trigger_field. Preserve both identifiers when resolving the referenced field."
         },
         "trigger_field_id": {
           "confidence": "inferred",
-          "purpose": "Trigger field identifier."
+          "purpose": "Field component of the composite reference to dbo.cf_fields(form_id, field_id), paired with trigger_form_id. Do not resolve this operand using field_id alone."
         },
         "xpath_expression": {
           "confidence": "unknown",
@@ -5482,7 +5482,7 @@
         },
         "member_id": {
           "confidence": "inferred",
-          "purpose": "Entity member identifier."
+          "purpose": "Entity-member reference to dbo.members.id through FK_operand_member. The reviewed discriminator-1 operand populated this reference and xpath_expression; the complete discriminator mapping and XPath evaluation rules remain unverified."
         }
       }
     },
@@ -5520,11 +5520,11 @@
         },
         "transition_source_step_id": {
           "confidence": "inferred",
-          "purpose": "Transition Source Step identifier associated with the formula definition record."
+          "purpose": "Transition Source Step identifier associated with the formula definition record. Exported foreign key FK_formula_transition: transition_process_id -> dbo.cf_bp_transitions.process_id; transition_source_step_id -> dbo.cf_bp_transitions.source_step_id; transition_target_step_id -> dbo.cf_bp_transitions.target_step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "transition_target_step_id": {
           "confidence": "inferred",
-          "purpose": "Transition Target Step identifier associated with the formula definition record."
+          "purpose": "Transition Target Step identifier associated with the formula definition record. Exported foreign key FK_formula_transition: transition_process_id -> dbo.cf_bp_transitions.process_id; transition_source_step_id -> dbo.cf_bp_transitions.source_step_id; transition_target_step_id -> dbo.cf_bp_transitions.target_step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -5541,7 +5541,7 @@
         },
         "profile_id": {
           "confidence": "inferred",
-          "purpose": "Profile identifier."
+          "purpose": "Profile identifier. Exported foreign key FK_global_lfrepo_security_lfrepo: profile_id -> dbo.global_lfrepo_profiles.profile_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "user_group_id": {
           "confidence": "inferred",
@@ -5674,7 +5674,7 @@
       "columns": {
         "list_id": {
           "confidence": "inferred",
-          "purpose": "List definition identifier."
+          "purpose": "List definition identifier. Exported foreign key FK_list_options_list: list_id -> dbo.lists.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "option_id": {
           "confidence": "inferred",
@@ -5715,7 +5715,7 @@
         },
         "bp_instance_id": {
           "confidence": "inferred",
-          "purpose": "Business process instance identifier."
+          "purpose": "Business process instance identifier. Exported foreign key FK_list_variable_entries_main_instance: bp_instance_id -> dbo.cf_bp_main_instances.bp_instance_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bp_data_id": {
           "confidence": "observed",
@@ -5723,7 +5723,7 @@
         },
         "attribute_id": {
           "confidence": "inferred",
-          "purpose": "Process data attribute identifier."
+          "purpose": "Process data attribute identifier. Exported foreign key FK_list_variable_entries_bp_dataset: attribute_id -> dbo.cf_bp_dataset.attribute_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "name": {
           "confidence": "inferred",
@@ -5769,7 +5769,7 @@
         },
         "unique_id": {
           "confidence": "inferred",
-          "purpose": "Unique identifier associated with the logo asset record."
+          "purpose": "Unique identifier associated with the logo asset record. Exported foreign key FK_logo_file_table: unique_id -> dbo.file_table.unique_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -5782,7 +5782,7 @@
       "columns": {
         "bp_instance_id": {
           "confidence": "inferred",
-          "purpose": "Business process instance identifier."
+          "purpose": "Business process instance identifier. Exported foreign key FK_main_inst_ext_data_main_insts: bp_instance_id -> dbo.cf_bp_main_instances.bp_instance_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "routing_xml": {
           "confidence": "unknown",
@@ -5807,7 +5807,7 @@
         },
         "parent_entity_id": {
           "confidence": "inferred",
-          "purpose": "Parent entity identifier."
+          "purpose": "Parent entity identifier. Exported foreign key FK_parent_members_entity: parent_entity_id -> dbo.entities.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "name": {
           "confidence": "inferred",
@@ -5815,15 +5815,15 @@
         },
         "member_type_id": {
           "confidence": "inferred",
-          "purpose": "Entity member type identifier."
+          "purpose": "Entity member type identifier. Exported foreign key FK_members_primitive_type: member_type_id -> dbo.primitive_data_types.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "list_id": {
           "confidence": "inferred",
-          "purpose": "List definition identifier."
+          "purpose": "List definition identifier. Exported foreign key FK_members_list: list_id -> dbo.lists.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "entity_associated_id": {
           "confidence": "inferred",
-          "purpose": "Entity Associated identifier associated with the entity member definition record."
+          "purpose": "Entity Associated identifier associated with the entity member definition record. Exported foreign key FK_members_entity_associated: entity_associated_id -> dbo.entities.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "multiplicity": {
           "confidence": "inferred",
@@ -5856,11 +5856,11 @@
         },
         "modern_form_id": {
           "confidence": "inferred",
-          "purpose": "Modern Form identifier associated with the modern form image mapping record."
+          "purpose": "Modern Form identifier associated with the modern form image mapping record. Exported foreign key FK_modern_form_image_mapping_cf_forms: modern_form_id -> dbo.cf_forms.form_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "logo_id": {
           "confidence": "inferred",
-          "purpose": "Logo asset identifier."
+          "purpose": "Logo asset identifier. Exported foreign key FK_modern_form_image_mapping_logo: logo_id -> dbo.logo.logo_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -5877,11 +5877,11 @@
         },
         "modern_theme_id": {
           "confidence": "inferred",
-          "purpose": "Modern Theme identifier associated with the modern theme image mapping record."
+          "purpose": "Modern Theme identifier associated with the modern theme image mapping record. Exported foreign key FK_modern_theme_image_mapping_cf_theme: modern_theme_id -> dbo.cf_theme.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "logo_id": {
           "confidence": "inferred",
-          "purpose": "Logo asset identifier."
+          "purpose": "Logo asset identifier. Exported foreign key FK_modern_theme_image_mapping_logo: logo_id -> dbo.logo.logo_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -5898,7 +5898,7 @@
         },
         "tenant_id": {
           "confidence": "inferred",
-          "purpose": "Forms tenant identifier."
+          "purpose": "Forms tenant identifier. Exported foreign key FK_payment_gateway_cf_tenants: tenant_id -> dbo.cf_tenants.tenant_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "gateway_type": {
           "confidence": "inferred",
@@ -6003,15 +6003,15 @@
         },
         "engine_id": {
           "confidence": "inferred",
-          "purpose": "Prediction engine identifier."
+          "purpose": "Prediction engine identifier. Exported foreign key FK_prediction_engines_security_engine: engine_id -> dbo.prediction_engines.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "group_id": {
           "confidence": "inferred",
-          "purpose": "Forms group identifier."
+          "purpose": "Forms group identifier. Exported foreign key FK_prediction_engines_security_group: group_id -> dbo.cf_usergroups.group_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_prediction_engines_security_user: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -6061,7 +6061,7 @@
       "columns": {
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_prediction_options_business_processes: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "enable_predictions": {
           "confidence": "inferred",
@@ -6103,19 +6103,19 @@
         },
         "entity_from_id": {
           "confidence": "inferred",
-          "purpose": "Entity From identifier associated with the entity relationship definition record."
+          "purpose": "Entity From identifier associated with the entity relationship definition record. Exported foreign key FK_relationships_entity_from: entity_from_id -> dbo.entities.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "member_from_id": {
           "confidence": "inferred",
-          "purpose": "Member From identifier associated with the entity relationship definition record."
+          "purpose": "Member From identifier associated with the entity relationship definition record. Exported foreign key FK_relationship_member_from: member_from_id -> dbo.members.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "entity_to_id": {
           "confidence": "inferred",
-          "purpose": "Entity To identifier associated with the entity relationship definition record."
+          "purpose": "Entity To identifier associated with the entity relationship definition record. Exported foreign key FK_relationships_entity_to: entity_to_id -> dbo.entities.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "member_to_id": {
           "confidence": "inferred",
-          "purpose": "Member To identifier associated with the entity relationship definition record."
+          "purpose": "Member To identifier associated with the entity relationship definition record. Exported foreign key FK_relationship_member_to: member_to_id -> dbo.members.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "relationship_type": {
           "confidence": "inferred",
@@ -6144,11 +6144,11 @@
         },
         "subview_id": {
           "confidence": "inferred",
-          "purpose": "Report subview identifier."
+          "purpose": "Report subview identifier. Exported foreign key FK_report_aggregations_subview: subview_id -> dbo.report_subview.subview_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "attributes_grouping_key_guid": {
           "confidence": "inferred",
-          "purpose": "Attributes Grouping Key Gu identifier associated with the report aggregation definition record."
+          "purpose": "Attributes Grouping Key Gu identifier associated with the report aggregation definition record. Exported foreign key FK_report_aggregations_attributes_grouping_guid: attributes_grouping_key_guid -> dbo.attributes_grouping_key.attributes_grouping_key_guid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "aggregation_column_id": {
           "confidence": "observed",
@@ -6177,19 +6177,19 @@
         },
         "subview_id": {
           "confidence": "inferred",
-          "purpose": "Report subview identifier."
+          "purpose": "Report subview identifier. Exported foreign key FK_report_columns_subview: subview_id -> dbo.report_subview.subview_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "user_profile_by_bp_id": {
           "confidence": "inferred",
-          "purpose": "User Profile By Business Process identifier associated with the report column definition record."
+          "purpose": "User Profile By Business Process identifier associated with the report column definition record. Exported foreign key FK_report_columns_user_profile_by_bp: user_profile_by_bp_id -> dbo.cf_user_profile_by_bp.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "attributes_grouping_key_guid": {
           "confidence": "inferred",
-          "purpose": "Attributes Grouping Key Gu identifier associated with the report column definition record."
+          "purpose": "Attributes Grouping Key Gu identifier associated with the report column definition record. Exported foreign key FK_report_columns_attributes_grouping_guid: attributes_grouping_key_guid -> dbo.attributes_grouping_key.attributes_grouping_key_guid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "regular_column_id": {
           "confidence": "observed",
-          "purpose": "Identifier for a built-in report column, as an alternative to a process-variable grouping key. In the reviewed table report, 12 corresponds to Status and 10 to Start date; other mappings are unverified."
+          "purpose": "Identifier for a built-in report column, as an alternative to a process-variable grouping key. Reviewed Forms 12.0.2607.40144 table reports correlate 3 with Current Step, 12 with Status, and 10 with Start date. Other mappings and cross-version consistency remain unverified."
         },
         "display_name": {
           "confidence": "inferred",
@@ -6214,7 +6214,7 @@
         },
         "subview_id": {
           "confidence": "inferred",
-          "purpose": "Report subview identifier."
+          "purpose": "Report subview identifier. Exported foreign key FK_report_email_scheduling_report_subview: subview_id -> dbo.report_subview.subview_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "status": {
           "confidence": "inferred",
@@ -6275,7 +6275,7 @@
         },
         "scheduling_id": {
           "confidence": "inferred",
-          "purpose": "Report email schedule identifier."
+          "purpose": "Report email schedule identifier. Exported foreign key FK_report_email_scheduling_favs_report_email_scheduling: scheduling_id -> dbo.report_email_scheduling.scheduling_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "user_id": {
           "confidence": "inferred",
@@ -6296,11 +6296,11 @@
         },
         "subview_id": {
           "confidence": "inferred",
-          "purpose": "Report subview identifier."
+          "purpose": "Report subview identifier. Exported foreign key FK_report_grouping_keys_subview: subview_id -> dbo.report_subview.subview_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "attributes_grouping_key_guid": {
           "confidence": "inferred",
-          "purpose": "Attributes Grouping Key Gu identifier associated with the report grouping key record."
+          "purpose": "Attributes Grouping Key Gu identifier associated with the report grouping key record. Exported foreign key FK_report_grouping_keys_attributes_grouping_guid: attributes_grouping_key_guid -> dbo.attributes_grouping_key.attributes_grouping_key_guid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "groupby_column_id": {
           "confidence": "inferred",
@@ -6325,7 +6325,7 @@
         },
         "group_id": {
           "confidence": "inferred",
-          "purpose": "Forms group identifier."
+          "purpose": "Forms group identifier. Exported foreign key FK_report_grouping_modifiers_grouping: group_id -> dbo.report_grouping_keys.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "modifier": {
           "confidence": "unknown",
@@ -6342,11 +6342,11 @@
       "columns": {
         "view_id": {
           "confidence": "inferred",
-          "purpose": "View identifier."
+          "purpose": "View identifier. Exported foreign key FK_report_processes_mapping_view: view_id -> dbo.cf_view_profile_by_bp.view_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_report_processes_mapping_bp: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -6363,7 +6363,7 @@
         },
         "subview_id": {
           "confidence": "inferred",
-          "purpose": "Report subview identifier."
+          "purpose": "Report subview identifier. Exported foreign key FK_report_sorting_subview: subview_id -> dbo.report_subview.subview_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "regular_column_id": {
           "confidence": "inferred",
@@ -6371,11 +6371,11 @@
         },
         "attributes_grouping_key_guid": {
           "confidence": "inferred",
-          "purpose": "Attributes Grouping Key Gu identifier associated with the report sorting definition record."
+          "purpose": "Attributes Grouping Key Gu identifier associated with the report sorting definition record. Exported foreign key FK_report_sorting_attributes_grouping_guid: attributes_grouping_key_guid -> dbo.attributes_grouping_key.attributes_grouping_key_guid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "direction": {
           "confidence": "observed",
-          "purpose": "Sort-direction code. Value 1 corresponds to Descending in the reviewed table report; other values have not been directly mapped."
+          "purpose": "Sort-direction code. Reviewed Forms 12.0.2607.40144 table reports correlate 0 with Ascending and 1 with Descending. These are sample observations; multiple-sort precedence, other values, and cross-version consistency remain unverified."
         },
         "priority": {
           "confidence": "inferred",
@@ -6396,11 +6396,11 @@
         },
         "view_id": {
           "confidence": "inferred",
-          "purpose": "View identifier."
+          "purpose": "Application report-view identifier associated with this subview, not the object ID of a SQL Server view. Reviewed report routes correlate view_id and subview_id; retain both when resolving report configuration."
         },
         "type": {
           "confidence": "inferred",
-          "purpose": "Type or category value for the record."
+          "purpose": "Report visualization code. Existing Forms 12.0.2607.40144 UI samples correlate 0 with a simple table, 1 with a vertical bar chart, and 6 with a pie chart. These are sample mappings, not an exhaustive enum or a guarantee for other builds."
         },
         "style_json": {
           "confidence": "unknown",
@@ -6425,11 +6425,11 @@
         },
         "team_id": {
           "confidence": "inferred",
-          "purpose": "Team identifier."
+          "purpose": "Team identifier. Exported foreign key FK_round_robin_team: team_id -> dbo.teams.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "prev_user_id": {
           "confidence": "inferred",
-          "purpose": "Prev User identifier associated with the round-robin distribution state record."
+          "purpose": "Prev User identifier associated with the round-robin distribution state record. Exported foreign key FK_round_robin_prev_user: prev_user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "last_updated": {
           "confidence": "inferred",
@@ -6441,11 +6441,11 @@
         },
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_round_robin_step: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "step_id": {
           "confidence": "inferred",
-          "purpose": "Business process step identifier."
+          "purpose": "Business process step identifier. Exported foreign key FK_round_robin_step: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -6549,11 +6549,11 @@
         },
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_simulation_task_step: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "step_id": {
           "confidence": "inferred",
-          "purpose": "Business process step identifier."
+          "purpose": "Business process step identifier. Exported foreign key FK_simulation_task_step: process_id -> dbo.cf_bp_steps.process_id; step_id -> dbo.cf_bp_steps.step_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "resource_list": {
           "confidence": "inferred",
@@ -6565,7 +6565,7 @@
         },
         "due_date_param": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for due date param on the simulation task record."
+          "purpose": "Integer due-date parameter for the simulation task. Units and parameter interpretation are unverified."
         },
         "priority_rule": {
           "confidence": "inferred",
@@ -6623,7 +6623,7 @@
         },
         "sr_id": {
           "confidence": "inferred",
-          "purpose": "Static report identifier."
+          "purpose": "Static report identifier. Exported foreign key FK_static_report_favs_cf_bp_static_reports: sr_id -> dbo.cf_bp_static_reports.sr_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -6640,11 +6640,11 @@
         },
         "sr_id": {
           "confidence": "inferred",
-          "purpose": "Static report identifier."
+          "purpose": "Static report identifier. Exported foreign key FK_static_report_process_mapping_cf_bp_static_reports: sr_id -> dbo.cf_bp_static_reports.sr_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bp_id": {
           "confidence": "inferred",
-          "purpose": "Business process definition identifier."
+          "purpose": "Business process definition identifier. Exported foreign key FK_static_report_process_mapping_cf_business_processes: bp_id -> dbo.cf_business_processes.bp_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "bp_name": {
           "confidence": "inferred",
@@ -6673,7 +6673,7 @@
         },
         "sr_id": {
           "confidence": "inferred",
-          "purpose": "Static report identifier."
+          "purpose": "Static report identifier. Exported foreign key FK_static_report_security_cf_bp_static_reports: sr_id -> dbo.cf_bp_static_reports.sr_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -6744,19 +6744,19 @@
         },
         "history_id": {
           "confidence": "inferred",
-          "purpose": "Worker instance history identifier."
+          "purpose": "Worker-history reference to dbo.cf_bp_worker_instance_history.history_id through FK_worker_instance_his_task_metric. All 109 reviewed metrics had distinct history IDs; this observed cardinality is not a universal uniqueness contract."
         },
         "instance_id": {
           "confidence": "inferred",
-          "purpose": "Worker or runtime instance identifier."
+          "purpose": "Worker reference to dbo.cf_bp_worker_instances.instance_id through FK_worker_instances_task_metric. The reviewed 109 metrics referenced 105 distinct workers; counting distinct workers is not equivalent to counting task metrics."
         },
         "step_id": {
           "confidence": "inferred",
-          "purpose": "Business process step identifier."
+          "purpose": "Step component of the composite reference to dbo.cf_bp_steps(process_id, step_id) through FK_task_metric_bp_step. Join with process_id; step_id alone does not identify the process-specific step."
         },
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process component of the composite reference to dbo.cf_bp_steps(process_id, step_id), paired with step_id. Retain the process context when resolving the metric's step."
         },
         "origin_step_name": {
           "confidence": "inferred",
@@ -6764,7 +6764,7 @@
         },
         "creation_date": {
           "confidence": "inferred",
-          "purpose": "Timestamp when the record was created."
+          "purpose": "Creation timestamp retained on the task metric. A reviewed Monitor creation time correlated after display-time conversion, but no metric creation timestamps exactly matched history start timestamps. Do not substitute history.start_date or assume a fixed timezone offset."
         },
         "last_assigned_start_date": {
           "confidence": "inferred",
@@ -6788,7 +6788,7 @@
         },
         "last_assigned_team_id": {
           "confidence": "inferred",
-          "purpose": "Last Assigned Team identifier associated with the task metrics mapping record."
+          "purpose": "Team reference retained for the last assignment, targeting dbo.teams.id through FK_team_task_metric. It does not by itself establish current individual ownership or effective team membership."
         },
         "last_assigned_owner_snapshot_id": {
           "confidence": "inferred",
@@ -6804,11 +6804,11 @@
         },
         "due_date": {
           "confidence": "inferred",
-          "purpose": "Due date associated with the task or record."
+          "purpose": "Due date retained on the task metric. Across 15 reviewed active task associations, 12 dates matched the current resume record and three were NULL on both sides. Historical synchronization and other lifecycle states remain unverified."
         },
         "finish_date": {
           "confidence": "inferred",
-          "purpose": "Timestamp when the record finished."
+          "purpose": "Finish timestamp retained on the task metric, distinct from worker-history finish_date. Only two reviewed metric/history finish timestamps matched exactly; do not substitute the history timestamp or infer a universal timing relationship."
         }
       }
     },
@@ -6825,11 +6825,11 @@
         },
         "process_id": {
           "confidence": "inferred",
-          "purpose": "Process definition or process version identifier."
+          "purpose": "Process definition or process version identifier. Exported foreign key FK_task_reminder_timers_cf_bp_task_reminders: process_id -> dbo.cf_bp_task_reminders.process_id; reminder_id -> dbo.cf_bp_task_reminders.reminder_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "reminder_id": {
           "confidence": "inferred",
-          "purpose": "Task reminder identifier."
+          "purpose": "Task reminder identifier. Exported foreign key FK_task_reminder_timers_cf_bp_task_reminders: process_id -> dbo.cf_bp_task_reminders.process_id; reminder_id -> dbo.cf_bp_task_reminders.reminder_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "main_instance_id": {
           "confidence": "inferred",
@@ -6858,7 +6858,7 @@
         },
         "user_profile_id": {
           "confidence": "inferred",
-          "purpose": "User Profile identifier associated with the task shown column preference record."
+          "purpose": "User Profile identifier associated with the task shown column preference record. Exported foreign key FK_task_shown_columns_user_profile: user_profile_id -> dbo.cf_user_profile_by_bp.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "column_name": {
           "confidence": "inferred",
@@ -6870,7 +6870,7 @@
         },
         "user_id": {
           "confidence": "inferred",
-          "purpose": "Forms user identifier."
+          "purpose": "Forms user identifier. Exported foreign key FK_task_shown_columns_user_id: user_id -> dbo.cf_users.user_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -6883,11 +6883,11 @@
       "columns": {
         "team_role_id": {
           "confidence": "inferred",
-          "purpose": "Team role identifier."
+          "purpose": "Team role identifier. Exported foreign key FK_team_member_team_role_mapping_role_id: team_role_id -> dbo.team_roles.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "team_member_id": {
           "confidence": "inferred",
-          "purpose": "Team member identifier."
+          "purpose": "Team member identifier. Exported foreign key FK_team_member_team_role_mapping_team_member: team_member_id -> dbo.team_members.id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -6910,7 +6910,7 @@
         },
         "team_id": {
           "confidence": "inferred",
-          "purpose": "Team identifier."
+          "purpose": "Team identifier. Exported foreign key FK_team_team_member: team_id -> dbo.teams.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "member_rights": {
           "confidence": "observed",
@@ -6955,7 +6955,7 @@
         },
         "team_id": {
           "confidence": "inferred",
-          "purpose": "Team identifier."
+          "purpose": "Team identifier. Exported foreign key FK_team_team_role: team_id -> dbo.teams.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "name": {
           "confidence": "inferred",
@@ -6992,7 +6992,7 @@
         },
         "tenant_id": {
           "confidence": "inferred",
-          "purpose": "Forms tenant identifier."
+          "purpose": "Forms tenant identifier. Exported foreign key FK_tenant_team: tenant_id -> dbo.cf_tenants.tenant_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "name": {
           "confidence": "inferred",
@@ -7016,7 +7016,7 @@
         },
         "avatar_id": {
           "confidence": "inferred",
-          "purpose": "Avatar identifier associated with the team record."
+          "purpose": "Avatar identifier associated with the team record. Exported foreign key FK_avatars_teams: avatar_id -> dbo.avatars.id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "date_updated": {
           "confidence": "inferred",
@@ -7070,7 +7070,7 @@
       "columns": {
         "history_id": {
           "confidence": "inferred",
-          "purpose": "Worker instance history identifier."
+          "purpose": "Worker instance history identifier. Exported foreign key FK_w_inst_history_ext_data_history: history_id -> dbo.cf_bp_worker_instance_history.history_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "routing_xml": {
           "confidence": "unknown",
@@ -7082,7 +7082,7 @@
         },
         "bp_instance_id": {
           "confidence": "inferred",
-          "purpose": "Business process instance identifier."
+          "purpose": "Business process instance identifier. Exported foreign key FK_bp_inst_history_ext_data: bp_instance_id -> dbo.cf_bp_main_instances.bp_instance_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "history_context_type": {
           "confidence": "inferred",

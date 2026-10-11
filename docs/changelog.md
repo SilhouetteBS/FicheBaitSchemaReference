@@ -4,6 +4,11 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Screened all 3,361 table columns in the four latest reviewed builds; enriched 318 purposes with exported foreign-key references and corrected or qualified 24 misleading date/time descriptions without upgrading runtime confidence.
+- Reconciled 67 Repository/Workflow column claims, corrected three schema-only confidence labels, and documented the remaining filing-date and view-metadata evidence gaps.
+- Added view output-column metadata to the SQL export, importer, snapshot validation and AI export, with a metadata-only views recovery script and automated regression coverage.
+- Added explicit empty-table limitations for trusted-login, instance-completion and task-queue reporting.
+
 - Reviewed all 60 unresolved dependency targets with explicit evidence categories; no missing object definitions were invented or warnings suppressed.
 - Clarified all 64 remaining Reporting-priority column notes across 329 versioned entries, including identity/join evidence, opaque-value limitations, and safe handling of design/diagnostic payloads. Recorded review dispositions in `docs/metadata-note-review.md`.
 

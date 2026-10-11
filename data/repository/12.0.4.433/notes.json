@@ -69,7 +69,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key active_doc_toc_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "who": {
           "confidence": "inferred",
@@ -216,7 +216,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key altedoc_toc_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "storeid": {
           "confidence": "inferred",
@@ -462,7 +462,7 @@
       "columns": {
         "ann_id": {
           "confidence": "inferred",
-          "purpose": "Annotation identifier."
+          "purpose": "Annotation identifier. Exported foreign key annaccess_ann_fk: ann_id -> dbo.ann.ann_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "sid": {
           "confidence": "inferred",
@@ -479,7 +479,7 @@
       "columns": {
         "ann_id": {
           "confidence": "inferred",
-          "purpose": "Annotation identifier."
+          "purpose": "Annotation identifier. Exported foreign key annhist_ann_fk: ann_id -> dbo.ann.ann_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "revision": {
           "confidence": "inferred",
@@ -508,7 +508,7 @@
       "columns": {
         "ann_id": {
           "confidence": "inferred",
-          "purpose": "Annotation identifier."
+          "purpose": "Annotation identifier. Exported foreign key annpoint_ann_fk: ann_id -> dbo.ann.ann_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "pos": {
           "confidence": "inferred",
@@ -533,7 +533,7 @@
       "columns": {
         "ann_id": {
           "confidence": "inferred",
-          "purpose": "Annotation identifier."
+          "purpose": "Annotation identifier. Exported foreign key annrect_ann_fk: ann_id -> dbo.ann.ann_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "pos": {
           "confidence": "inferred",
@@ -636,7 +636,7 @@
         },
         "last_event": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for last event on the audit log file row record."
+          "purpose": "Numeric last-event marker for the audit log. Whether this represents an event identifier or encoded time is unverified."
         },
         "log_state": {
           "confidence": "inferred",
@@ -869,7 +869,7 @@
         },
         "trigger_disp_act": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for trigger disposition act on the cutoff instruction record."
+          "purpose": "Single-character trigger disposition action code for the cutoff record. The action mapping is unverified."
         },
         "trigger_location_id": {
           "confidence": "inferred",
@@ -899,7 +899,7 @@
         },
         "event_id": {
           "confidence": "inferred",
-          "purpose": "Event definition identifier."
+          "purpose": "Event definition identifier. Exported foreign key coff_events_event_def_fk: event_id -> dbo.event_def.event_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -1033,7 +1033,7 @@
       "columns": {
         "vol_id": {
           "confidence": "inferred",
-          "purpose": "Repository volume identifier."
+          "purpose": "Repository volume identifier. Exported foreign key deletedelec_fk: vol_id -> dbo.vol.vol_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "storeid": {
           "confidence": "inferred",
@@ -1054,7 +1054,7 @@
       "columns": {
         "vol_id": {
           "confidence": "inferred",
-          "purpose": "Repository volume identifier."
+          "purpose": "Repository volume identifier. Exported foreign key deletedpage_fk: vol_id -> dbo.vol.vol_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "storeid": {
           "confidence": "inferred",
@@ -1092,7 +1092,7 @@
         },
         "final_locid": {
           "confidence": "inferred",
-          "purpose": "Final disposition location identifier."
+          "purpose": "Final disposition location identifier. Exported foreign key disp_sched_final_locid_fk: final_locid -> dbo.location.location_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "final_keep": {
           "confidence": "observed",
@@ -1234,7 +1234,7 @@
       "columns": {
         "sig_id": {
           "confidence": "inferred",
-          "purpose": "Document signature identifier."
+          "purpose": "Document signature identifier. Exported foreign key document_signature_targets_sig_id_fk: sig_id -> dbo.document_signatures.sig_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "target_sig_id": {
           "confidence": "inferred",
@@ -1255,7 +1255,7 @@
         },
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key document_signatures_tocid_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -1408,7 +1408,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key entryacl_toc_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "pos": {
           "confidence": "inferred",
@@ -1525,7 +1525,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key frozen_toc_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "root_id": {
           "confidence": "inferred",
@@ -1537,7 +1537,7 @@
         },
         "freezeid": {
           "confidence": "inferred",
-          "purpose": "Freeze identifier."
+          "purpose": "Freeze identifier. Exported foreign key frozen_freeze_fk: freezeid -> dbo.freeze.freezeid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "freeze_date": {
           "confidence": "inferred",
@@ -1575,7 +1575,7 @@
       "columns": {
         "time_stamp": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for time stamp on the index queue item record."
+          "purpose": "Numeric time-stamp marker for the index queue record. Encoding, units and whether it also provides ordering are unverified."
         },
         "tocid": {
           "confidence": "inferred",
@@ -1855,7 +1855,7 @@
         },
         "datetime_precision": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for datetime precision on the LFQL schema column row record."
+          "purpose": "Numeric date/time precision metadata for the described schema column. The application precision convention is unverified; this is not a timestamp."
         },
         "character_set_catalog": {
           "confidence": "inferred",
@@ -1929,7 +1929,7 @@
       "columns": {
         "pageid": {
           "confidence": "inferred",
-          "purpose": "Document page identifier."
+          "purpose": "Document page identifier. Exported foreign key lft_doc_fk: pageid -> dbo.doc.page_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "data": {
           "confidence": "unknown",
@@ -1974,7 +1974,7 @@
       "columns": {
         "pageid": {
           "confidence": "inferred",
-          "purpose": "Document page identifier."
+          "purpose": "Document page identifier. Exported foreign key loc_doc_fk: pageid -> dbo.doc.page_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "data": {
           "confidence": "unknown",
@@ -2168,7 +2168,7 @@
         },
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key plock_tock_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "owner": {
           "confidence": "inferred",
@@ -2233,7 +2233,7 @@
       "columns": {
         "prop_id": {
           "confidence": "inferred",
-          "purpose": "Field definition identifier."
+          "purpose": "Field definition identifier. Exported foreign key propacl_propdef_fk: prop_id -> dbo.propdef.prop_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "pos": {
           "confidence": "inferred",
@@ -2422,7 +2422,7 @@
       "columns": {
         "pset_id": {
           "confidence": "inferred",
-          "purpose": "Template identifier."
+          "purpose": "Template identifier. Exported foreign key pset_prop_group_propset_fk: pset_id -> dbo.propset.pset_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "group_id": {
           "confidence": "inferred",
@@ -2445,11 +2445,11 @@
       "columns": {
         "pset_id": {
           "confidence": "inferred",
-          "purpose": "Template identifier."
+          "purpose": "Template identifier. Exported foreign key pset_props_propset_fk: pset_id -> dbo.propset.pset_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "prop_id": {
           "confidence": "inferred",
-          "purpose": "Field definition identifier."
+          "purpose": "Field definition identifier. Exported foreign key pset_props_propdef_fk: prop_id -> dbo.propdef.prop_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "prop_pos": {
           "confidence": "observed",
@@ -2491,15 +2491,15 @@
         },
         "pset_id": {
           "confidence": "inferred",
-          "purpose": "Template identifier."
+          "purpose": "Template identifier. Exported foreign key pset_rule_pset_props_fk: pset_id -> dbo.pset_props.pset_id; prop_id -> dbo.pset_props.prop_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "prop_id": {
           "confidence": "inferred",
-          "purpose": "Field definition identifier."
+          "purpose": "Field definition identifier. Exported foreign key pset_rule_pset_props_fk: pset_id -> dbo.pset_props.pset_id; prop_id -> dbo.pset_props.prop_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "do_validate": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for do validate on the template field rule record."
+          "purpose": "Boolean validation setting for the property-set rule. The exact validation behavior and timing are unverified."
         },
         "lfe_id": {
           "confidence": "inferred",
@@ -2532,7 +2532,7 @@
       "columns": {
         "pset_rule_id": {
           "confidence": "inferred",
-          "purpose": "Template field rule identifier."
+          "purpose": "Template field rule identifier. Exported foreign key pset_rule_parent_pset_rule_fk: pset_rule_id -> dbo.pset_rule.pset_rule_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "parent_id": {
           "confidence": "inferred",
@@ -2549,7 +2549,7 @@
       "columns": {
         "pset_rule_id": {
           "confidence": "inferred",
-          "purpose": "Template field rule identifier."
+          "purpose": "Template field rule identifier. Exported foreign key pset_rule_query_fk: pset_rule_id -> dbo.pset_rule.pset_rule_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "rule_pos": {
           "confidence": "inferred",
@@ -2578,7 +2578,7 @@
       "columns": {
         "pset_id": {
           "confidence": "inferred",
-          "purpose": "Template identifier."
+          "purpose": "Template identifier. Exported foreign key psetacl_propdef_fk: pset_id -> dbo.propset.pset_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "pos": {
           "confidence": "inferred",
@@ -2625,7 +2625,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key recycle_bin_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "orig_parent": {
           "confidence": "observed",
@@ -2655,11 +2655,11 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key recycle_elec_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "vol_id": {
           "confidence": "inferred",
-          "purpose": "Repository volume identifier."
+          "purpose": "Repository volume identifier. Exported foreign key recycle_elec_vol_fk: vol_id -> dbo.vol.vol_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "edoc_storeid": {
           "confidence": "inferred",
@@ -2737,11 +2737,11 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key rf_events_toc_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "event_id": {
           "confidence": "inferred",
-          "purpose": "Event definition identifier."
+          "purpose": "Event definition identifier. Exported foreign key rf_events_event_def_fk: event_id -> dbo.event_def.event_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "event_date": {
           "confidence": "inferred",
@@ -3423,7 +3423,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key series_toc_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "series_code": {
           "confidence": "inferred",
@@ -3564,7 +3564,7 @@
       "columns": {
         "tag_id": {
           "confidence": "inferred",
-          "purpose": "Entry tag identifier."
+          "purpose": "Entry tag identifier. Exported foreign key tagacl_tagdef_fk: tag_id -> dbo.tag.tag_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "pos": {
           "confidence": "inferred",
@@ -3701,7 +3701,7 @@
         },
         "linkto": {
           "confidence": "inferred",
-          "purpose": "Linked target repository entry identifier."
+          "purpose": "Linked target repository entry identifier. Exported foreign key toc_linkto_fk: linkto -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "modified": {
           "confidence": "inferred",
@@ -3732,7 +3732,7 @@
           "purpose": "Repository Entry Security Descriptor Control for the repository entry record."
         },
         "toc_uuid": {
-          "confidence": "observed",
+          "confidence": "inferred",
           "purpose": "UUID-shaped char(36) identifier on the repository entry, constrained unique by toc_uuid_unq. The exported primary key is tocid; uniqueness here does not establish portability or identity across repositories."
         },
         "vol_id": {
@@ -3749,7 +3749,7 @@
         },
         "location_id": {
           "confidence": "inferred",
-          "purpose": "Records management location identifier."
+          "purpose": "Records management location identifier. Exported foreign key toc_location_fk: location_id -> dbo.location.location_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "pagecount": {
           "confidence": "observed",
@@ -3797,15 +3797,15 @@
         },
         "review_cycle": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for review cycle on the repository entry record."
+          "purpose": "Numeric review-cycle setting for the repository entry. Units and lifecycle behavior are unverified."
         },
         "review_interval": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for review interval on the repository entry record."
+          "purpose": "Numeric review interval for the repository entry, accompanied by review_interval_unit. The unit mapping and scheduling behavior are unverified."
         },
         "review_interval_unit": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for review interval unit on the repository entry record."
+          "purpose": "Single-character unit code accompanying review_interval. The unit mapping is unverified."
         },
         "last_review": {
           "confidence": "inferred",
@@ -3833,7 +3833,7 @@
         },
         "reviewer": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for reviewer on the repository entry record."
+          "purpose": "Binary reviewer value associated with the repository entry. Its identity target and encoding are unverified; this is not a date value."
         },
         "authority": {
           "confidence": "inferred",
@@ -3861,15 +3861,15 @@
         },
         "disp_sched_id": {
           "confidence": "inferred",
-          "purpose": "Disposition schedule identifier."
+          "purpose": "Disposition schedule identifier. Exported foreign key toc_disp_sched_fk: disp_sched_id -> dbo.disp_sched.disp_sched_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "active_sched_id": {
           "confidence": "inferred",
           "purpose": "Active Sched identifier for the repository entry record."
         },
         "filing_date": {
-          "confidence": "observed",
-          "purpose": "Records-management filing date matching the client date in the reviewed sample. Treat it as a filing date, not automatically as an instant requiring timezone conversion."
+          "confidence": "inferred",
+          "purpose": "Records-management filing-date value. Exact correspondence to the client date needs reconfirmation because the retained evidence does not document that column-specific match. Do not assume it is an instant requiring timezone conversion."
         },
         "event_date": {
           "confidence": "inferred",
@@ -3923,7 +3923,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key toc_transfers_toc_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "transfer_id": {
           "confidence": "inferred",
@@ -3948,7 +3948,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key tocgeo_toc_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "geo1": {
           "confidence": "unknown",
@@ -3973,7 +3973,7 @@
         },
         "disp_sched_id": {
           "confidence": "inferred",
-          "purpose": "Disposition schedule identifier."
+          "purpose": "Disposition schedule identifier. Exported foreign key transfer_disp_sched_fk: disp_sched_id -> dbo.disp_sched.disp_sched_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "ordinal": {
           "confidence": "inferred",
@@ -3989,7 +3989,7 @@
         },
         "location_id": {
           "confidence": "inferred",
-          "purpose": "Records management location identifier."
+          "purpose": "Records management location identifier. Exported foreign key transfer_location_fk: location_id -> dbo.location.location_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "xfer_descrip": {
           "confidence": "inferred",
@@ -4036,7 +4036,7 @@
         },
         "trustee_id": {
           "confidence": "inferred",
-          "purpose": "Repository trustee identifier."
+          "purpose": "Repository trustee identifier. Exported foreign key trusted_group_trustee_fk: trustee_id -> dbo.trustee.trustee_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -4044,16 +4044,17 @@
       "confidence": "inferred",
       "summary": "Repository metadata records for trusted login mapping.",
       "safeReportingNotes": [
-        "Use trusted login mapping records for read-only Repository metadata reporting."
+        "Use trusted login mapping records for read-only Repository metadata reporting.",
+        "No rows were present in the reviewed test database. The exported userid reference to dbo.trustee.trustee_id establishes local trustee structure only; no live LFDS user bridge or login behavior was verified."
       ],
       "columns": {
         "sid": {
           "confidence": "inferred",
-          "purpose": "Security identifier for the trustee, user, group, or account."
+          "purpose": "Binary SID value for the trusted-login mapping. The table was empty in the reviewed test database, so its external identity target and matching behavior remain unverified."
         },
         "userid": {
           "confidence": "inferred",
-          "purpose": "User identifier for the trusted login mapping record."
+          "purpose": "Local Repository trustee identifier. Exported foreign key trusted_login_trustee_fk: userid -> dbo.trustee.trustee_id. The reference establishes the target, not lifecycle or UI behavior. This empty-table review does not verify an LFDS user bridge or login behavior."
         }
       }
     },
@@ -4148,7 +4149,7 @@
         },
         "tag_id": {
           "confidence": "inferred",
-          "purpose": "Entry tag identifier."
+          "purpose": "Entry tag identifier. Exported foreign key trustee_tag_fk: tag_id -> dbo.tag.tag_id. The reference establishes the target, not lifecycle or UI behavior."
         }
       }
     },
@@ -4165,7 +4166,7 @@
         },
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key uarea_entry_toc_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "uarea_entry_modified": {
           "confidence": "inferred",
@@ -4269,7 +4270,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key verlabel_vhist_toc_fk: tocid -> dbo.vhist_toc.tocid; version -> dbo.vhist_toc.version. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "label": {
           "confidence": "inferred",
@@ -4318,7 +4319,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key vertree_vhist_toc_fk: tocid -> dbo.vhist_toc.tocid; version -> dbo.vhist_toc.version. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -4339,7 +4340,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key vhist_altedoc_vhist_toc_fk: tocid -> dbo.vhist_toc.tocid; version -> dbo.vhist_toc.version. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -4380,7 +4381,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key vhist_ann_doc_fk: tocid -> dbo.vhist_doc.tocid; version -> dbo.vhist_doc.version; pagenum -> dbo.vhist_doc.pagenum. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -4569,7 +4570,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key vhist_annaccess_ann_fk: tocid -> dbo.vhist_ann.tocid; version -> dbo.vhist_ann.version; ann_id -> dbo.vhist_ann.ann_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -4577,7 +4578,7 @@
         },
         "ann_id": {
           "confidence": "inferred",
-          "purpose": "Annotation identifier."
+          "purpose": "Annotation identifier. Exported foreign key vhist_annaccess_ann_fk: tocid -> dbo.vhist_ann.tocid; version -> dbo.vhist_ann.version; ann_id -> dbo.vhist_ann.ann_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "sid": {
           "confidence": "inferred",
@@ -4594,7 +4595,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key vhist_annpoint_ann_fk: tocid -> dbo.vhist_ann.tocid; version -> dbo.vhist_ann.version; ann_id -> dbo.vhist_ann.ann_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -4602,7 +4603,7 @@
         },
         "ann_id": {
           "confidence": "inferred",
-          "purpose": "Annotation identifier."
+          "purpose": "Annotation identifier. Exported foreign key vhist_annpoint_ann_fk: tocid -> dbo.vhist_ann.tocid; version -> dbo.vhist_ann.version; ann_id -> dbo.vhist_ann.ann_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "pos": {
           "confidence": "inferred",
@@ -4627,7 +4628,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key vhist_annrect_ann_fk: tocid -> dbo.vhist_ann.tocid; version -> dbo.vhist_ann.version; ann_id -> dbo.vhist_ann.ann_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -4635,7 +4636,7 @@
         },
         "ann_id": {
           "confidence": "inferred",
-          "purpose": "Annotation identifier."
+          "purpose": "Annotation identifier. Exported foreign key vhist_annrect_ann_fk: tocid -> dbo.vhist_ann.tocid; version -> dbo.vhist_ann.version; ann_id -> dbo.vhist_ann.ann_id. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "pos": {
           "confidence": "inferred",
@@ -4670,7 +4671,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key vhist_changes_vhist_toc_fk: tocid -> dbo.vhist_toc.tocid; version -> dbo.vhist_toc.version. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -4740,7 +4741,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key vhist_doc_vhist_toc_fk: tocid -> dbo.vhist_toc.tocid; version -> dbo.vhist_toc.version. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -4833,7 +4834,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key vhist_geo_vhist_toc_fk: tocid -> dbo.vhist_toc.tocid; version -> dbo.vhist_toc.version. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -4858,7 +4859,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key vhist_propval_vhist_toc_fk: tocid -> dbo.vhist_toc.tocid; version -> dbo.vhist_toc.version. Preserve all components of this composite reference when joining. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -4917,7 +4918,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key vhist_toc_toc_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "version": {
           "confidence": "inferred",
@@ -5109,7 +5110,7 @@
       "columns": {
         "vol_id": {
           "confidence": "inferred",
-          "purpose": "Repository volume identifier."
+          "purpose": "Repository volume identifier. Exported foreign key volacl_vol_fk: vol_id -> dbo.vol.vol_id. The reference establishes the target, not lifecycle or UI behavior."
         },
         "pos": {
           "confidence": "inferred",
@@ -5196,7 +5197,7 @@
         },
         "expires": {
           "confidence": "inferred",
-          "purpose": "Timestamp or date value for expires on the WOPI lock record."
+          "purpose": "Numeric expiry metadata for the WOPI lock. Encoding, epoch and units are unverified."
         }
       }
     },
@@ -5209,7 +5210,7 @@
       "columns": {
         "tocid": {
           "confidence": "inferred",
-          "purpose": "Repository entry identifier."
+          "purpose": "Repository entry identifier. Exported foreign key wopi_user_info_toc_fk: tocid -> dbo.toc.tocid. The reference establishes the target, not lifecycle or UI behavior."
         },
         "toc_version": {
           "confidence": "inferred",

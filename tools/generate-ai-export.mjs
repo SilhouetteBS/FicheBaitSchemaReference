@@ -276,6 +276,7 @@ function objectRows(schema) {
       parentObjectKey: object.parentObjectKey ?? '',
       type: object.type ?? object.typeDescription ?? object.routineType ?? '',
       typeDescription: object.typeDescription ?? object.routineTypeDescription ?? '',
+      ...(objectType === 'view' ? { columns: object.columns ?? [] } : {}),
       dependencies: object.dependencies ?? [],
       ...definition,
     };
