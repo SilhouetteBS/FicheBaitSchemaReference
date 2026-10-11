@@ -74,7 +74,7 @@ function SelectedRelationshipCard({
         </div>
         <div>
           <dt>Type</dt>
-          <dd>{relationship.type === 'foreignKey' ? 'Foreign key' : 'Dependency'}</dd>
+          <dd>{relationship.type === 'foreignKey' ? 'Foreign key' : relationship.type === 'triggerParent' ? 'Trigger parent' : 'Dependency'}</dd>
         </div>
         <div>
           <dt>Direction</dt>
@@ -189,7 +189,7 @@ export function FocusedRelationshipPanel({
   }
 
   return (
-    <aside className="diagram-relationship-panel" aria-label="Focused table relationships">
+    <aside className="diagram-relationship-panel" aria-label="Focused object relationships">
       {!collapsed && (
         <button
           aria-label={`Resize focused relationship panel. Current width ${relationshipPanelWidth}px.`}
@@ -204,7 +204,7 @@ export function FocusedRelationshipPanel({
       )}
       <div className="relationship-panel-heading">
         <div>
-          <p className="snapshot-kicker">Focused table</p>
+          <p className="snapshot-kicker">Focused {focusedNode.type}</p>
           <h3>{focusedNode.label}</h3>
           <span>{relationshipCounts.all} relationships</span>
         </div>
@@ -225,6 +225,7 @@ export function FocusedRelationshipPanel({
               ['all', 'All', relationshipCounts.all],
               ['foreignKey', 'Foreign keys', relationshipCounts.foreignKey],
               ['dependency', 'Dependencies', relationshipCounts.dependency],
+              ['triggerParent', 'Trigger parents', relationshipCounts.triggerParent],
             ].map(([value, label, count]) => (
               <button
                 className={edgeType === value ? 'selected' : ''}

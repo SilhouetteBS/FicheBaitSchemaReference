@@ -1,4 +1,4 @@
-import { Clipboard, ExternalLink, FileText } from 'lucide-react';
+import { Clipboard, ExternalLink, FileText, Plus, Minus, Crosshair } from 'lucide-react';
 
 function getObjectTypeLabel(type) {
   return {
@@ -31,6 +31,9 @@ export function DiagramCanvas({
   onNodeDoubleClick,
   onNodeOpen,
   onNodeSelect,
+  onNodeExpand,
+  onNodeFocus,
+  selectedObjectKey,
   getDiagramEdgeGeometry,
   getEdgeClassName,
   getEdgeTooltip,
@@ -50,7 +53,7 @@ export function DiagramCanvas({
 
   return (
     <div
-      className={compactColumns ? 'database-diagram diagram-cards-compact' : 'database-diagram'}
+      className={`database-diagram ${compactColumns ? 'diagram-cards-compact' : ''} ${diagram.exploration ? 'database-diagram-exploration' : ''}`}
       style={{ width: `${diagram.width * zoom}px`, height: `${diagram.height * zoom}px` }}
     >
       <svg
@@ -66,6 +69,7 @@ export function DiagramCanvas({
           <marker id="diagram-arrow-dependency" markerHeight="15" markerUnits="userSpaceOnUse" markerWidth="15" orient="auto" refX="11.5" refY="7.5" viewBox="0 0 15 15">
             <path d="M 0 2 L 14 7.5 L 0 13 z" />
           </marker>
+          <marker id="diagram-arrow-triggerParent" markerHeight="15" markerUnits="userSpaceOnUse" markerWidth="15" orient="auto" refX="11.5" refY="7.5" viewBox="0 0 15 15"><path d="M 0 2 L 14 7.5 L 0 13 z" /></marker>
           <marker id="diagram-arrow-focus" markerHeight="16" markerUnits="userSpaceOnUse" markerWidth="16" orient="auto" refX="12.25" refY="8" viewBox="0 0 16 16">
             <path d="M 0 2 L 15 8 L 0 14 z" />
           </marker>
@@ -84,7 +88,7 @@ export function DiagramCanvas({
             <g key={edge.id}>
               <title>{getEdgeTooltip(edge)}</title>
               <path
-                aria-label={`${edge.type === 'foreignKey' ? 'Select foreign key' : 'Select dependency'} ${edge.label}: ${edge.columnSummary || `${edge.from} to ${edge.to}`}`}
+                aria-label={`${edge.type === 'foreignKey' ? 'Select foreign key' : edge.type === 'triggerParent' ? 'Select trigger parent' : 'Select dependency'} ${edge.label}: ${edge.columnSummary || `${edge.from} to ${edge.to}`}`}
                 aria-pressed={pinnedEdgeId === edge.id}
                 className="diagram-edge-hit-target"
                 d={geometry.path}
@@ -106,7 +110,7 @@ export function DiagramCanvas({
                 markerEnd={
                   isActiveEdge
                     ? 'url(#diagram-arrow-selected)'
-                    : `url(#diagram-arrow-${edge.type === 'foreignKey' ? 'fk' : 'dependency'})`
+                    : `url(#diagram-arrow-${edge.type === 'foreignKey' ? 'fk' : edge.type === 'triggerParent' ? 'triggerParent' : 'dependency'})`
                 }
               />
               {edgeLabel ? (
@@ -125,7 +129,7 @@ export function DiagramCanvas({
 
       {mode === 'focused' && (
         <div className="diagram-lane-layer" aria-hidden="true">
-          {['Focused', 'Related', 'Other'].map((lane) => {
+          {(diagram.exploration ? ['Incoming', 'Focused', 'Outgoing'] : ['Focused', 'Related', 'Other']).map((lane) => {
             const laneNodes = diagram.nodes.filter((node) => node.lane === lane);
             if (laneNodes.length === 0) {
               return null;
@@ -142,7 +146,7 @@ export function DiagramCanvas({
                   width: `${(laneRight - laneLeft) * zoom}px`,
                 }}
               >
-                {lane === 'Focused' ? 'Focused' : lane === 'Related' ? 'Direct' : 'Second-hop'}
+                {diagram.exploration ? lane : lane === 'Focused' ? 'Focused' : lane === 'Related' ? 'Direct' : 'Second-hop'}
               </span>
             );
           })}
@@ -170,7 +174,7 @@ export function DiagramCanvas({
         <div
           className={`diagram-box diagram-box-${node.type} ${
             node.key === focusKey ? 'diagram-node-focused' : ''
-          } ${focusKey && diagram.connectedKeys.has(node.key) ? 'diagram-node-connected' : ''}`}
+          } ${focusKey && diagram.connectedKeys.has(node.key) ? 'diagram-node-connected' : ''} ${selectedObjectKey===node.key ? 'diagram-node-selected' : ''}`}
           key={node.key}
           style={{
             left: `${node.x * zoom}px`,
@@ -194,6 +198,12 @@ export function DiagramCanvas({
             </span>
           </button>
           <span className="diagram-box-actions">
+            {diagram.exploration && node.key !== focusKey && <>
+              <button type="button" disabled={!node.isExpanded && !node.hiddenNeighborCount} aria-label={`${node.isExpanded ? 'Collapse' : 'Expand'} connections ${node.key}`} title={node.isExpanded ? 'Collapse branch' : `Expand ${node.hiddenNeighborCount} hidden neighbors`} onClick={()=>onNodeExpand(node)}>
+                {node.isExpanded ? <Minus size={12}/> : <Plus size={12}/>}
+              </button>
+              <button type="button" aria-label={`Focus here ${node.key}`} title="Focus here" onClick={()=>onNodeFocus(node)}><Crosshair size={12}/></button>
+            </>}
             <button
               aria-label={`Copy object key ${node.key}`}
               title="Copy object key"

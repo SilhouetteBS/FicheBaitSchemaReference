@@ -56,6 +56,70 @@ function buildObjectAliasMap(nodes) {
   return aliases;
 }
 
+function buildObjectNeighborhood(nodes, edges, focusKey, filters, options, unresolvedDependencies) {
+  const allowed = key => key === focusKey || filters[nodes.get(key)?.type] !== false;
+  const available = edges.filter(e => allowed(e.from) && allowed(e.to));
+  const adjacency = new Map([...nodes.keys()].map(key => [key, []]));
+  for (const edge of available) {
+    adjacency.get(edge.from)?.push(edge);
+    if (edge.to !== edge.from) adjacency.get(edge.to)?.push(edge);
+  }
+  const levels = new Map();
+  const expanded = new Set(options.expandedKeys ?? []);
+  if (nodes.has(focusKey)) levels.set(focusKey, 0);
+  const queue = levels.size ? [focusKey] : [];
+  // Only reached, expanded objects expose another branch. Stale expansion keys
+  // cannot keep a disconnected branch alive after its parent is collapsed.
+  for (let index = 0; index < queue.length; index += 1) {
+    const key = queue[index];
+    if (key !== focusKey && !expanded.has(key)) continue;
+    for (const edge of adjacency.get(key) ?? []) {
+      const other = edge.from === key ? edge.to : edge.from;
+      if (levels.has(other)) continue;
+      const level = levels.get(key);
+      levels.set(other, key === focusKey ? (edge.to === key ? -1 : 1) : level + Math.sign(level));
+      queue.push(other);
+    }
+  }
+  const visibleEdges = available.filter(e => levels.has(e.from) && levels.has(e.to));
+  const groups = new Map();
+  for (const [key,level] of levels) {
+    if (!groups.has(level)) groups.set(level, []);
+    groups.get(level).push(nodes.get(key));
+  }
+  const heightFor = node => node.type === 'table' ? 208 : 90;
+  for (const group of groups.values()) group.sort((a,b) => a.key.localeCompare(b.key));
+  const groupHeight = group => group.reduce((height,node) => height + heightFor(node) + 36, 0) - 36;
+  const height = Math.max(276, ...[...groups.values()].map(group => groupHeight(group) + 68));
+  const minLevel = Math.min(0, ...levels.values());
+  const positioned = [];
+  for (const [level,group] of groups) {
+    let y = (height - groupHeight(group)) / 2;
+    for (const node of group) {
+      const incident = adjacency.get(node.key) ?? [];
+      positioned.push({...node, x:34 + (level - minLevel) * 390, y, width:250, height:heightFor(node),
+        lane:level === 0 ? 'Focused' : level < 0 ? 'Incoming' : 'Outgoing',
+        isExpanded:expanded.has(node.key), hiddenNeighborCount:new Set(incident.map(e=>e.from===node.key?e.to:e.from).filter(key=>!levels.has(key))).size});
+      y += heightFor(node) + 36;
+    }
+  }
+  const relevantUnresolved = unresolvedDependencies.filter(d => levels.has(d.referencingObjectKey) || levels.has(d.referencedObjectKey));
+  return {
+    exploration:true, groupLabels:{table:'Tables',view:'Views',routine:'Routines',trigger:'Triggers'},
+    groupOrder:['table','view','routine','trigger'],
+    nodes:positioned,edges:visibleEdges.map(e=>({...e,hop:1})),
+    width:Math.max(364,...positioned.map(n=>n.x+n.width+80)),height,
+    positionedByKey:new Map(positioned.map(n=>[n.key,n])),connectedKeys:new Set(levels.keys()),
+    highlightedEdges:new Set(visibleEdges.filter(e=>e.from===focusKey||e.to===focusKey).map(e=>e.id)),
+    relationshipDetails:visibleEdges.map(edge=>({...edge,
+      direction:edge.type==='triggerParent' ? (edge.from===focusKey?'attached to':'has trigger') : edge.from===focusKey ? (edge.type==='dependency'?'depends on':'references') : edge.to===focusKey ? (edge.type==='dependency'?'depended on by':'referenced by') : 'connected branch',
+      otherTableKey:edge.from===focusKey?edge.to:edge.from,otherTableLabel:getObjectLabel(edge.from===focusKey?edge.to:edge.from),
+      fromType:nodes.get(edge.from)?.type,toType:nodes.get(edge.to)?.type,
+      fromTypeLabel:getObjectTypeLabel(nodes.get(edge.from)?.type),toTypeLabel:getObjectTypeLabel(nodes.get(edge.to)?.type)})),
+    unresolvedDependencies:relevantUnresolved,unresolvedDependencyCount:relevantUnresolved.length,
+  };
+}
+
 export function buildDatabaseDiagram(
   version,
   query,
@@ -94,7 +158,7 @@ export function buildDatabaseDiagram(
   };
 
   version.source.tables.forEach((table) => addNode(table.key, 'table', getObjectLabel(table.key), table));
-  if (edgeType !== 'foreignKey') {
+  if (edgeType !== 'foreignKey' || options.exploration) {
     (version.source.views ?? []).forEach((view) => addNode(view.key, 'view', getObjectLabel(view.key), view));
     (version.source.routines ?? []).forEach((routine) =>
       addNode(routine.key, 'routine', getObjectLabel(routine.key), routine),
@@ -107,6 +171,14 @@ export function buildDatabaseDiagram(
 
   const edges = [];
   const unresolvedDependencies = [];
+  if (options.exploration && (edgeType === 'all' || edgeType === 'triggerParent')) {
+    for (const trigger of version.source.triggers ?? []) {
+      if (nodes.has(trigger.name) && nodes.has(trigger.parentObjectKey)) edges.push({
+        id:`trigger:${trigger.name}:${trigger.parentObjectKey}`,type:'triggerParent',from:trigger.name,to:trigger.parentObjectKey,
+        label:`${trigger.name} attached to ${trigger.parentObjectKey}`,confidence:'confirmed',status:'Exported trigger parent association',
+      });
+    }
+  }
   if (edgeType === 'all' || edgeType === 'foreignKey') {
     (version.source.foreignKeys ?? []).forEach((foreignKey) => {
       if (nodes.has(foreignKey.sourceTableKey) && nodes.has(foreignKey.referencedTableKey)) {
@@ -166,6 +238,9 @@ export function buildDatabaseDiagram(
     });
   }
 
+  if (options.exploration && mode === 'focused') {
+    return buildObjectNeighborhood(nodes, edges, focusKey, objectTypeFilters, options, unresolvedDependencies);
+  }
   const needle = normalize(query);
   let visibleKeys = new Set(nodes.keys());
   const enabledObjectTypes = {

@@ -125,6 +125,16 @@ export function getEdgeGeometry(edge, diagram, { curve = false, mode, focusKey }
     return null;
   }
 
+  if (diagram.exploration && edge.from === edge.to) {
+    const offset = getParallelOffset(edge, diagram);
+    const startX = from.x + from.width;
+    const endX = startX;
+    const startY = from.y + 42;
+    const endY = from.y + Math.min(from.height - 20, 80);
+    const midX = startX + 38 + Math.abs(offset);
+    return {startX,startY,endX,endY,midX,path:`M ${startX} ${startY} L ${midX} ${startY} L ${midX} ${endY} L ${endX} ${endY}`};
+  }
+
   if (mode === 'focused' && focusKey && (edge.from === focusKey || edge.to === focusKey)) {
     const focused = diagram.positionedByKey.get(focusKey);
     const relatedKey = edge.from === focusKey ? edge.to : edge.from;

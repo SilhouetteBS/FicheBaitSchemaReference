@@ -34,6 +34,7 @@ export function DiagramToolbar({
   focusedNode,
   highContrastDiagram,
   mode,
+  exploration = false,
   objectTypeFilters,
   presets = [],
   selectedRelationship,
@@ -73,6 +74,7 @@ export function DiagramToolbar({
         <span className="diagram-legend-row">
           <span><i className="legend-fk" /> Foreign key</span>
           <span><i className="legend-dependency" /> Dependency</span>
+          <span><i className="legend-trigger-parent" /> Trigger parent</span>
           <span><i className="legend-focus" /> Direct focused relationship</span>
         </span>
         <span className="diagram-legend-row">
@@ -83,7 +85,7 @@ export function DiagramToolbar({
         </span>
       </div>
       <div className="diagram-control-row">
-        <label className="diagram-depth-control">
+        {!exploration && <label className="diagram-depth-control">
           <span>Depth</span>
           <select
             disabled={mode !== 'focused' || !focusedNode}
@@ -93,7 +95,7 @@ export function DiagramToolbar({
             <option value={1}>1 hop</option>
             <option value={2}>2 hops</option>
           </select>
-        </label>
+        </label>}
         <div className="diagram-view-actions" aria-label="Diagram viewport actions">
           <button aria-label="Fit diagram" className="text-button" title="Fit diagram" type="button" onClick={onFitDiagram}>
             <Maximize2 size={14} />
@@ -204,7 +206,7 @@ export function DiagramToolbar({
                   <input checked={highContrastDiagram} onChange={(event) => onSetHighContrastDiagram(event.target.checked)} type="checkbox" />
                   <span>High contrast</span>
                 </label>
-                {mode === 'focused' && depth === 2 ? (
+                {!exploration && mode === 'focused' && depth === 2 ? (
                   <label className="diagram-toggle">
                     <input
                       checked={showSecondHopEdges}
@@ -224,7 +226,7 @@ export function DiagramToolbar({
                   <span>Connected only</span>
                 </label>
               ) : null}
-                {(edgeType === 'dependency' || edgeType === 'all') && focusedNode ? (
+                {!exploration && (edgeType === 'dependency' || edgeType === 'all') && focusedNode ? (
                   <label>
                     <span>Dependencies</span>
                     <select
@@ -256,7 +258,7 @@ export function DiagramToolbar({
                     <label key={type}>
                       <input
                         checked={objectTypeFilters[type]}
-                        disabled={type === 'table' || edgeType === 'foreignKey'}
+                        disabled={!exploration && (type === 'table' || edgeType === 'foreignKey')}
                         onChange={(event) => onChangeObjectTypeFilter(type, event.target.checked)}
                         type="checkbox"
                       />

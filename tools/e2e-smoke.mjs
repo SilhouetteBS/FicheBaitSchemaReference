@@ -64,6 +64,7 @@ await page.waitForTimeout(100);
 assert.equal(await page.locator('.detail-surface h2').textContent(), 'Database diagram');
 assert.match(await page.locator('.diagram-explainer').innerText(), /Foreign keys vs\. dependencies/i);
 assert.match(await page.locator('.diagram-explainer').innerText(), /foreign keys are exported SQL constraints/i);
+await page.getByRole('combobox', { name: 'Select database object' }).selectOption('dbo.cf_bp_worker_instances');
 assert.ok((await page.locator('.diagram-box').count()) > 0);
 assert.ok((await page.locator('.diagram-edge').count()) > 0);
 assert.equal(await page.locator('.diagram-mini-map').count(), 1);
@@ -208,11 +209,11 @@ const lfdsMiniMapViewport = await page.locator('.diagram-mini-map').evaluate((mi
   };
 });
 assert.ok(lfdsMiniMapViewport.viewportHeight > 0);
-assert.ok(lfdsMiniMapViewport.viewportHeight < lfdsMiniMapViewport.viewBoxHeight);
-assert.equal(await page.getByLabel('2-hop lines').isChecked(), false);
+assert.ok(lfdsMiniMapViewport.viewportHeight <= lfdsMiniMapViewport.viewBoxHeight);
+assert.equal(await page.getByLabel('2-hop lines').count(), 0);
 assert.match(page.url(), /diagramSecondHop=hidden/);
 assert.equal(await page.locator('.relationship-group h4').count(), 1);
-assert.match(await page.locator('.relationship-group h4').first().innerText(), /Foreign keys\s+2/i);
+assert.match(await page.locator('.relationship-group h4').first().innerText(), /Foreign keys\s+4/i);
 const relationshipPanelState = await page.locator('.diagram-relationship-panel').evaluate((panel) => {
   const styles = globalThis.getComputedStyle(panel);
   return {
@@ -380,7 +381,7 @@ await page.locator('.diagram-relationship-panel .relationship-quick-filters').fi
   .getByRole('button', { name: /Foreign keys/i })
   .click();
 await page.waitForTimeout(100);
-assert.equal(await page.locator('.diagram-lines path.diagram-edge-foreignKey').count(), 2);
+assert.equal(await page.locator('.diagram-lines path.diagram-edge-foreignKey').count(), 4);
 
 const lfdsDependencyUrl = new URL(appUrl);
 lfdsDependencyUrl.search = new URLSearchParams({
@@ -472,7 +473,7 @@ const legendRows = await page.locator('.diagram-legend-row').allTextContents();
 assert.deepEqual(
   legendRows.map((row) => row.replace(/\s+/g, ' ').trim()),
   [
-    'Foreign key Dependency Direct focused relationship',
+    'Foreign key Dependency Trigger parent Direct focused relationship',
     'Table View Routine Trigger',
   ],
 );

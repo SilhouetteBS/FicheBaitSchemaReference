@@ -144,6 +144,9 @@ export function DatabaseDiagram({
   const [relationshipPanelCollapsed, setRelationshipPanelCollapsed] = useState(false);
   const [relationshipPanelWidth, setRelationshipPanelWidth] = useState(320);
   const [selectedObjectKey, setSelectedObjectKey] = useState('');
+  const [expandedKeys, setExpandedKeys] = useState([]);
+  const [originalFocusKey, setOriginalFocusKey] = useState(focusKey);
+  const panRef = useRef(null);
   const [relationshipDirectionFilter, setRelationshipDirectionFilter] = useState('all');
   const [dependencyDirection, setDependencyDirection] = useState('both');
   const [edgeLabelMode, setEdgeLabelMode] = useState('minimal');
@@ -167,11 +170,13 @@ export function DatabaseDiagram({
       mode,
       depth,
       objectTypeFilters,
-      { connectedOnly, dependencyDirection },
+      { connectedOnly, dependencyDirection, exploration: true, expandedKeys },
     ),
-    [connectedOnly, dependencyDirection, depth, diagramQuery, edgeType, focusKey, mode, objectTypeFilters, version],
+    [connectedOnly, dependencyDirection, depth, diagramQuery, edgeType, expandedKeys, focusKey, mode, objectTypeFilters, version],
   );
   const focusedNode = focusKey ? diagram.positionedByKey.get(focusKey) : null;
+  const catalog = useMemo(() => buildDatabaseDiagram(version, '', 'all', '', 'full', 1).nodes, [version]);
+  const objectChoices = catalog.filter(node => `${node.key} ${node.type}`.toLowerCase().includes(diagramQuery.toLowerCase()));
   const visibleDiagramEdges = showSecondHopEdges
     ? diagram.edges
     : diagram.edges.filter((edge) => edge.hop !== 2);
@@ -200,6 +205,7 @@ export function DatabaseDiagram({
     outgoing: diagram.relationshipDetails.filter((relationship) => relationship.from === focusKey).length,
     foreignKey: diagram.relationshipDetails.filter((relationship) => relationship.type === 'foreignKey').length,
     dependency: diagram.relationshipDetails.filter((relationship) => relationship.type === 'dependency').length,
+    triggerParent: diagram.relationshipDetails.filter((relationship) => relationship.type === 'triggerParent').length,
   };
   const relationshipSections = [
     {
@@ -212,6 +218,7 @@ export function DatabaseDiagram({
       label: 'Dependencies',
       relationships: visibleRelationshipDetails.filter((relationship) => relationship.type === 'dependency'),
     },
+    { type: 'triggerParent', label: 'Trigger parents', relationships: visibleRelationshipDetails.filter(relationship => relationship.type === 'triggerParent') },
   ].filter((section) => section.relationships.length > 0);
   const visibleEdgeGeometries = useMemo(() => {
     const geometries = new Map();
@@ -249,7 +256,7 @@ export function DatabaseDiagram({
     }
     // Centering should run only when the focused object changes, not when helper identities change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focusKey, focusedNode, mode]);
+  }, [focusKey, mode]);
 
   function updateDiagramViewport() {
     const scrollContainer = diagramScrollRef.current;
@@ -304,7 +311,9 @@ export function DatabaseDiagram({
   function resetView() {
     onDiagramQueryChange('');
     onFocusKeyChange('');
-    onModeChange('full');
+    onModeChange('focused');
+    onEdgeTypeChange('all');
+    setExpandedKeys([]);
     onDepthChange(1);
     onZoomChange(1);
     setDependencyDirection('both');
@@ -318,12 +327,28 @@ export function DatabaseDiagram({
       return;
     }
 
+    setSelectedObjectKey(node.key);
+  }
+
+  function focusDiagramNode(node, preserveOriginal = false) {
+    if (!preserveOriginal) setOriginalFocusKey(node.key);
+    setExpandedKeys([]);
+    setSelectedObjectKey('');
+    setHoveredEdgeId('');
+    setPinnedEdgeId('');
+    setRelationshipDirectionFilter('all');
+    onDiagramQueryChange('');
     onFocusKeyChange(node.key);
     onModeChange('focused');
     onDepthChange(1);
-    if (node.type !== 'table' && edgeType === 'foreignKey') {
-      onEdgeTypeChange('dependency');
-    }
+    onEdgeTypeChange('all');
+    onObjectTypeFiltersChange({table:true,view:true,routine:true,trigger:true});
+  }
+
+  function toggleExpansion(node) {
+    setHoveredEdgeId('');
+    setPinnedEdgeId('');
+    setExpandedKeys(keys => keys.includes(node.key) ? keys.filter(key => key !== node.key) : [...keys, node.key]);
   }
 
   async function copyText(label, text) {
@@ -452,6 +477,11 @@ export function DatabaseDiagram({
   }
 
   function resetDiagramView() {
+    setExpandedKeys([]);
+    if (originalFocusKey && originalFocusKey !== focusKey) {
+      const original = catalog.find(node => node.key === originalFocusKey);
+      if (original) focusDiagramNode(original, true);
+    }
     onZoomChange(1);
     globalThis.requestAnimationFrame(() => {
       if (focusedNode) {
@@ -510,7 +540,8 @@ export function DatabaseDiagram({
 
   function clearFocus() {
     onFocusKeyChange('');
-    onModeChange('full');
+    onModeChange('focused');
+    setExpandedKeys([]);
     setHoveredEdgeId('');
     setPinnedEdgeId('');
     setDependencyDirection('both');
@@ -637,7 +668,7 @@ export function DatabaseDiagram({
     }
 
     return [
-      `Dependency: ${edge.label}`,
+      `${edge.type === 'triggerParent' ? 'Trigger parent' : 'Dependency'}: ${edge.label}`,
       `From: ${edge.from} (${edge.referencingType || 'Object'})`,
       `To: ${edge.to} (${edge.referencedType || 'Object'})`,
       `Status: ${edge.status}`,
@@ -703,8 +734,8 @@ export function DatabaseDiagram({
       if (!geometry) {
         return '';
       }
-      const stroke = edge.type === 'dependency' ? '#7a6992' : '#1c73fe';
-      const dash = edge.type === 'dependency' ? ' stroke-dasharray="6 5"' : '';
+      const stroke = edge.type === 'triggerParent' ? '#536475' : edge.type === 'dependency' ? '#7a6992' : '#1c73fe';
+      const dash = edge.type === 'triggerParent' ? ' stroke-dasharray="10 3 2 3"' : edge.type === 'dependency' ? ' stroke-dasharray="6 5"' : '';
       return `<path d="${xmlEscape(geometry.path)}" fill="none" stroke="${stroke}" stroke-width="1.8"${dash}><title>${xmlEscape(edge.label)}</title></path>`;
     }).join('\n');
     const nodeMarkup = diagram.nodes.map((node) => {
@@ -789,10 +820,22 @@ export function DatabaseDiagram({
           <label>
             <span>Find object</span>
             <input
+              aria-label="Search database objects"
               value={diagramQuery}
               onChange={(event) => onDiagramQueryChange(event.target.value)}
-              placeholder="Filter diagram"
+              placeholder="Search objects"
             />
+          </label>
+          <label className="diagram-object-picker">
+            <span>Object</span>
+            <select aria-label="Select database object" value={catalog.some(node=>node.key===focusKey) ? focusKey : ''} onChange={event => {
+              const node = catalog.find(item=>item.key===event.target.value);
+              if (node) focusDiagramNode(node);
+              else clearFocus();
+            }}>
+              <option value="">Select object</option>
+              {[...new Map([...objectChoices, ...catalog.filter(node=>node.key===focusKey)].map(node=>[node.key,node])).values()].map(node=><option key={node.key} value={node.key}>{node.key} ({node.type})</option>)}
+            </select>
           </label>
           <label>
             <span>Mode</span>
@@ -807,6 +850,7 @@ export function DatabaseDiagram({
               <option value="all">All</option>
               <option value="foreignKey">Foreign keys</option>
               <option value="dependency">Dependencies</option>
+              <option value="triggerParent">Trigger parents</option>
             </select>
           </label>
           <label>
@@ -867,6 +911,7 @@ export function DatabaseDiagram({
       </div>
 
       <DiagramToolbar
+        exploration={mode === 'focused'}
         compactColumns={compactColumns}
         connectedOnly={connectedOnly}
         curvedConnectors={curvedConnectors}
@@ -975,7 +1020,16 @@ export function DatabaseDiagram({
         connector inspection, and minimap navigation.
       </div>
 
+      {selectedObject && (
+        <div className="diagram-selection-bar">
+          <strong>{selectedObject.key}</strong>
+          <button type="button" onClick={()=>focusDiagramNode(selectedObject, true)}>Focus here</button>
+          <button type="button" onClick={()=>openDiagramObject(selectedObject)}>Open details</button>
+        </div>
+      )}
       <DiagramObjectDetailPanel object={selectedObject} onClose={() => setSelectedObjectKey('')} />
+      {mode === 'focused' && !focusedNode && <p className="diagram-empty-state">Select a database object.</p>}
+      {focusedNode && !diagram.edges.length && <p className="diagram-empty-state">No exported relationships found.</p>}
 
       {copiedLabel && (
         <div className="copy-toast" role="status">
@@ -1016,7 +1070,21 @@ export function DatabaseDiagram({
 
         <div className="diagram-scroll-frame">
           <span className="diagram-scroll-hint" aria-hidden="true">Scroll or use pan controls for more</span>
-          <div className="diagram-scroll" aria-label="Database relationship diagram" ref={diagramScrollRef}>
+          <div className="diagram-scroll" aria-label="Database relationship diagram" ref={diagramScrollRef}
+            onPointerDown={event => {
+              if (event.button !== 0 || event.target.closest('button, input, select, .diagram-box, path')) return;
+              const scroll = event.currentTarget;
+              panRef.current = {x:event.clientX,y:event.clientY,left:scroll.scrollLeft,top:scroll.scrollTop};
+              scroll.setPointerCapture(event.pointerId);
+            }}
+            onPointerMove={event => {
+              if (!panRef.current) return;
+              const pan = panRef.current;
+              event.currentTarget.scrollTo(pan.left+pan.x-event.clientX,pan.top+pan.y-event.clientY);
+            }}
+            onPointerUp={()=>{panRef.current=null;}}
+            onPointerCancel={()=>{panRef.current=null;}}
+          >
             <DiagramCanvas
               activeEdgeId={activeEdgeId}
               compactColumns={compactColumns}
@@ -1045,6 +1113,9 @@ export function DatabaseDiagram({
               onNodeDoubleClick={(node) => node.type === 'table' && onSelectTable(node.key)}
               onNodeOpen={openDiagramObject}
               onNodeSelect={selectDiagramNode}
+              selectedObjectKey={selectedObjectKey}
+              onNodeExpand={toggleExpansion}
+              onNodeFocus={node=>focusDiagramNode(node, true)}
             />
             <DiagramMiniMap
               diagram={diagram}

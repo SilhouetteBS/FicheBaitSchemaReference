@@ -177,11 +177,11 @@ function versionSummaryToMarkdown(productName, version) {
 
 
 function getInitialDiagramEdgeType(value) {
-  return ['all', 'foreignKey', 'dependency'].includes(value) ? value : 'foreignKey';
+  return ['all', 'foreignKey', 'dependency', 'triggerParent'].includes(value) ? value : 'all';
 }
 
 function getInitialDiagramMode(value) {
-  return ['full', 'focused'].includes(value) ? value : 'full';
+  return ['full', 'focused'].includes(value) ? value : 'focused';
 }
 
 function getInitialDiagramDepth(value) {
@@ -1231,6 +1231,7 @@ function App() {
             />
           ) : activeView === 'diagram' ? (
             <DatabaseDiagram
+              key={`${selectedProductKey}/${selectedVersion}`}
               diagramQuery={diagramQuery}
               edgeType={diagramEdgeType}
               focusKey={diagramFocusKey}

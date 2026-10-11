@@ -2713,7 +2713,7 @@ button {
 .diagram-controls {
   min-width: 320px;
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) 130px 150px 170px;
+  grid-template-columns: minmax(180px, 1fr) minmax(240px, 1.4fr) 150px 170px;
   gap: 10px;
   align-items: end;
 }
@@ -4100,6 +4100,9 @@ button {
   stroke-dasharray: 5 4;
 }
 
+.diagram-edge-triggerParent { stroke: #536475; stroke-dasharray: 10 3 2 3; }
+#diagram-arrow-triggerParent path { fill: #536475; }
+
 #diagram-arrow-fk path {
   fill: var(--diagram-fk);
 }
@@ -4323,6 +4326,15 @@ button {
   opacity: 0;
   transition: opacity 120ms ease;
 }
+
+.diagram-object-picker { min-width: 0; }
+.diagram-selection-bar { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-top: 1px solid var(--line); }
+.diagram-selection-bar strong { overflow-wrap: anywhere; }
+.diagram-empty-state { padding: 16px 20px; }
+.diagram-node-selected { outline: 2px solid #1c73fe; outline-offset: 3px; }
+.legend-trigger-parent { background: none !important; border-top: 2px dashed #536475; }
+.database-diagram-exploration .diagram-box-actions { opacity: 1; top: auto; bottom: 4px; }
+.database-diagram-exploration .diagram-box { padding-bottom: 28px; }
 
 .diagram-box:hover .diagram-box-actions,
 .diagram-box:focus-within .diagram-box-actions,
