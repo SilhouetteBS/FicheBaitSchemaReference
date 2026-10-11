@@ -2710,6 +2710,20 @@ button {
   padding: 18px 20px 20px;
 }
 
+.column-review-filters { flex-wrap: wrap; align-items: end; }
+.column-review-filters label { min-width: 160px; flex: 1; }
+.column-review-filters input, .column-review-filters select { width: 100%; min-width: 0; }
+.column-review-scroll { overflow: auto; max-height: 560px; margin-top: 12px; }
+.column-review-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.column-review-table th, .column-review-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; overflow-wrap: anywhere; vertical-align: top; }
+.column-review-table th { background: var(--surface-soft, #f5f8fa); }
+.column-review-table thead { position: sticky; top: 0; z-index: 1; }
+.column-review-table th:nth-child(1), .column-review-table th:nth-child(2) { width: 21%; }
+.column-review-table th:nth-child(3) { width: 14%; }
+.column-review-table th:nth-child(5) { width: 110px; }
+.column-review-table .text-button { white-space: normal; text-align: left; }
+.column-review-pagination { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 12px; }
+
 .diagram-heading {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

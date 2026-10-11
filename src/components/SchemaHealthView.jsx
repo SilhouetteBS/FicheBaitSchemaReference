@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { getReviewItems, getSchemaHealthItems, getUnresolvedDependencyItems } from '../data/schemaAnalysis.js';
 import { MetadataStat } from './MetadataStat.jsx';
+import { ColumnReviewList } from './ColumnReviewList.jsx';
 
 export function SchemaHealthView({ version, onDownloadJson, onSelectTable }) {
   const healthItems = useMemo(() => getSchemaHealthItems(version), [version]);
@@ -41,6 +42,7 @@ export function SchemaHealthView({ version, onDownloadJson, onSelectTable }) {
           value={unresolvedDependencies.length}
         />
       </div>
+      <ColumnReviewList key={`${version.source.productKey}/${version.version}`} version={version} onSelectTable={onSelectTable} />
       <section className="health-section">
         <div className="section-title-row">
           <h3>Needs documentation queue</h3>

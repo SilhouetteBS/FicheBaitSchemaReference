@@ -84,6 +84,35 @@ try {
   await racePage.waitForTimeout(750);
   assert.equal(new URL(racePage.url()).searchParams.get('product'), 'lfds');
   assert.equal(await racePage.getByLabel('Version', { exact: true }).inputValue(), '12.0.2607.421');
+  const reviewUrl = new URL(base);
+  reviewUrl.search = new URLSearchParams({ product: 'forms', version: '12.0.2607.40144', view: 'health' });
+  await page.goto(reviewUrl.toString(), { waitUntil: 'networkidle' });
+  const review = page.locator('.column-review-section');
+  await review.getByRole('heading', { name: 'Columns needing review' }).waitFor();
+  assert.equal(await review.getByLabel('Column review status').inputValue(), 'unknown');
+  const unknownCount = await review.locator('tbody tr').count();
+  assert.ok(unknownCount <= 50);
+  assert.ok((await review.locator('tbody .confidence').allTextContents()).every(text => text === 'Unknown'));
+  if (unknownCount === 50 && await review.getByRole('button', { name: 'Next columns page' }).isEnabled()) {
+    await review.getByRole('button', { name: 'Next columns page' }).click();
+    assert.match(await review.locator('.column-review-pagination').innerText(), /51-/);
+    await review.getByRole('button', { name: 'Previous columns page' }).click();
+  }
+  await review.getByLabel('Column review status').selectOption('');
+  await review.getByLabel('Search review columns').fill('cf_forms');
+  assert.ok(await review.locator('tbody tr').count() > 0);
+  const downloadPromise = page.waitForEvent('download');
+  await review.getByRole('button', { name: 'Export CSV', exact: true }).click();
+  assert.match((await downloadPromise).suggestedFilename(), /forms-12\.0\.2607\.40144-columns-review\.csv/);
+  await review.getByLabel('Search review columns').fill('no-such-column-zzzz');
+  assert.equal(await review.locator('tbody tr').count(), 0);
+  await review.getByRole('status').waitFor();
+  await review.getByLabel('Search review columns').fill('cf_forms');
+  const openTable = review.getByRole('button', { name: /^Open table/ }).first();
+  const tableName = await openTable.innerText();
+  await openTable.click();
+  await page.locator('.table-detail h2').waitFor();
+  assert.equal(await page.locator('.table-detail h2').innerText(), tableName);
   assert.deepEqual(errors, []);
   console.log('Browser review regressions passed: history, persistence, object navigation, corrections, script search, Markdown, tabs, and unavailable storage.');
 } finally { await browser.close(); }
