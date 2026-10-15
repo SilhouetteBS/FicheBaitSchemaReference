@@ -1023,11 +1023,12 @@ function App() {
   return (
     <main className="app-shell">
       <aside className="sidebar" aria-label="Product, version, and view navigation">
-        <div className="brand">
-          <h1>
-            <img className="brand-logo" src={`${import.meta.env.BASE_URL}fichebait-schema-reference-logo.svg`} alt="FicheBait Schema Reference" />
-          </h1>
-          <p>Schema, relationships, and reporting</p>
+        <div className="fb-brand-frame">
+          <div className="fb-brand">
+            <img className="fb-logo" src={`${import.meta.env.BASE_URL}fichebait-logo-horizontal.svg`} alt="FicheBait" width="1080" height="387.4" />
+            <span className="fb-divider" aria-hidden="true" />
+            <div className="fb-copy"><h1 className="fb-name">Schema Reference</h1><p className="fb-description">Laserfiche database schema reference</p></div>
+          </div>
         </div>
 
         <section className="sidebar-section">
