@@ -11873,6 +11873,75 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "WorkflowInstanceID",
+          "ordinal": 1,
+          "dataType": "uniqueidentifier",
+          "typeDefinition": "uniqueidentifier",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "WorkflowName",
+          "ordinal": 2,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(100)",
+          "maxLength": 100,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "ActivityName",
+          "ordinal": 3,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(256)",
+          "maxLength": 256,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "ActivityStartTime",
+          "ordinal": 4,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        },
+        {
+          "name": "ActivityStatusTime",
+          "ordinal": 5,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "Duration",
+          "ordinal": 6,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "IsClosed",
+          "ordinal": 7,
+          "dataType": "tinyint",
+          "typeDefinition": "tinyint",
+          "precision": 3,
+          "scale": 0,
+          "isNullable": false
+        }
       ]
     },
     {
@@ -11941,6 +12010,66 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "WorkflowInstanceID",
+          "ordinal": 1,
+          "dataType": "uniqueidentifier",
+          "typeDefinition": "uniqueidentifier",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "WorkflowName",
+          "ordinal": 2,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(100)",
+          "maxLength": 100,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "ActivityName",
+          "ordinal": 3,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(256)",
+          "maxLength": 256,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "ActivityStartTime",
+          "ordinal": 4,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        },
+        {
+          "name": "ActivityStatusTime",
+          "ordinal": 5,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "IsClosed",
+          "ordinal": 6,
+          "dataType": "tinyint",
+          "typeDefinition": "tinyint",
+          "precision": 3,
+          "scale": 0,
+          "isNullable": false
+        }
       ]
     },
     {
@@ -11997,6 +12126,84 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "workflow_id",
+          "ordinal": 1,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "workflow_name",
+          "ordinal": 2,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(100)",
+          "maxLength": 100,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "instance_id",
+          "ordinal": 3,
+          "dataType": "uniqueidentifier",
+          "typeDefinition": "uniqueidentifier",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "service_id",
+          "ordinal": 4,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "service_name",
+          "ordinal": 5,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(400)",
+          "maxLength": 400,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "input_token_count",
+          "ordinal": 6,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "output_token_count",
+          "ordinal": 7,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "timestamp",
+          "ordinal": 8,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        }
       ]
     },
     {
@@ -12052,6 +12259,102 @@
           "isSchemaBoundReference": false,
           "isCallerDependent": false,
           "isAmbiguous": false
+        }
+      ],
+      "columns": [
+        {
+          "name": "workflow_id",
+          "ordinal": 1,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "workflow_name",
+          "ordinal": 2,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(100)",
+          "maxLength": 100,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "instance_id",
+          "ordinal": 3,
+          "dataType": "uniqueidentifier",
+          "typeDefinition": "uniqueidentifier",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "service_id",
+          "ordinal": 4,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "service_name",
+          "ordinal": 5,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(400)",
+          "maxLength": 400,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "total_calls",
+          "ordinal": 6,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "total_input_token_count",
+          "ordinal": 7,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "total_output_token_count",
+          "ordinal": 8,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "first_time",
+          "ordinal": 9,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "last_time",
+          "ordinal": 10,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
         }
       ]
     },
@@ -12121,6 +12424,135 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "BPInstanceID",
+          "ordinal": 1,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "BPInstanceName",
+          "ordinal": 2,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "BPStatus",
+          "ordinal": 3,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(64)",
+          "maxLength": 64,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "BPStartTime",
+          "ordinal": 4,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        },
+        {
+          "name": "BPEndTime",
+          "ordinal": 5,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "DueDate",
+          "ordinal": 6,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "BPAverageDuration",
+          "ordinal": 7,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "WorkflowName",
+          "ordinal": 8,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(100)",
+          "maxLength": 100,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "WFInstanceID",
+          "ordinal": 9,
+          "dataType": "uniqueidentifier",
+          "typeDefinition": "uniqueidentifier",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "WFStatus",
+          "ordinal": 10,
+          "dataType": "tinyint",
+          "typeDefinition": "tinyint",
+          "precision": 3,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "WFParentID",
+          "ordinal": 11,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "WFRule",
+          "ordinal": 12,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "WFInitiator",
+          "ordinal": 13,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        }
       ]
     },
     {
@@ -12177,6 +12609,93 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "StepID",
+          "ordinal": 1,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "RoleName",
+          "ordinal": 2,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(100)",
+          "maxLength": 100,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "TrusteeName",
+          "ordinal": 3,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "ParticipantStartTime",
+          "ordinal": 4,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        },
+        {
+          "name": "ParticipantEndTime",
+          "ordinal": 5,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "BPInstanceID",
+          "ordinal": 6,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "DelegatedFrom",
+          "ordinal": 7,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "DelegatedTo",
+          "ordinal": 8,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "ParticipantID",
+          "ordinal": 9,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": false
+        }
       ]
     },
     {
@@ -12196,6 +12715,133 @@
           "isSchemaBoundReference": false,
           "isCallerDependent": false,
           "isAmbiguous": false
+        }
+      ],
+      "columns": [
+        {
+          "name": "BPInstanceID",
+          "ordinal": 1,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "StepID",
+          "ordinal": 2,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "StepName",
+          "ordinal": 3,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "StepStartTime",
+          "ordinal": 4,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        },
+        {
+          "name": "StepEndTime",
+          "ordinal": 5,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "StepDuration",
+          "ordinal": 6,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "StepDueDate",
+          "ordinal": 7,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "ParentStepID",
+          "ordinal": 8,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "StepAverageDuration",
+          "ordinal": 9,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "StepInstructions",
+          "ordinal": 10,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(3700)",
+          "maxLength": 3700,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "StepResolution",
+          "ordinal": 11,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(3700)",
+          "maxLength": 3700,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "StepFlags",
+          "ordinal": 12,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "StepReportID",
+          "ordinal": 13,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(64)",
+          "maxLength": 64,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
         }
       ]
     },
@@ -12253,6 +12899,68 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "EntryID",
+          "ordinal": 1,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "EntryName",
+          "ordinal": 2,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(512)",
+          "maxLength": 512,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "EntryPath",
+          "ordinal": 3,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(2000)",
+          "maxLength": 2000,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "IsStartingEntry",
+          "ordinal": 4,
+          "dataType": "bit",
+          "typeDefinition": "bit",
+          "precision": 1,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "WorkflowInstanceID",
+          "ordinal": 5,
+          "dataType": "uniqueidentifier",
+          "typeDefinition": "uniqueidentifier",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "ActivityName",
+          "ordinal": 6,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(256)",
+          "maxLength": 256,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        }
       ]
     },
     {
@@ -12308,6 +13016,113 @@
           "isSchemaBoundReference": false,
           "isCallerDependent": false,
           "isAmbiguous": false
+        }
+      ],
+      "columns": [
+        {
+          "name": "report_id",
+          "ordinal": 1,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "instance_id",
+          "ordinal": 2,
+          "dataType": "uniqueidentifier",
+          "typeDefinition": "uniqueidentifier",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "workflow_id",
+          "ordinal": 3,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "workflow_name",
+          "ordinal": 4,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(100)",
+          "maxLength": 100,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "version",
+          "ordinal": 5,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "start_time",
+          "ordinal": 6,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        },
+        {
+          "name": "end_time",
+          "ordinal": 7,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "status",
+          "ordinal": 8,
+          "dataType": "tinyint",
+          "typeDefinition": "tinyint",
+          "precision": 3,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "initiator",
+          "ordinal": 9,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "rule_name",
+          "ordinal": 10,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "parent_id",
+          "ordinal": 11,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": true
         }
       ]
     },
@@ -12401,6 +13216,113 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "WorkflowInstanceID",
+          "ordinal": 1,
+          "dataType": "uniqueidentifier",
+          "typeDefinition": "uniqueidentifier",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "ParentInstanceID",
+          "ordinal": 2,
+          "dataType": "uniqueidentifier",
+          "typeDefinition": "uniqueidentifier",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "WorkflowName",
+          "ordinal": 3,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(100)",
+          "maxLength": 100,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "WorkflowRule",
+          "ordinal": 4,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "WorkflowStartTime",
+          "ordinal": 5,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        },
+        {
+          "name": "WorkflowStatusTime",
+          "ordinal": 6,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        },
+        {
+          "name": "WorkflowUser",
+          "ordinal": 7,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "WorkflowVersion",
+          "ordinal": 8,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "IdleTime",
+          "ordinal": 9,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "Status",
+          "ordinal": 10,
+          "dataType": "tinyint",
+          "typeDefinition": "tinyint",
+          "precision": 3,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "Duration",
+          "ordinal": 11,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        }
       ]
     },
     {
@@ -12492,6 +13414,104 @@
           "isSchemaBoundReference": false,
           "isCallerDependent": false,
           "isAmbiguous": false
+        }
+      ],
+      "columns": [
+        {
+          "name": "WorkflowInstanceID",
+          "ordinal": 1,
+          "dataType": "uniqueidentifier",
+          "typeDefinition": "uniqueidentifier",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "ParentInstanceID",
+          "ordinal": 2,
+          "dataType": "uniqueidentifier",
+          "typeDefinition": "uniqueidentifier",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "WorkflowName",
+          "ordinal": 3,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(100)",
+          "maxLength": 100,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "WorkflowRule",
+          "ordinal": 4,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "WorkflowStartTime",
+          "ordinal": 5,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        },
+        {
+          "name": "WorkflowStatusTime",
+          "ordinal": 6,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        },
+        {
+          "name": "WorkflowUser",
+          "ordinal": 7,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "WorkflowVersion",
+          "ordinal": 8,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "IdleTime",
+          "ordinal": 9,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "Status",
+          "ordinal": 10,
+          "dataType": "tinyint",
+          "typeDefinition": "tinyint",
+          "precision": 3,
+          "scale": 0,
+          "isNullable": false
         }
       ]
     }

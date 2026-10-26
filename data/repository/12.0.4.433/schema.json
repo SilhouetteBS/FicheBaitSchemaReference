@@ -27504,6 +27504,67 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "trustee_id",
+          "ordinal": 1,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "sid",
+          "ordinal": 2,
+          "dataType": "varbinary",
+          "typeDefinition": "varbinary(85)",
+          "maxLength": 85,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "trustee_name",
+          "ordinal": 3,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "isuser",
+          "ordinal": 4,
+          "dataType": "bit",
+          "typeDefinition": "bit",
+          "precision": 1,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "descrip",
+          "ordinal": 5,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(79)",
+          "maxLength": 79,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "trustee_flags",
+          "ordinal": 6,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        }
       ]
     },
     {
@@ -27584,6 +27645,196 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "tocid",
+          "ordinal": 1,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "etype",
+          "ordinal": 2,
+          "dataType": "smallint",
+          "typeDefinition": "smallint",
+          "precision": 5,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "type",
+          "ordinal": 3,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "orig_parent",
+          "ordinal": 4,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(1023)",
+          "maxLength": 1023,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "deleted",
+          "ordinal": 5,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "created",
+          "ordinal": 6,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": false
+        },
+        {
+          "name": "deleter",
+          "ordinal": 7,
+          "dataType": "varbinary",
+          "typeDefinition": "varbinary(85)",
+          "maxLength": 85,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "toc_uuid",
+          "ordinal": 8,
+          "dataType": "char",
+          "typeDefinition": "char(36)",
+          "maxLength": 36,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "parent_name",
+          "ordinal": 9,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "orig_name",
+          "ordinal": 10,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "trustee_name",
+          "ordinal": 11,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(47)",
+          "maxLength": 47,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "account_name",
+          "ordinal": 12,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(255)",
+          "maxLength": 255,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "edoc_mime",
+          "ordinal": 13,
+          "dataType": "varchar",
+          "typeDefinition": "varchar(127)",
+          "maxLength": 127,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "edoc_ext",
+          "ordinal": 14,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(15)",
+          "maxLength": 15,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "page_num",
+          "ordinal": 15,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "page_count",
+          "ordinal": 16,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "edoc_storeid",
+          "ordinal": 17,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "file_size",
+          "ordinal": 18,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "page_id",
+          "ordinal": 19,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": true
+        }
       ]
     },
     {
@@ -27604,6 +27855,26 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "pageid",
+          "ordinal": 1,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "data",
+          "ordinal": 2,
+          "dataType": "image",
+          "typeDefinition": "image",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false
+        }
       ]
     },
     {
@@ -27623,6 +27894,26 @@
           "isSchemaBoundReference": false,
           "isCallerDependent": false,
           "isAmbiguous": false
+        }
+      ],
+      "columns": [
+        {
+          "name": "pageid",
+          "ordinal": 1,
+          "dataType": "bigint",
+          "typeDefinition": "bigint",
+          "precision": 19,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "data",
+          "ordinal": 2,
+          "dataType": "image",
+          "typeDefinition": "image",
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false
         }
       ]
     }

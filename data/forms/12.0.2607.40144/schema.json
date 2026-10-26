@@ -41329,6 +41329,144 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "map_history_id",
+          "ordinal": 1,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "bp_instance_id",
+          "ordinal": 2,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "bp_name",
+          "ordinal": 3,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(500)",
+          "maxLength": 500,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "start_date",
+          "ordinal": 4,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "end_date",
+          "ordinal": 5,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "submission_data_removed",
+          "ordinal": 6,
+          "dataType": "bit",
+          "typeDefinition": "bit",
+          "precision": 1,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "title",
+          "ordinal": 7,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(2000)",
+          "maxLength": 2000,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "snapshot_user_id",
+          "ordinal": 8,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "snapshot_username",
+          "ordinal": 9,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(256)",
+          "maxLength": 256,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "snapshot_displayname",
+          "ordinal": 10,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(500)",
+          "maxLength": 500,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "snapshot_sid",
+          "ordinal": 11,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(100)",
+          "maxLength": 100,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "status",
+          "ordinal": 12,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "suspended_instance_id",
+          "ordinal": 13,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "is_test_mode",
+          "ordinal": 14,
+          "dataType": "bit",
+          "typeDefinition": "bit",
+          "precision": 1,
+          "scale": 0,
+          "isNullable": true
+        }
       ]
     },
     {
@@ -41397,6 +41535,184 @@
           "isCallerDependent": false,
           "isAmbiguous": false
         }
+      ],
+      "columns": [
+        {
+          "name": "bp_instance_id",
+          "ordinal": 1,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "has_error",
+          "ordinal": 2,
+          "dataType": "bit",
+          "typeDefinition": "bit",
+          "precision": 1,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "process_id",
+          "ordinal": 3,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "process_name",
+          "ordinal": 4,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(500)",
+          "maxLength": 500,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "bp_id",
+          "ordinal": 5,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "initiator_ip_address",
+          "ordinal": 6,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(50)",
+          "maxLength": 50,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "last_updated",
+          "ordinal": 7,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "start_date",
+          "ordinal": 8,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "end_date",
+          "ordinal": 9,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "is_archived",
+          "ordinal": 10,
+          "dataType": "bit",
+          "typeDefinition": "bit",
+          "precision": 1,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "title",
+          "ordinal": 11,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(2000)",
+          "maxLength": 2000,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": false,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "snapshot_user_id",
+          "ordinal": 12,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "snapshot_username",
+          "ordinal": 13,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(256)",
+          "maxLength": 256,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "snapshot_displayname",
+          "ordinal": 14,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(500)",
+          "maxLength": 500,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "snapshot_sid",
+          "ordinal": 15,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(100)",
+          "maxLength": 100,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "snapshot_email",
+          "ordinal": 16,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(500)",
+          "maxLength": 500,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "status",
+          "ordinal": 17,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "is_test_mode",
+          "ordinal": 18,
+          "dataType": "bit",
+          "typeDefinition": "bit",
+          "precision": 1,
+          "scale": 0,
+          "isNullable": false
+        }
       ]
     },
     {
@@ -41452,6 +41768,66 @@
           "isSchemaBoundReference": false,
           "isCallerDependent": false,
           "isAmbiguous": false
+        }
+      ],
+      "columns": [
+        {
+          "name": "bp_data_id",
+          "ordinal": 1,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "bp_instance_id",
+          "ordinal": 2,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "attribute_id",
+          "ordinal": 3,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "value",
+          "ordinal": 4,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(max)",
+          "maxLength": -1,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "member_path",
+          "ordinal": 5,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(200)",
+          "maxLength": 200,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "member_type",
+          "ordinal": 6,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
         }
       ]
     },
@@ -41544,6 +41920,177 @@
           "isSchemaBoundReference": false,
           "isCallerDependent": false,
           "isAmbiguous": false
+        }
+      ],
+      "columns": [
+        {
+          "name": "bp_instance_id",
+          "ordinal": 1,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "worker_id",
+          "ordinal": 2,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "status",
+          "ordinal": 3,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "resume_id",
+          "ordinal": 4,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(36)",
+          "maxLength": 36,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "step_name",
+          "ordinal": 5,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(200)",
+          "maxLength": 200,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "step_deleted",
+          "ordinal": 6,
+          "dataType": "bit",
+          "typeDefinition": "bit",
+          "precision": 1,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "step_type",
+          "ordinal": 7,
+          "dataType": "varchar",
+          "typeDefinition": "varchar(50)",
+          "maxLength": 50,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "step_sub_type",
+          "ordinal": 8,
+          "dataType": "varchar",
+          "typeDefinition": "varchar(50)",
+          "maxLength": 50,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "milestone_name",
+          "ordinal": 9,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(50)",
+          "maxLength": 50,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "form_name",
+          "ordinal": 10,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(200)",
+          "maxLength": 200,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "start_date",
+          "ordinal": 11,
+          "dataType": "datetime",
+          "typeDefinition": "datetime",
+          "precision": 23,
+          "scale": 3,
+          "isNullable": true
+        },
+        {
+          "name": "get_approvers",
+          "ordinal": 12,
+          "dataType": "bit",
+          "typeDefinition": "bit",
+          "precision": 1,
+          "scale": 0,
+          "isNullable": false
+        },
+        {
+          "name": "task_owner_user_id",
+          "ordinal": 13,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "task_owner_username",
+          "ordinal": 14,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(256)",
+          "maxLength": 256,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "task_owner_displayname",
+          "ordinal": 15,
+          "dataType": "nvarchar",
+          "typeDefinition": "nvarchar(500)",
+          "maxLength": 500,
+          "precision": 0,
+          "scale": 0,
+          "isNullable": true,
+          "collationName": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "name": "parent_instance_id",
+          "ordinal": 16,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
+        },
+        {
+          "name": "parent_status",
+          "ordinal": 17,
+          "dataType": "int",
+          "typeDefinition": "int",
+          "precision": 10,
+          "scale": 0,
+          "isNullable": true
         }
       ]
     }

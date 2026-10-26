@@ -102,3 +102,8 @@ Follow-up:
 - Repaired the Windows editing launcher by executing Vite's JavaScript entry point with the running Node executable, retaining `shell: false`, loopback binding, argument forwarding and the local editing flag. Added CLI/space-containing-directory regression tests; Windows startup and local Import visibility passed.
 - Reviewed four new Answers posts and recorded their dispositions in `docs/answers-sql-processed-batch-2026-10-26.md`. Added one original read-only Forms entry-ID association diagnostic with column-level checks across all five imported Forms builds; kept it marked Not live tested. Clarified latest-build attachment reporting cautions without increasing confidence.
 - Documented all 19 specific views and metadata fields still awaiting recovery exports. No new metadata or live SQL results were fabricated.
+
+### View Metadata Recovery: 2026-10-26
+
+- Closed the latest-build view-column gap using owner-supplied Forms 12.0.2607.40144, Repository 12.0.4.433 and Workflow 12.0.2605.385 exports: 19 views and 188 columns. All definition hashes matched; existing notes and non-column schema metadata were preserved.
+- Added a guarded standalone recovery importer and regression tests for product/version mismatch, incomplete/duplicate view sets, changed hashes and conflicting column metadata. Historical snapshots and confidence labels were not changed.

@@ -4,6 +4,9 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Recovered 188 output columns for all 19 latest-build Forms, Repository and Workflow views from owner-supplied exports, with matching definition hashes and unchanged manual notes.
+- Added a standalone view-column recovery importer that rejects mismatched snapshots, incomplete exports and conflicting metadata.
+
 - Fixed the Windows local editing launcher without enabling shell command execution and added cross-directory launch regression tests.
 - Added a bounded Forms attachment entry-ID association diagnostic, with column checks across all imported Forms builds, source context and explicit Not live tested status.
 - Clarified attachment join-count and repository-scope limitations and listed the exact remaining view metadata exports needed.
