@@ -1134,6 +1134,7 @@ function App() {
               <MessageSquarePlus size={14} />
               <span>Report correction</span>
             </a>
+            <a className="text-button user-guide-link" href="/user-guide.html">User Guide</a>
             <button className="text-button command-button" type="button" onClick={() => setCommandOpen(true)}>
               <Search size={14} />
               Command
