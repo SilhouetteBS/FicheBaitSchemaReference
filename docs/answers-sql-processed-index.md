@@ -6,6 +6,7 @@ This index explains the public processed-queue documents used by the Reporting S
 
 | File | Purpose |
 | --- | --- |
+| `docs/answers-sql-processed-batch-2026-10-26.md` | Four new posts; one curated Forms diagnostic, three context/exclusion dispositions. |
 | `docs/answers-sql-processed-exclusions.md` | Initial public-safe list of rows that were processed but not promoted. |
 | `docs/answers-sql-processed-additional-batch-2026-06-30.md` | Additional 2026-06-30 batch with promoted-script notes and remaining dispositions. |
 | `docs/answers-sql-processed-batch-2026-06-30-2.md` | Second 2026-06-30 batch. |

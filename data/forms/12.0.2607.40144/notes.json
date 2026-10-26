@@ -471,7 +471,8 @@
       "confidence": "inferred",
       "summary": "Metadata records for business process attachment.",
       "safeReportingNotes": [
-        "Use business process attachment records for read-only reporting after reviewing whether values include user-entered or sensitive content."
+        "Use business process attachment records for read-only reporting after reviewing whether values include user-entered or sensitive content.",
+        "Repeated lfentry_id numbers across attachments or instances do not by themselves prove corruption. Entry numbers are repository-scoped; verify the destination repository and process history before drawing conclusions."
       ],
       "columns": {
         "attachment_id": {
@@ -914,7 +915,8 @@
       "confidence": "inferred",
       "summary": "Mapping records for submitted data attachment mapping.",
       "safeReportingNotes": [
-        "Use submitted data attachment mapping records for read-only reporting after reviewing whether values include user-entered or sensitive content."
+        "Use submitted data attachment mapping records for read-only reporting after reviewing whether values include user-entered or sensitive content.",
+        "Count distinct attachments and instances when following these mappings through cf_bp_data and cf_submissions; joined row counts are not counts of unique repository documents. Preserve unmatched attachment records for diagnostic review."
       ],
       "columns": {
         "bp_data_id": {

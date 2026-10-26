@@ -95,3 +95,10 @@ Follow-up:
 
 - The Windows `npm run dev:editing` launcher fails with `spawn EINVAL` when executing its `.cmd` shim with `shell: false`. This pre-existing launcher was not changed in this batch; normal Vite development startup and production preview passed. Repair and regression-test it in a later batch.
 - The 19 latest-build view output-column metadata gaps still need the matching private Forms, Repository, and Workflow exports described in `docs/column-review-follow-up.md`. LFDS has no view-column gap in this scope. Do not infer missing view columns or promote unknown confidence labels.
+
+### Approved Follow-Up: 2026-10-26
+
+- Merged the tested maintenance branch after all three CI jobs passed. Reconciled the Sites-only user guide and screenshot commits with GitHub history without overwriting either side, then published Sites version 28 with access settings unchanged.
+- Repaired the Windows editing launcher by executing Vite's JavaScript entry point with the running Node executable, retaining `shell: false`, loopback binding, argument forwarding and the local editing flag. Added CLI/space-containing-directory regression tests; Windows startup and local Import visibility passed.
+- Reviewed four new Answers posts and recorded their dispositions in `docs/answers-sql-processed-batch-2026-10-26.md`. Added one original read-only Forms entry-ID association diagnostic with column-level checks across all five imported Forms builds; kept it marked Not live tested. Clarified latest-build attachment reporting cautions without increasing confidence.
+- Documented all 19 specific views and metadata fields still awaiting recovery exports. No new metadata or live SQL results were fabricated.

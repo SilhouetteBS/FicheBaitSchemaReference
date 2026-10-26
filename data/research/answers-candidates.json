@@ -6078,5 +6078,45 @@
       ],
       "generated": true
     }
+  },
+  {
+    "product": "forms",
+    "title": "Duplicate entry IDs saving in multiple instances v12",
+    "url": "https://answers.laserfiche.com/questions/237458/Duplicate-entry-IDs-saving-in-multiple-instances-v12",
+    "sourceFile": "answers-sql-processed-batch-2026-10-26.md",
+    "risk": "Read-only adaptation",
+    "disposition": "Promoted to curated forms-attachment-entry-usage.sql; all referenced columns checked; not live tested.",
+    "referencedObjects": ["dbo.cf_bp_attachment_data", "dbo.cf_bp_data_attachment_mapping", "dbo.cf_bp_data", "dbo.cf_submissions"],
+    "publishedCandidate": null
+  },
+  {
+    "product": "lfds",
+    "title": "creating a silent install for laserfiche 12",
+    "url": "https://answers.laserfiche.com/questions/238502/creating-a-silent-install-for-laserfiche-12",
+    "sourceFile": "answers-sql-processed-batch-2026-10-26.md",
+    "risk": "Context only",
+    "disposition": "Excluded: installation/configuration discussion without reusable product-database SQL.",
+    "referencedObjects": [],
+    "publishedCandidate": null
+  },
+  {
+    "product": "repository",
+    "title": "Inquiry About Retrieving Transaction Creation and Modification Dates from the Laserfiche Database",
+    "url": "https://answers.laserfiche.com/questions/238059/Inquiry-About-Retrieving-Transaction-Creation-and-Modification-Dates-from-the-Laserfiche-Database",
+    "sourceFile": "answers-sql-processed-batch-2026-10-26.md",
+    "risk": "Context only",
+    "disposition": "Object name matched; no reusable SQL captured or universal transaction-date semantics established.",
+    "referencedObjects": ["dbo.toc"],
+    "publishedCandidate": null
+  },
+  {
+    "product": "workflow",
+    "title": "How do I publish a Data Query Rule to Forms?",
+    "url": "https://answers.laserfiche.com/questions/238363/How-do-I-publish-a-Data-Query-Rule-to-Forms",
+    "sourceFile": "answers-sql-processed-batch-2026-10-26.md",
+    "risk": "Context only",
+    "disposition": "Workflow/Forms integration context; no internal schema references or reusable SQL captured.",
+    "referencedObjects": [],
+    "publishedCandidate": null
   }
 ]

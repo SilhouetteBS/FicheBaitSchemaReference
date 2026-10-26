@@ -4,6 +4,10 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Fixed the Windows local editing launcher without enabling shell command execution and added cross-directory launch regression tests.
+- Added a bounded Forms attachment entry-ID association diagnostic, with column checks across all imported Forms builds, source context and explicit Not live tested status.
+- Clarified attachment join-count and repository-scope limitations and listed the exact remaining view metadata exports needed.
+
 - Restored the responsive header's full accessible product name, verified its separate logo in render checks, and improved subtitle contrast with matching accessibility coverage.
 - Updated vulnerable Vite and transitive Zod tooling versions while retaining the current supported major versions.
 - Unified the default and unit test commands, removed duplicate metadata preparation, and enabled CI for maintainer review branches without requiring a pull request.

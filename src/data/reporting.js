@@ -1,6 +1,10 @@
 export { getReportingQuestions, getReportingPaths, productReportingPaths } from './reportingGuidance.js';
 
 const reportingAssetLoaders = {
+  'reporting/forms/forms-attachment-entry-usage.sql': () =>
+    import('../../reporting/forms/forms-attachment-entry-usage.sql?raw').then((module) => module.default),
+  'reporting/forms/forms-attachment-entry-usage-evidence.md': () =>
+    import('../../reporting/forms/forms-attachment-entry-usage-evidence.md?raw').then((module) => module.default),
   'reporting/forms/forms-active-task-monitor.sql': () =>
     import('../../reporting/forms/forms-active-task-monitor.sql?raw').then((module) => module.default),
   'reporting/forms/forms-active-task-monitor-evidence.md': () =>
@@ -179,6 +183,17 @@ function buildGeneratedCandidateEvidence(pattern) {
 
 export const communityReportingPatterns = {
   forms: [
+    {
+      title: 'Forms attachment entry-ID associations',
+      summary: 'Counts attachment and instance associations for a supplied entry reference without reading file contents or submitted values.',
+      scriptPath: 'reporting/forms/forms-attachment-entry-usage.sql',
+      evidencePath: 'reporting/forms/forms-attachment-entry-usage-evidence.md',
+      sourceCount: 1,
+      tables: ['dbo.cf_bp_attachment_data', 'dbo.cf_bp_data_attachment_mapping', 'dbo.cf_bp_data', 'dbo.cf_submissions'],
+      tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
+      confirmedVersions: ['11.0.2311.50564', '12.0.2503.10378', '12.0.2509.20409', '12.0.2603.30215', '12.0.2607.40144'],
+      answersLinks: [{ title: 'Duplicate entry IDs saving in multiple instances v12', url: 'https://answers.laserfiche.com/questions/237458/Duplicate-entry-IDs-saving-in-multiple-instances-v12' }],
+    },
     {
       title: 'Forms active task and Monitor reporting',
       summary:

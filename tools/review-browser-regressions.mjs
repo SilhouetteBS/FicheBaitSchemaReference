@@ -113,6 +113,17 @@ try {
   await openTable.click();
   await page.locator('.table-detail h2').waitFor();
   assert.equal(await page.locator('.table-detail h2').innerText(), tableName);
+  await page.getByRole('button', { name: 'Reporting', exact: true }).click();
+  await page.getByRole('button', { name: /Forms attachment entry-ID associations/ }).click();
+  await page.getByRole('heading', { name: 'Forms attachment entry-ID associations', exact: true }).waitFor();
+  await page.getByRole('tab', { name: 'SQL', exact: true }).click();
+  await page.waitForFunction(() => globalThis.document.querySelector('.reporting-sql-viewer')?.textContent.includes('DECLARE @EntryId'));
+  assert.match(await page.locator('.reporting-section-full').innerText(), /Not live tested/i);
+  await page.getByRole('tab', { name: 'Review notes', exact: true }).click();
+  await page.waitForFunction(() => globalThis.document.querySelector('.reporting-markdown')?.textContent.includes('repository-scoped'));
+  assert.match(await page.locator('.reporting-markdown').innerText(), /repository-scoped/);
+  await page.getByRole('tab', { name: 'Links to Resources', exact: true }).click();
+  assert.ok(await page.getByRole('link', { name: /Duplicate entry IDs saving/ }).count() > 0);
   assert.deepEqual(errors, []);
   console.log('Browser review regressions passed: history, persistence, object navigation, corrections, script search, Markdown, tabs, and unavailable storage.');
 } finally { await browser.close(); }

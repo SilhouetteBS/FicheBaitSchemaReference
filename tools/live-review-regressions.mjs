@@ -8,6 +8,30 @@ const version = '12.0.2605.385';
 const notes = json(`data/workflow/${version}/notes.json`);
 const schema = json(`data/workflow/${version}/schema.json`);
 
+test('Forms entry-association diagnostic references columns in every claimed build', () => {
+  const required = {
+    'dbo.cf_bp_attachment_data': ['attachment_id', 'lfentry_id', 'bp_id', 'is_deleted'],
+    'dbo.cf_bp_data_attachment_mapping': ['attachment_id', 'bp_data_id'],
+    'dbo.cf_bp_data': ['bp_data_id', 'submission_id'],
+    'dbo.cf_submissions': ['submission_id', 'bp_instance_id'],
+  };
+  const manifest = json('data/forms/versions.json');
+  for (const entry of manifest.versions) {
+    const tables = json(`data/forms/${entry.version}/schema.json`).tables;
+    for (const [key, columns] of Object.entries(required)) {
+      const table = tables.find(table => table.key === key);
+      assert.ok(table, `${entry.version}: ${key}`);
+      for (const name of columns) assert.ok(table.columns.some(column => column.name === name), `${entry.version}: ${key}.${name}`);
+    }
+  }
+  const sql = read('reporting/forms/forms-attachment-entry-usage.sql');
+  assert.match(sql, /IF @EntryId IS NULL OR @EntryId <= 0\s+THROW/);
+  assert.match(sql, /COUNT\(DISTINCT s\.bp_instance_id\)/);
+  assert.match(sql, /SELECT DISTINCT TOP \(1000\)/);
+  assert.equal((sql.match(/WHERE a\.lfentry_id = @EntryId/g) ?? []).length, 2);
+  assert.doesNotMatch(sql, /\b(?:UPDATE|DELETE|INSERT|MERGE|CREATE|ALTER|DROP|TRUNCATE)\b|SELECT\s+\*|a\.attachment\b|d\.value\b/i);
+});
+
 test('LFDS SAML mapping joins only the schema-backed LF identity side', () => {
   const sql = read('reporting/lfds/lfds-user-license-inventory.sql');
   assert.match(sql, /ON saml\.lf_sid = lf_user\.sid/);

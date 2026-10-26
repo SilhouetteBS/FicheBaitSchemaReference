@@ -26,7 +26,7 @@
     "verify:answers-generated": "node tools/verify-answers-schema-candidates.mjs --check",
     "lint": "eslint .",
     "test": "npm run test:unit",
-    "test:unit": "node tools/run-tests.mjs && node tools/review-regressions.mjs && node --test tools/live-review-regressions.mjs tools/forms-column-review.test.mjs tools/full-column-review.test.mjs tools/view-column-export.test.mjs tools/column-review.test.mjs",
+    "test:unit": "node tools/run-tests.mjs && node tools/review-regressions.mjs && node --test tools/live-review-regressions.mjs tools/forms-column-review.test.mjs tools/full-column-review.test.mjs tools/view-column-export.test.mjs tools/column-review.test.mjs tools/dev-editing.test.mjs",
     "test:e2e": "node tools/e2e-smoke.mjs && node tools/review-browser-regressions.mjs && node tools/object-neighborhood-browser.mjs",
     "test:diagram": "node tools/diagram-regression.mjs && node --test tools/object-neighborhood.test.mjs",
     "test:columns-review": "node --test tools/column-review.test.mjs",

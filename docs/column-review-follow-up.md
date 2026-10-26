@@ -46,6 +46,31 @@ authoritative documentation, or a safe aggregate from a consenting contributor.
 
 The latest reviewed exports lack output-column metadata for 19 views: four Forms,
 four Repository and eleven Workflow views. LFDS has no such gap in this scope.
+
+### Exact Recovery Scope
+
+| Product build | Views missing output columns |
+| --- | --- |
+| Forms 12.0.2607.40144 | `dbo.completed_tasks_data`, `dbo.main_instance_data`, `dbo.main_instance_variable_data`, `dbo.worker_instance_data` |
+| Repository Server 12.0.4.433 | `dbo.all_trustees`, `dbo.global_recycle_bin`, `dbo.locations`, `dbo.thumbnails` |
+| Workflow 12.0.2605.385 | `dbo.Activities`, `dbo.Activities2`, `dbo.ai_usage_log_view`, `dbo.ai_usage_reporting_log_view`, `dbo.BPInstances`, `dbo.BPParticipants`, `dbo.BPSteps`, `dbo.Entries`, `dbo.workflow_reporting_log_view`, `dbo.Workflows`, `dbo.Workflows2` |
+| LFDS 12.0.2607.421 | None: the snapshot exports no user views. No recovery export is required. |
+
+The view objects are present, but their nested output-column lists are absent.
+Missing details include column names, ordinal positions, SQL types, length,
+precision, scale, collation and nullability. This is a metadata gap, not a claim
+that the live views have no columns. It limits column-level documentation,
+AI exports and query compatibility checks.
+
+Run the standalone script separately against the matching three product
+databases. In SSMS select Results to File (Ctrl+Shift+F) before executing and save
+the complete single JSON result, without headers or truncation. Use three
+separate folders named for product and exact build, each containing `views.json`,
+or clearly label the three files before providing them to the maintainer.
+Use an account whose metadata visibility includes all user views (the DBA can
+confirm VIEW DEFINITION access). If the installed build differs, report that
+build and provide a matching complete export rather than combining snapshots.
+
 The exporter now includes nested view columns; the importer retains names,
 ordinals, SQL types, precision, scale, length, collation and nullability. The AI
 export preserves these columns in objects.jsonl. None are inferred from a view
