@@ -322,20 +322,55 @@ function compareSchemaObjects(beforeObjects = [], afterObjects = [], objectType)
       if (!beforeObject) {
         return null;
       }
-      const details = summarizeObjectChange(beforeObject, afterObject, [
+      const structuralFields = [
         ['type', (object) => object.typeDescription ?? object.type],
         ['parent object', (object) => object.parentObjectKey],
         ['disabled', (object) => object.isDisabled],
         ['instead of trigger', (object) => object.isInsteadOfTrigger],
-        ['definition', (object) => object.definitionSha256],
         ['parameters', (object) => describeRoutineParameters(object.parameters)],
-      ]);
-      return details.length > 0 ? { key, objectType, details } : null;
+      ];
+      // An absent output-column export is a coverage gap, not evidence of a schema change.
+      if (objectType === 'view' && beforeObject.columns?.length && afterObject.columns?.length) {
+        structuralFields.push(['output columns', (object) => object.columns.map(column =>
+          `${column.ordinal}: ${column.name} ${column.typeDefinition ?? column.dataType} ${column.isNullable ? 'NULL' : 'NOT NULL'}${column.collationName ? ` COLLATE ${column.collationName}` : ''}`).join('; ')]);
+      }
+      const structuralDetails = summarizeObjectChange(beforeObject, afterObject, structuralFields);
+      const beforeHash = beforeObject.definitionSha256 ?? '';
+      const afterHash = afterObject.definitionSha256 ?? '';
+      const definitionChange = beforeHash.toLowerCase() !== afterHash.toLowerCase()
+        ? { beforeHash, afterHash, kind: beforeHash && afterHash ? 'textChanged' : 'metadataChanged' }
+        : null;
+      const details = [...structuralDetails, ...(definitionChange ? [`definition: ${beforeHash || '(none)'} -> ${afterHash || '(none)'}`] : [])];
+      return details.length > 0 ? {
+        key, objectType, details, structuralDetails, definitionChange,
+        changeCategory: structuralDetails.length ? 'structural' : 'definitionOnly',
+      } : null;
     })
     .filter(Boolean)
     .sort((left, right) => byName(left.key, right.key));
 
   return { added, removed, changed };
+}
+
+export function getObjectChangeCounts(comparison) {
+  const groups = Object.values(comparison.objectChanges ?? {});
+  const all = groups.reduce((sum, group) => sum + group.added.length + group.removed.length + group.changed.length, 0)
+    + (comparison.dependencyChanges?.added.length ?? 0) + (comparison.dependencyChanges?.removed.length ?? 0);
+  const definitionOnly = groups.reduce((sum, group) => sum + group.changed.filter(object => object.changeCategory === 'definitionOnly').length, 0);
+  return { all, structural: all - definitionOnly, definitionOnly };
+}
+
+export function filterComparisonObjectChanges(comparison, filter) {
+  const includeStructural = filter !== 'definitionOnly';
+  return {
+    objectChanges: Object.fromEntries(Object.entries(comparison.objectChanges ?? {}).map(([key, group]) => [key, {
+      added: includeStructural ? group.added : [],
+      removed: includeStructural ? group.removed : [],
+      changed: group.changed.filter(object => filter === 'all'
+        || (filter === 'definitionOnly') === (object.changeCategory === 'definitionOnly')),
+    }])),
+    dependencyChanges: includeStructural ? comparison.dependencyChanges ?? { added: [], removed: [] } : { added: [], removed: [] },
+  };
 }
 
 function getDependencyChangeKey(dependency) {

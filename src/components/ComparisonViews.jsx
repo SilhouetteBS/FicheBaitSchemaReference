@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { Check, Copy } from 'lucide-react';
+import { copyTextToClipboard } from '../data/clipboard.js';
+import { getObjectChangeCounts, filterComparisonObjectChanges } from '../data/schemaDictionary.js';
 import {
   getComparisonSeverityCounts,
   getTableChangeSeverity,
@@ -128,24 +131,6 @@ export function ComparisonDetail({
   }
   const selectedChange =
     comparison.changedTables.find((table) => table.key === selectedTableKey) ?? comparison.changedTables[0];
-  const objectChangeGroups = [
-    ['views', 'Views'],
-    ['routines', 'Routines'],
-    ['triggers', 'Triggers'],
-  ].map(([key, label]) => ({
-    key,
-    label,
-    changes: comparison.objectChanges?.[key] ?? { added: [], removed: [], changed: [] },
-  }));
-  const hasObjectChanges = objectChangeGroups.some(
-    (group) => group.changes.added.length + group.changes.removed.length + group.changes.changed.length > 0,
-  );
-  const dependencyChanges = comparison.dependencyChanges ?? { added: [], removed: [] };
-  const dependencyChangeCount = dependencyChanges.added.length + dependencyChanges.removed.length;
-  const objectChangeCount = objectChangeGroups.reduce(
-    (total, group) => total + group.changes.added.length + group.changes.removed.length + group.changes.changed.length,
-    0,
-  );
   const changeFilterCounts = {
     all: comparison.changedTables.length,
     columns: comparison.changedTables.filter((table) =>
@@ -282,21 +267,7 @@ export function ComparisonDetail({
           ))}
         </div>
       </section>
-      {(hasObjectChanges || dependencyChangeCount > 0) && (
-        <section className="diff-section">
-          <div className="section-title-row">
-            <h3>Object and dependency changes</h3>
-            <span>{objectChangeCount + dependencyChangeCount}</span>
-          </div>
-          <div className="drilldown-grid">
-            {objectChangeGroups.map((group) => (
-              <ObjectChangeBucket group={group} key={group.key} />
-            ))}
-            <ChangeBucket title="Added dependencies" items={dependencyChanges.added} />
-            <ChangeBucket title="Removed dependencies" items={dependencyChanges.removed} />
-          </div>
-        </section>
-      )}
+      <ObjectChanges key={`${comparison.fromVersion}/${comparison.toVersion}`} comparison={comparison} />
       {selectedChange && (
         <section className="comparison-drilldown">
           <div className="section-title-row">
@@ -387,26 +358,85 @@ export function ComparisonDetail({
   );
 }
 
-function ObjectChangeBucket({ group }) {
+function ObjectChanges({ comparison }) {
+  const [filter, setFilter] = useState('structural');
+  const counts = getObjectChangeCounts(comparison);
+  if (!counts.all) return null;
+  const filtered = filterComparisonObjectChanges(comparison, filter);
+  return <section className="diff-section object-comparison-section" aria-labelledby="object-changes-heading">
+    <div className="section-title-row"><h3 id="object-changes-heading">Object and dependency changes</h3><span>{counts[filter]} of {counts.all}</span></div>
+    <div className="comparison-filter-row" role="group" aria-label="Object change filters">
+      {[['all', 'All changes'], ['structural', 'Structural changes'], ['definitionOnly', 'Definition-only changes']].map(([value, label]) =>
+        <button type="button" key={value} className={filter === value ? 'selected' : ''} aria-pressed={filter === value} onClick={() => setFilter(value)}>{label}<span>{counts[value]}</span></button>)}
+    </div>
+    {counts[filter] === 0 && <p className="empty-state">No {filter === 'structural' ? 'structural' : 'definition-only'} object or dependency changes. Other changes remain available in the filters above.</p>}
+    {[['views', 'Views'], ['routines', 'Routines'], ['triggers', 'Triggers']].map(([key, label]) => {
+      const changes = filtered.objectChanges[key];
+      return changes && changes.added.length + changes.removed.length + changes.changed.length > 0
+        ? <ObjectChangeBucket group={{ key, label, changes }} key={key} comparison={comparison} /> : null;
+    })}
+    {(filtered.dependencyChanges.added.length + filtered.dependencyChanges.removed.length > 0) && <div className="drilldown-grid">
+      <ChangeBucket title="Added dependencies" items={filtered.dependencyChanges.added} />
+      <ChangeBucket title="Removed dependencies" items={filtered.dependencyChanges.removed} />
+    </div>}
+  </section>;
+}
+
+function ObjectChangeBucket({ group, comparison }) {
   return (
-    <div className="change-bucket change-bucket-changed">
+    <section className="object-change-bucket" aria-label={`${group.label} changes`}>
       <div className="section-title-row">
         <h3>{group.label}</h3>
-        <span className="change-status-changed">
+        <span>
           {group.changes.added.length + group.changes.removed.length + group.changes.changed.length}
         </span>
       </div>
       <div className="object-change-grid">
-        <ChangeList title="Added" status="added" items={group.changes.added} />
-        <ChangeList title="Removed" status="removed" items={group.changes.removed} />
-        <ChangeList
-          title="Changed"
-          status="changed"
-          items={group.changes.changed.map((object) => `${object.key}: ${object.details.join('; ')}`)}
-        />
+        {group.changes.added.length > 0 && <ChangeList title="Added" status="added" items={group.changes.added} />}
+        {group.changes.removed.length > 0 && <ChangeList title="Removed" status="removed" items={group.changes.removed} />}
+        {group.changes.changed.length > 0 && <div className="object-change-table-scroll"><table className="object-change-table">
+          <thead><tr><th scope="col">Object</th><th scope="col">Change</th><th scope="col">Impact</th></tr></thead>
+          <tbody>{group.changes.changed.map(object => <tr key={object.key} data-object-key={object.key} className={object.changeCategory === 'definitionOnly' ? 'definition-only-change' : 'structural-object-change'}>
+            <td><code>{object.key}</code></td>
+            <td>
+              {object.structuralDetails.length > 0 && <ul>{object.structuralDetails.map(detail => <li key={detail}>{detail}</li>)}</ul>}
+              {object.definitionChange && <DefinitionChange object={object} comparison={comparison} />}
+            </td>
+            <td>{object.changeCategory === 'definitionOnly' ? 'Functional impact not established' : 'Review affected queries'}
+              {object.changeCategory === 'structural' && object.definitionChange && <small>Definition impact not established</small>}
+            </td>
+          </tr>)}</tbody>
+        </table></div>}
       </div>
-    </div>
+    </section>
   );
+}
+
+function DefinitionChange({ object, comparison }) {
+  const [copyStatus, setCopyStatus] = useState('');
+  const change = object.definitionChange;
+  async function copyHash(side, hash) {
+    try { await copyTextToClipboard(hash); setCopyStatus(`${side} fingerprint copied`); }
+    catch { setCopyStatus('Copy failed'); }
+  }
+  return <div className="definition-change-summary">
+    <span>{change.kind === 'textChanged' ? 'Definition text changed' : 'Definition metadata availability changed'}</span>
+    <details className="definition-technical-details">
+      <summary aria-label={`Technical details for ${object.key}`}>Technical details</summary>
+      <p>{change.kind === 'textChanged'
+        ? 'The exported SQL text differs. Logic, comments, or formatting may have changed; this alone does not establish a functional or breaking change.'
+        : 'A definition fingerprint is missing from one export. A SQL text change cannot be established from these exports.'}</p>
+      <dl>{[['Before', change.beforeHash, comparison.fromVersion], ['After', change.afterHash, comparison.toVersion]].map(([side, hash, version]) => <div key={side}>
+        <dt>{side} ({version}) SHA-256</dt><dd><code>{hash || 'Not exported'}</code>
+          <button type="button" className="icon-button" title={`Copy ${side.toLowerCase()} fingerprint`} aria-label={`Copy ${side.toLowerCase()} fingerprint for ${object.key}`} disabled={!hash} onClick={() => copyHash(side, hash)}>
+            {copyStatus === `${side} fingerprint copied` ? <Check size={15} aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}
+          </button>
+        </dd>
+      </div>)}</dl>
+      <p>SQL definition text is not included in these exports; a SQL diff is unavailable.</p>
+      <span role="status" aria-live="polite">{copyStatus}</span>
+    </details>
+  </div>;
 }
 
 function getColumnChangeStatus(selectedChange, columnName, side) {
