@@ -4,6 +4,10 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Restored the responsive header's full accessible product name, verified its separate logo in render checks, and improved subtitle contrast with matching accessibility coverage.
+- Updated vulnerable Vite and transitive Zod tooling versions while retaining the current supported major versions.
+- Unified the default and unit test commands, removed duplicate metadata preparation, and enabled CI for maintainer review branches without requiring a pull request.
+
 - Screened all 3,361 table columns in the four latest reviewed builds; enriched 318 purposes with exported foreign-key references and corrected or qualified 24 misleading date/time descriptions without upgrading runtime confidence.
 - Reconciled 67 Repository/Workflow column claims, corrected three schema-only confidence labels, and documented the remaining filing-date and view-metadata evidence gaps.
 - Added view output-column metadata to the SQL export, importer, snapshot validation and AI export, with a metadata-only views recovery script and automated regression coverage.

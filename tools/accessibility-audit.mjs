@@ -133,7 +133,7 @@ try {
       return 'rgb(255, 255, 255)';
     }
 
-    const selectors = ['.brand h1', '.sidebar-view-nav button.selected', '.warning-banner p', '.table-item.selected span:nth-child(2)'];
+    const selectors = ['.fb-brand .fb-name', '.fb-brand .fb-description', '.sidebar-view-nav button.selected', '.warning-banner p', '.table-item.selected span:nth-child(2)'];
     return selectors.map((selector) => {
       const element = globalThis.document.querySelector(selector);
       if (!(element instanceof globalThis.Element)) {

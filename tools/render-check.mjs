@@ -27,7 +27,8 @@ await page.locator('.community-disclaimer summary').click();
 
 const result = {
   title: await page.title(),
-  h1: await page.locator('h1 img').getAttribute('alt'),
+  h1: await page.getByRole('heading', { name: 'FicheBait Schema Reference', level: 1 }).getAttribute('aria-label'),
+  logoLoaded: await page.getByRole('img', { name: 'FicheBait', exact: true }).evaluate(image => image.complete && image.naturalWidth > 0),
   tableHeading: await page.locator('.detail-heading h2').innerText(),
   hasSupportWarning: (await page.locator('.warning-banner').innerText()).includes(
     'consult your applicable license and support agreements',
@@ -35,6 +36,7 @@ const result = {
   columnRows: await page.locator('.columns-table .table-row').count(),
 };
 assert.equal(result.hasSupportWarning, true, 'The expandable disclaimer must retain the support boundary.');
+assert.equal(result.logoLoaded, true, 'The FicheBait header logo must load.');
 assert.ok(result.columnRows > 1, 'Table columns must render.');
 
 await page.screenshot({

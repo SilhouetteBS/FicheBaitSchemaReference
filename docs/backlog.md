@@ -78,3 +78,20 @@ This is a public product backlog. Do not add private research notes, customer-sp
 ## Current Focus
 
 Items 1-68 have initial implementations in the app or repository documentation. Future passes can refine the interaction design and expand coverage, but these backlog entries should now be treated as shipped baseline functionality rather than pending feature requests.
+
+## Maintenance Review: 2026-10-26
+
+Prepared on `codex/weekly-maintenance-2026-10-26` for owner review; not merged or published.
+
+1. Completed: repaired header regression coverage after the responsive branding change. The heading retains its full accessible product name, the render check verifies the separate logo actually loaded, and contrast checks cover the current heading and subtitle. Darkened the small subtitle text to meet AA contrast without changing header layout.
+2. Completed: updated Vite from 7.3.5 to 7.3.7 and transitive development-tool Zod from 4.4.3 to 4.6.7 within supported major versions. The dependency audit reports zero vulnerabilities. These advisories concern local development/lint paths; no deployed static-site exploit was established.
+3. Completed: made `npm test` delegate to the complete unit suite, including column-review tests, without regenerating metadata twice. Enabled existing CI checks on `codex/**` pushes so maintenance branches can be validated without a pull request or merge.
+
+Validation: unit and diagram regressions, render smoke, browser regressions, accessibility, visual baselines, runtime performance, public-build boundary, static build/security checks, editing guard, lockfile integrity, data/notes validation, canonical/public parity, and generated Answers verification passed locally. Lint passed with ignored private `outputs/**` excluded. The 520 existing data-quality warnings remain visible.
+
+Release check: the [official Laserfiche 12 release list](https://doc.laserfiche.com/laserfiche.documentation/12/userguide/en-us/content/intro-release-information.htm), checked 2026-10-26, matches the latest imported Forms 12.0.2607.40144, LFDS 12.0.2607.421, Repository Server 12.0.4.433, and Workflow 12.0.2605.385 builds. No newer target-product schema was identified there. No new SQL candidates were processed in this batch because CI/security maintenance took priority.
+
+Follow-up:
+
+- The Windows `npm run dev:editing` launcher fails with `spawn EINVAL` when executing its `.cmd` shim with `shell: false`. This pre-existing launcher was not changed in this batch; normal Vite development startup and production preview passed. Repair and regression-test it in a later batch.
+- The 19 latest-build view output-column metadata gaps still need the matching private Forms, Repository, and Workflow exports described in `docs/column-review-follow-up.md`. LFDS has no view-column gap in this scope. Do not infer missing view columns or promote unknown confidence labels.
