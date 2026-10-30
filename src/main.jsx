@@ -5,7 +5,6 @@ import {
   AlertTriangle,
   Database,
   ExternalLink,
-  HelpCircle,
   Lock,
   MessageSquarePlus,
   Search,
@@ -1147,13 +1146,10 @@ function App() {
               <Search size={14} />
               Command
             </button>
-            <button className="icon-button" title="Keyboard shortcuts" type="button" onClick={() => setShortcutHelpOpen(true)}>
-              <HelpCircle size={16} />
-            </button>
             <button className="icon-button" title="Copy current view link" type="button" onClick={() => copyCurrentDeepLink('current view')}>
               <Share2 size={16} />
             </button>
-            <HelpMenu />
+            <HelpMenu onOpenShortcuts={() => setShortcutHelpOpen(true)} />
           </div>
         </header>
 

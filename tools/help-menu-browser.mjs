@@ -24,7 +24,7 @@ try {
   await page.keyboard.press('Enter');
   await guide.waitFor();
   assert.equal(await guide.evaluate(el => el === globalThis.document.activeElement), true);
-  assert.deepEqual(await menu.getByRole('menuitem').allTextContents(), ['User Guide', 'About', 'Feature Requests']);
+  assert.deepEqual(await menu.getByRole('menuitem').allTextContents(), ['User Guide', 'About', 'Keyboard shortcuts', 'Feature Requests']);
   assert.equal(await feature.getAttribute('href'), 'https://fichebait.com/suggest-a-feature/?feature_product=FicheBait%20Schema%20Reference');
   assert.equal(await feature.getAttribute('target'), '_blank');
   assert.equal(await guide.getAttribute('target'), null);
@@ -79,6 +79,21 @@ try {
   await page.getByRole('button', { name: 'Close About', exact: true }).click();
   assert.equal(await help.evaluate(el => el === globalThis.document.activeElement), true);
   const returnQuery = new URL(page.url()).search;
+  assert.equal(await page.locator('.topbar-actions [title="Keyboard shortcuts"]').count(), 0);
+  await help.click();
+  await menu.getByRole('menuitem', { name: 'Keyboard shortcuts', exact: true }).click();
+  const shortcuts = page.getByRole('dialog', { name: 'Keyboard shortcuts', exact: true });
+  await shortcuts.waitFor();
+  assert.equal(await menu.count(), 0);
+  await page.keyboard.press('Escape');
+  assert.equal(await shortcuts.count(), 0);
+  assert.equal(await help.evaluate(el => el === globalThis.document.activeElement), true);
+  await page.keyboard.press('?');
+  await shortcuts.waitFor();
+  await page.getByRole('button', { name: 'Close keyboard shortcuts', exact: true }).click();
+  assert.equal(await help.evaluate(el => el === globalThis.document.activeElement), true);
+  assert.equal(await search.inputValue(), 'cf_bp_main_instances');
+  assert.equal(await page.locator('.table-detail h2').innerText(), selection);
   const tagClasses = ['confidence confidence-unknown', 'confidence confidence-inferred', 'confidence confidence-observed', 'confidence confidence-confirmed',
     'community-tag-source', 'community-tag-matched', 'community-tag-neutral', 'community-tag-untested', 'community-tag-review', 'community-tag-readonly', 'community-tag-context'];
   const appColors = await page.evaluate(classes => {

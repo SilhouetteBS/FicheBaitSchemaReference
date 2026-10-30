@@ -1,12 +1,12 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { BookOpen, ChevronDown, CircleHelp, ExternalLink, Info, MessageSquarePlus, X } from 'lucide-react';
+import { BookOpen, ChevronDown, CircleHelp, ExternalLink, Info, Keyboard, MessageSquarePlus, X } from 'lucide-react';
 import { AccessibleModal } from './AccessibleModal.jsx';
 import './HelpMenu.css';
 
 export const featureRequestUrl = `https://fichebait.com/suggest-a-feature/?feature_product=${encodeURIComponent('FicheBait Schema Reference')}`;
 
-export function HelpMenu() {
+export function HelpMenu({ onOpenShortcuts }) {
   const [position, setPosition] = useState(null);
   const [aboutOpen, setAboutOpen] = useState(false);
   const triggerRef = useRef(null);
@@ -19,7 +19,7 @@ export function HelpMenu() {
     const rect = triggerRef.current.getBoundingClientRect();
     const width = Math.min(232, window.innerWidth - 16);
     setPosition({
-      top: Math.max(8, Math.min(rect.bottom + 6, window.innerHeight - 160)),
+      top: Math.max(8, Math.min(rect.bottom + 6, window.innerHeight - 200)),
       right: Math.max(8, Math.min(window.innerWidth - rect.right, window.innerWidth - width - 8)),
       last,
     });
@@ -82,6 +82,11 @@ export function HelpMenu() {
         setPosition(null);
         setAboutOpen(true);
       }}><Info size={17} aria-hidden="true" />About</button>
+      <button role="menuitem" type="button" onClick={() => {
+        triggerRef.current.focus();
+        setPosition(null);
+        onOpenShortcuts();
+      }}><Keyboard size={17} aria-hidden="true" />Keyboard shortcuts</button>
       <a role="menuitem" href={featureRequestUrl} target="_blank" rel="noopener noreferrer" aria-label="Feature Requests (opens in a new tab)">
         <MessageSquarePlus size={17} aria-hidden="true" /><span>Feature Requests</span><ExternalLink className="help-external" size={13} aria-hidden="true" />
       </a>
