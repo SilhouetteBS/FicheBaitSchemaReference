@@ -4,6 +4,8 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Pointed Help > User Guide to the FicheBait-hosted Schema Reference manual, opening in the same tab. The supplied manual URL currently returns HTTP 404.
+
 - Moved Keyboard shortcuts from the header into Help, retaining the shortcut dialog, question-mark shortcut, and focus restoration to Help.
 
 - Reworded the notice, About dialog, and guide to describe Schema Reference as an independent database schema reference, consistent with Error Helper's independent-reference wording.

@@ -28,6 +28,7 @@ try {
   assert.equal(await feature.getAttribute('href'), 'https://fichebait.com/suggest-a-feature/?feature_product=FicheBait%20Schema%20Reference');
   assert.equal(await feature.getAttribute('target'), '_blank');
   assert.equal(await guide.getAttribute('target'), null);
+  assert.equal(await guide.getAttribute('href'), 'https://fichebait.com/support/manuals/fichebait-schema-reference/');
   assert.equal(await help.evaluate(el => globalThis.getComputedStyle(el).backgroundColor), 'rgba(0, 0, 0, 0)');
   await page.keyboard.press('End');
   assert.equal(await feature.evaluate(el => el === globalThis.document.activeElement), true);
@@ -110,8 +111,8 @@ try {
     container.remove();
     return colors;
   }, tagClasses);
-  await help.click();
-  await guide.click();
+  // Retain local guide coverage separately from the externally hosted manual link.
+  await page.goto(`${base}/user-guide.html?${new URLSearchParams({ return: returnQuery })}`, { waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'How it works', exact: true }).waitFor();
   await page.getByRole('heading', { name: 'Tags and legends', exact: true }).waitFor();
   const returnLink = page.getByRole('link', { name: 'Open Schema Reference', exact: true }).first();

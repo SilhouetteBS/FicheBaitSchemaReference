@@ -75,7 +75,7 @@ export function HelpMenu({ onOpenShortcuts }) {
       <CircleHelp size={16} aria-hidden="true" /><span>Help</span><ChevronDown size={13} aria-hidden="true" />
     </button>
     {open && createPortal(<div ref={menuRef} id={menuId} className="help-menu" role="menu" tabIndex={-1} aria-label="Help" style={{ top: position.top, right: position.right }} onKeyDown={handleMenuKey}>
-      <a role="menuitem" href={`/user-guide.html?${new URLSearchParams({ return: window.location.search })}`}><BookOpen size={17} aria-hidden="true" />User Guide</a>
+      <a role="menuitem" href="https://fichebait.com/support/manuals/fichebait-schema-reference/"><BookOpen size={17} aria-hidden="true" />User Guide</a>
       <button role="menuitem" type="button" onClick={() => {
         // The existing modal restores the focus it captures on mount.
         triggerRef.current.focus();
