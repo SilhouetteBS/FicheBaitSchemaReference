@@ -1111,9 +1111,9 @@ function App() {
           <div className="warning-banner topbar-warning" role="note">
             <ShieldAlert size={20} />
             <details className="community-disclaimer">
-              <summary>Community research aid. Read-only use; validate changes in a test environment.</summary>
+              <summary>Independent database schema reference. Read-only use; validate changes in a test environment.</summary>
               <p>
-              This community research aid documents Laserfiche&reg; product databases for read-only
+              This independent database schema reference documents Laserfiche&reg; product databases for read-only
               reporting, troubleshooting, and education. It is not affiliated with or endorsed by
               Laserfiche. Direct modification of Laserfiche product databases is unsupported; consult
               your applicable license and support agreements. Validate changes in a test environment.

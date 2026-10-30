@@ -4,6 +4,8 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Reworded the notice, About dialog, and guide to describe Schema Reference as an independent database schema reference, consistent with Error Helper's independent-reference wording.
+
 - Consolidated header help into an accessible Help menu with User Guide, About, and Feature Requests. Added how-it-works context and color-matched tag/diagram legends to the guide, with a return link preserving the current reference view. The external suggestion form currently returns HTTP 404; product preselection cannot yet be verified.
 
 - Made structural object changes the default comparison view, with counted filters for all changes and definition-only changes. Definition fingerprints now appear in expandable technical details with copy controls; missing fingerprints are distinguished from proven text changes and functional impact remains unconfirmed.

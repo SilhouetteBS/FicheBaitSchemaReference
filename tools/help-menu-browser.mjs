@@ -10,6 +10,8 @@ try {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto(`${base}/?product=forms&version=12.0.2607.40144&view=tables&table=dbo.cf_bp_main_instances`, { waitUntil: 'networkidle' });
+  assert.equal(await page.locator('.community-disclaimer summary').innerText(), 'Independent database schema reference. Read-only use; validate changes in a test environment.');
+  assert.match(await page.locator('.community-disclaimer').textContent(), /not affiliated with or endorsed by\s+Laserfiche/);
   const search = page.getByLabel('Search tables, columns, descriptions');
   await search.fill('cf_bp_main_instances');
   const selection = await page.locator('.table-detail h2').innerText();
@@ -67,6 +69,7 @@ try {
   assert.equal(await search.inputValue(), 'cf_bp_main_instances');
   assert.equal(await page.locator('.table-detail h2').innerText(), selection);
   assert.match(await dialog.innerText(), /Not affiliated with or endorsed by Laserfiche/);
+  assert.match(await dialog.innerText(), /independent database schema reference/);
   assert.deepEqual((await new AxeBuilder({ page }).include('[role="dialog"]').analyze()).violations, []);
   await page.keyboard.press('Escape');
   assert.equal(await dialog.count(), 0);

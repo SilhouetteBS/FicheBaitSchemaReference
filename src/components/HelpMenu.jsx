@@ -89,7 +89,7 @@ export function HelpMenu() {
     {aboutOpen && <AccessibleModal labelledBy={aboutId} onClose={() => setAboutOpen(false)}>
       <div className="help-about">
         <div className="section-title-row"><h2 id={aboutId}>About Schema Reference</h2><button type="button" className="icon-button" aria-label="Close About" title="Close About" onClick={() => setAboutOpen(false)}><X size={18} aria-hidden="true" /></button></div>
-        <p>Published by FicheBait, Schema Reference is a community research aid for read-only reporting, troubleshooting, and education across Laserfiche Forms, Directory Server, Repository, and Workflow databases.</p>
+        <p>Published by FicheBait, Schema Reference is an independent database schema reference for read-only reporting, troubleshooting, and education across Laserfiche Forms, Directory Server, Repository, and Workflow databases.</p>
         <p>It documents exported schemas and evidence-based notes, not live databases. Coverage varies by product and version; inferred meanings and untested SQL require validation in a test environment. Direct modification of Laserfiche product databases is unsupported.</p>
         <p>Not affiliated with or endorsed by Laserfiche.</p>
       </div>
