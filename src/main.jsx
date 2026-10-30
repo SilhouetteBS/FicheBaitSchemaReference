@@ -44,6 +44,7 @@ import { copyTextToClipboard } from './data/clipboard.js';
 import { buildCorrectionIssueUrl } from './data/correctionIssue.js';
 import { ErrorBoundary } from './components/ErrorBoundary.jsx';
 import { AccessibleModal } from './components/AccessibleModal.jsx';
+import { HelpMenu } from './components/HelpMenu.jsx';
 import { ProductMetadataPanel, formatSnapshotDate } from './components/ProductMetadataPanel.jsx';
 import './styles.css';
 import './community.css';
@@ -685,6 +686,7 @@ function App() {
 
   useEffect(() => {
     function handleKeyboardShortcuts(event) {
+      if (event.target.closest?.('[role="menu"], [role="dialog"]')) return;
       if (commandOpen || shortcutHelpOpen) {
         return;
       }
@@ -1141,7 +1143,6 @@ function App() {
               <MessageSquarePlus size={14} />
               <span>Report correction</span>
             </a>
-            <a className="text-button user-guide-link" href="/user-guide.html">User Guide</a>
             <button className="text-button command-button" type="button" onClick={() => setCommandOpen(true)}>
               <Search size={14} />
               Command
@@ -1152,6 +1153,7 @@ function App() {
             <button className="icon-button" title="Copy current view link" type="button" onClick={() => copyCurrentDeepLink('current view')}>
               <Share2 size={16} />
             </button>
+            <HelpMenu />
           </div>
         </header>
 

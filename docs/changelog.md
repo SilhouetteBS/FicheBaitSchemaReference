@@ -4,6 +4,8 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Consolidated header help into an accessible Help menu with User Guide, About, and Feature Requests. Added how-it-works context and color-matched tag/diagram legends to the guide, with a return link preserving the current reference view. The external suggestion form currently returns HTTP 404; product preselection cannot yet be verified.
+
 - Made structural object changes the default comparison view, with counted filters for all changes and definition-only changes. Definition fingerprints now appear in expandable technical details with copy controls; missing fingerprints are distinguished from proven text changes and functional impact remains unconfirmed.
 
 - Recovered 188 output columns for all 19 latest-build Forms, Repository and Workflow views from owner-supplied exports, with matching definition hashes and unchanged manual notes.
