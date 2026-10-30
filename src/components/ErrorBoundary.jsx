@@ -1,3 +1,4 @@
+import { reportFailure } from '../diagnostics/reporting.js';
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { getErrorBoundaryFallback } from './errorBoundaryFallback.js';
@@ -13,6 +14,7 @@ export class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error) {
+    reportFailure(error, 'react.render');
     console.error(error);
   }
 

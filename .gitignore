@@ -15,3 +15,6 @@ outputs/
 # Private source-review artifacts from signed-in Laserfiche Answers research.
 data/sources/
 docs/laserfiche-answers-source-review.md
+
+# Public production ingestion/release configuration is intentionally tracked.
+!.env.production

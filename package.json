@@ -14,7 +14,7 @@
     "pretest:unit": "npm run prepare:data",
     "dev": "vite --host 127.0.0.1",
     "dev:editing": "node tools/dev-editing.mjs",
-    "build": "vite build",
+    "build": "vite build && node tools/clean-source-maps.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "render:check": "node tools/render-check.mjs",
     "import:forms": "node tools/import-forms-metadata.mjs",
@@ -26,7 +26,7 @@
     "verify:answers-generated": "node tools/verify-answers-schema-candidates.mjs --check",
     "lint": "eslint .",
     "test": "npm run test:unit",
-    "test:unit": "node tools/run-tests.mjs && node tools/review-regressions.mjs && node --test tools/live-review-regressions.mjs tools/forms-column-review.test.mjs tools/full-column-review.test.mjs tools/view-column-export.test.mjs tools/column-review.test.mjs tools/dev-editing.test.mjs tools/object-comparison.test.mjs",
+    "test:unit": "node tools/run-tests.mjs && node tools/review-regressions.mjs && node --test tools/live-review-regressions.mjs tools/forms-column-review.test.mjs tools/full-column-review.test.mjs tools/view-column-export.test.mjs tools/column-review.test.mjs tools/dev-editing.test.mjs tools/object-comparison.test.mjs && npm run test:diagnostics",
     "test:e2e": "node tools/e2e-smoke.mjs && node tools/review-browser-regressions.mjs && node tools/object-neighborhood-browser.mjs && node tools/object-comparison-browser.mjs",
     "test:diagram": "node tools/diagram-regression.mjs && node --test tools/object-neighborhood.test.mjs",
     "test:columns-review": "node --test tools/column-review.test.mjs",
@@ -45,9 +45,12 @@
     "verify:public-build": "node tools/verify-public-build.mjs",
     "verify:deployed-site": "node tools/verify-deployed-site.mjs",
     "validate": "npm run lint && npm run test:unit && npm run test:diagram && npm run validate:data && npm run validate:notes && npm run verify:data-parity && npm run generate:ai-export && npm run verify:lockfile && npm run verify:static-security && npm run build && npm run test:static-build && npm run audit:performance && npm run render:check",
-    "validate:full": "npm run validate && npm run test:e2e"
+    "validate:full": "npm run validate && npm run test:e2e",
+    "test:diagnostics": "node --test tools/diagnostics.test.mjs",
+    "test:diagnostics:browser": "node tools/diagnostics-browser.mjs"
   },
   "dependencies": {
+    "@sentry/react": "11.10.0",
     "@vitejs/plugin-react": "^5.0.0",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
@@ -59,6 +62,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "^9.0.0",
+    "@sentry/vite-plugin": "11.10.0",
     "csv-parse": "^7.0.3",
     "eslint": "^9.0.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",

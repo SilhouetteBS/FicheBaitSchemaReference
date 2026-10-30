@@ -1,13 +1,16 @@
+import { diagnosticBreadcrumb, reportFailure } from '../diagnostics/reporting.js';
+import { resourceCategory } from '../diagnostics/policy.js';
 import { buildSchemaProduct, validateSchemaSnapshot } from './schemaDictionary.js';
 import { attachProductVersions } from './projectInsights.js';
 
 const requestCache = new Map();
 
 export class DataLoadError extends Error {
-  constructor(message, details = []) {
+  constructor(message, details = [], cause) {
     super(message);
     this.name = 'DataLoadError';
     this.details = details;
+    if (cause) this.cause = cause;
   }
 }
 
@@ -29,30 +32,41 @@ export async function fetchJson(url, { refresh = false } = {}) {
   }
 
   const request = (async () => {
+    const resource = resourceCategory(requestUrl);
+    diagnosticBreadcrumb('data.requested', { resource });
+    const fail = (error, failure_kind, http_status) => {
+      const context = { resource, failure_kind, http_status };
+      diagnosticBreadcrumb('data.failed', context);
+      reportFailure(error, 'data.load', context);
+    };
     let response;
     try {
       response = await fetch(requestUrl, { cache: refresh ? 'no-cache' : 'default' });
     } catch (error) {
+      fail(error, 'network');
       throw new DataLoadError(`Unable to request ${requestUrl}.`, [
         'Confirm the static site is serving the public/data folder.',
         error.message,
-      ]);
+      ], error);
     }
 
     if (!response.ok) {
+      const failure = new Error('HTTP failure');
+      fail(failure, 'http', response.status);
       throw new DataLoadError(`Unable to load ${requestUrl}.`, [
         `HTTP status: ${response.status}`,
         'Confirm the product manifest points to an existing JSON file.',
-      ]);
+      ], failure);
     }
 
     try {
       return await response.json();
     } catch (error) {
+      fail(error, 'json');
       throw new DataLoadError(`Unable to parse JSON from ${requestUrl}.`, [
         'Confirm the file was exported as JSON and was not saved as text, HTML, or CSV.',
         error.message,
-      ]);
+      ], error);
     }
   })();
 
@@ -73,18 +87,20 @@ export async function loadVersionEntry(versionEntry, productKey) {
       versionEntry.schemaUrl,
       error.message,
       ...(error.details ?? []),
-    ]);
+    ], error);
   });
   const schemaErrors = validateSchemaSnapshot(schema);
   if (schema.productVersion !== versionEntry.version) schemaErrors.push('Schema version does not match the version manifest.');
   if (productKey && schema.productKey !== productKey) schemaErrors.push('Schema product does not match the selected product.');
   if (schemaErrors.length > 0) {
+    const failure = new Error('Schema validation failed');
+    reportFailure(failure, 'schema.validate', { resource: 'schema', failure_kind: 'validation' });
     requestCache.delete(resolvePublicUrl(versionEntry.schemaUrl));
     throw new DataLoadError(`Schema snapshot failed validation for ${versionEntry.version}.`, [
       versionEntry.schemaUrl,
       ...schemaErrors.slice(0, 8),
       ...(schemaErrors.length > 8 ? [`${schemaErrors.length - 8} more validation errors.`] : []),
-    ]);
+    ], failure);
   }
 
   let notes = { tables: {} };

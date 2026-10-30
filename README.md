@@ -225,3 +225,11 @@ GitHub Actions runs separate jobs for:
 - static product/version data validation
 - production build and render smoke check
 - Playwright browser smoke test
+
+## Optional diagnostic reporting
+
+The initial local Sentry pilot is documented in [docs/sentry-pilot.md](docs/sentry-pilot.md). It uses a strict minimal data policy and separate build-time source-map upload controls.
+
+## Production diagnostics
+
+Production Sentry error reporting uses the minimal data policy and private source-map uploads described in [docs/sentry-production.md](docs/sentry-production.md).

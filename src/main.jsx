@@ -1,3 +1,4 @@
+import { initializeDiagnostics, reportFailure } from './diagnostics/reporting.js';
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
@@ -48,6 +49,8 @@ import './styles.css';
 import './community.css';
 import './accessibility.css';
 import './system-overlays.css';
+
+initializeDiagnostics();
 
 const editingBuildEnabled = import.meta.env.VITE_ENABLE_EDITING === 'true';
 const emptyTables = [];
@@ -326,7 +329,7 @@ function App() {
           selectedProduct.manifestUrl,
           error.message,
           ...(error.details ?? []),
-        ]);
+        ], error);
       });
       if (!Array.isArray(manifest.versions) || manifest.versions.length === 0) {
         throw new DataLoadError(`Product manifest has no versions: ${selectedProduct.manifestUrl}`, [
@@ -408,6 +411,7 @@ function App() {
         await loadProduct(selectedProduct, products);
       } catch (error) {
         if (isCurrent) {
+          reportFailure(error, 'data.load');
           setLoadError(error);
         }
       }
@@ -607,6 +611,7 @@ function App() {
         setOperationError('');
         historyReadyRef.current = false;
       } catch (error) {
+        reportFailure(error, 'navigation.restore');
         if (requestId === productLoadRequestRef.current) setOperationError(`Unable to restore navigation: ${error.message}`);
       } finally {
         if (requestId === productLoadRequestRef.current) restoringHistoryRef.current = false;
@@ -767,6 +772,7 @@ function App() {
         nextVersionData = nextProduct.versions.find((item) => item.version === nextVersion);
         if (!nextVersionData?.isLoaded) return;
       } catch (error) {
+        reportFailure(error, 'version.change');
         if (requestId === versionSelectionRequestRef.current) setOperationError(`Unable to load ${nextVersion}: ${error.message}`);
         return;
       }
@@ -822,6 +828,7 @@ function App() {
 
     } catch (error) {
       if (requestId === productLoadRequestRef.current) {
+        reportFailure(error, 'product.change');
         setOperationError(`Unable to change product: ${error.message}`);
       }
     }
@@ -1445,5 +1452,10 @@ function App() {
 }
 
 const rootElement = document.getElementById('root');
-globalThis.laserficheDictionaryRoot ??= createRoot(rootElement);
+globalThis.laserficheDictionaryRoot ??= createRoot(rootElement, {
+  onUncaughtError(error) {
+    reportFailure(error, 'react.render');
+    console.error(error);
+  },
+});
 globalThis.laserficheDictionaryRoot.render(<App />);
