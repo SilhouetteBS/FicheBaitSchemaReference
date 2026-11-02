@@ -55,7 +55,7 @@ async function scenario({ enabled, failure, blocked = false }) {
     await page.locator('.error-boundary').waitFor();
   } else if (['global', 'promise'].includes(failure)) {
     await page.route('**/assets/pilot-check.js', (route) => route.fulfill({ contentType: 'text/javascript', body: failure === 'promise' ? `Promise.reject(new TypeError('${marker}'));` : `setTimeout(() => { throw new TypeError('${marker}'); }, 0);` }));
-    await page.evaluate(() => { const script = document.createElement('script'); script.src = '/assets/pilot-check.js'; document.head.append(script); });
+    await page.evaluate(() => { const script = globalThis.document.createElement('script'); script.src = '/assets/pilot-check.js'; globalThis.document.head.append(script); });
   }
   if (enabled) {
     for (let attempt = 0; !envelopes.length && attempt < 100; attempt++) await page.waitForTimeout(100);

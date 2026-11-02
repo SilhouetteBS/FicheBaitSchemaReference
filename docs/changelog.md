@@ -4,6 +4,8 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Prepared a review-only maintenance branch restoring CI lint, adding existing diagnostics privacy browser checks to CI, and correcting metadata-export instructions with current missing-build requirements. Not merged or published.
+
 - Pointed Help > User Guide to the FicheBait-hosted Schema Reference manual, opening in the same tab. The supplied manual URL currently returns HTTP 404.
 
 - Moved Keyboard shortcuts from the header into Help, retaining the shortcut dialog, question-mark shortcut, and focus restoration to Help.

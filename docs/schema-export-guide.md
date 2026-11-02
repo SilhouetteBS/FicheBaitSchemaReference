@@ -13,19 +13,28 @@ DECLARE @ProductVersion nvarchar(50) = N'11.x';
 DECLARE @DatabaseRole nvarchar(50) = N'forms';
 ```
 
-Run the script once against the Forms 11 database and once against the Forms 12 database. The actual SQL Server database name can differ in every environment and should not be used as a product or version identifier.
+Run the script once against each product database/build being contributed. Replace the example version with the exact installed product build, confirmed separately from SQL Server's version. The actual SQL Server database name can differ in every environment and must not be used as a product or version identifier.
 
 `@DatabaseRole` should describe the Laserfiche product database being exported, such as `forms`, `lfds`, `repository`, or `workflow`. It is not the SQL Server database name.
 
-## Optional Module Definitions
+## Module Fingerprints And View Columns
 
-The script defaults to:
+The canonical script exports SHA-256 definition fingerprints, not SQL module definition text. There is no `@IncludeModuleDefinitions` setting. A changed fingerprint can reflect logic, comments, or formatting; it does not establish functional impact. Compare keeps definition-only changes separate from structural changes. Missing fingerprints are a metadata-availability gap, not proof that SQL text changed.
 
-```sql
-DECLARE @IncludeModuleDefinitions bit = 0;
-```
+The `views` result includes nested output columns (names, ordinals, types, lengths, precision, scale, collation, and nullability). New full exports do not need a separate `view-columns-export.sql` run. That recovery script is only for an existing snapshot whose view-column metadata is missing; never combine it with another build's export.
 
-Leave this off unless you intentionally want view, procedure, function, and trigger definitions in the export. Definition text and hashes are useful for internal review, but the app does not count definition-only changes as schema changes.
+## Missing Latest-Build Exports: Checked 2026-11-02
+
+The [official Laserfiche 12 release list](https://doc.laserfiche.com/laserfiche.documentation/12/userguide/en-us/content/intro-release-information.htm) lists two October 28 releases newer than this catalog. A new application build does not prove its schema changed; fresh exports are required to determine that.
+
+| Product | Latest imported build | Official listed build | Required contribution |
+| --- | --- | --- | --- |
+| LFDS | 12.0.2607.421 | 12.0.2610.126 | Full metadata export from Directory Server 12.0.2610.126. Set product key/role to `lfds`, product name to `LFDS`. |
+| Repository Server | 12.0.4.433 | 12.0.5.447 | Full metadata export from a repository database served by Server 12.0.5.447. Set product key/role to `repository`, product name to `Repository`. Use the Server build, not the Desktop or Web Client build. |
+| Forms | 12.0.2607.40144 | 12.0.2607.40144 | No newer listed target build identified in this check. |
+| Workflow | 12.0.2605.385 | 12.0.2605.385 | No newer listed target build identified in this check. |
+
+For each requested build, use the current script and save all eleven result sets listed below, including `views` with output columns. Preserve empty results as `[]`, or explicitly confirm that no views/triggers exist for that export. Keep the source files outside Git for private intake. Do not send row data, database/server names, connection details, or credentials. Do not relabel an older snapshot as a new build even if the schemas might be identical.
 
 ## Result Sets
 

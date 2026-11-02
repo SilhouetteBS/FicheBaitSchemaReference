@@ -132,6 +132,11 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
+      # This suite builds isolated enabled/disabled fixtures. Rebuild the release
+      # artifact afterwards so the ordinary browser checks never use a fixture.
+      - name: Diagnostics privacy browser regressions
+        run: npm run test:diagnostics:browser
+
       - name: Build static artifact
         run: npm run build
 

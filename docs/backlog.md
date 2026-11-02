@@ -79,6 +79,23 @@ This is a public product backlog. Do not add private research notes, customer-sp
 
 Items 1-68 have initial implementations in the app or repository documentation. Future passes can refine the interaction design and expand coverage, but these backlog entries should now be treated as shipped baseline functionality rather than pending feature requests.
 
+## Maintenance Review: 2026-11-02
+
+Prepared on `codex/weekly-maintenance-2026-11-02` for owner review only. Nothing was merged into `main` or published to Sites; existing access settings were not changed.
+
+1. Repaired the current CI lint failure: [run 41130700236](https://github.com/SilhouetteBS/FicheBaitSchemaReference/actions/runs/41130700236) stops on two unqualified browser `document` references in the diagnostics test. Used `globalThis.document`, matching existing browser-test conventions, without changing diagnostics behavior. Excluded Git-ignored generated `.tmp/`, `outputs/`, and `artifacts/` trees from ESLint so the normal local command also checks source rather than private scratch copies.
+2. Added the existing diagnostics privacy browser suite to CI before rebuilding the normal static artifact. Ten controlled enabled/disabled scenarios pass locally, including blocked delivery, rejected promises, JSON/network failures, and React errors. Tests intercept their synthetic Sentry requests; no real account events or uploads were required. This guards event sanitization and opt-in reporting on future maintenance pushes.
+3. Corrected the export guide's obsolete module-definition switch and Forms-only instructions, regression-tested documented SQL settings against the canonical script, and recorded the exact LFDS/Repository exports now needed. No SQL exporter, snapshot, column purpose, confidence label, or reporting script was modified.
+
+Evidence and validation:
+
+- Latest main CI failure is reproduced by lint and fixed locally; other open GitHub issues were absent at review time. Branch CI results must be checked after push; local results are not remote CI acceptance.
+- Full `npm run validate`, browser regressions, accessibility, diagnostics browser scenarios, lockfile/static security/data parity checks, and reproducible Answers verification passed locally. The first render attempt lacked a running preview; the full validation was rerun successfully after starting it. Existing 520 data-quality warnings remain visible; no baseline was relaxed.
+- Dependency audit reports no high/critical findings and no production-dependency advisories (`npm audit --omit=dev`). The full toolchain reports nine moderate findings through `glob` and `minimatch`; see [GHSA-3g3m-2fjr-6pw4](https://github.com/advisories/GHSA-3g3m-2fjr-6pw4) and [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249). Installed toolchain paths include Sentry's `glob@13.0.6`/`minimatch@10.2.6` and ESLint's `minimatch@3.1.5`. Patched versions cross dependency major-version boundaries (glob 14.0.2 and minimatch 11.0.1); no blind override or `audit fix --force` was applied. A static-site attack path was not established. Follow up with compatible upstream tool releases or an isolated, tested migration; do not interpret the high-severity audit threshold as zero advisories.
+- The supplied [User Guide](https://fichebait.com/support/manuals/fichebait-schema-reference/) and [Feature Requests](https://fichebait.com/suggest-a-feature/?feature_product=FicheBait%20Schema%20Reference) destinations still return HTTP 404 as of this check. The site links were preserved exactly as requested. Owner action: publish those WordPress destinations; then verify the manual return link and exact product preselection without submitting a request.
+- The [official release list](https://doc.laserfiche.com/laserfiche.documentation/12/userguide/en-us/content/intro-release-information.htm) now lists LFDS **12.0.2610.126** and Repository Server **12.0.5.447**, released October 28. Both are missing from the imported catalog. Request all eleven metadata result sets using `docs/sql-server-schema-export.sql` from those exact builds; the current `views` result already includes view columns. Forms 12.0.2607.40144 and Workflow 12.0.2605.385 remain the latest listed target builds. No schema equivalence was assumed and no old export was relabeled.
+- Reviewed the existing processed-post index, October 26 research dispositions, and private reviewed-post register before selecting work. No new Answers posts or SQL candidates were processed because CI recovery and export correctness took priority. No live SQL or customer database access occurred.
+
 ## Maintenance Review: 2026-10-26
 
 Prepared on `codex/weekly-maintenance-2026-10-26` for owner review; not merged or published.
