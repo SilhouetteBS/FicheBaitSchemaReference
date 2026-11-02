@@ -1,5 +1,10 @@
 name: CI
 
+# Regression failures must not create events in the production Sentry project.
+# The diagnostics browser suite explicitly opts into its intercepted fake DSN.
+env:
+  VITE_SENTRY_ENABLED: 'false'
+
 on:
   pull_request:
   push:

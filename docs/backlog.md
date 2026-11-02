@@ -81,6 +81,10 @@ Items 1-68 have initial implementations in the app or repository documentation. 
 
 ## Maintenance Review: 2026-11-02
 
+### Alert Follow-Up
+
+The email for commit `337719a` corresponds to the failed Compare browser test in [run 41460168414](https://github.com/SilhouetteBS/FicheBaitSchemaReference/actions/runs/41460168414); its URL construction was repaired by `78363f4`, whose [full CI run passed](https://github.com/SilhouetteBS/FicheBaitSchemaReference/actions/runs/41461129336). The Sentry alert SCHEMA-REFERENCE-WEB-4 records a handled `react.render` event at 2026-11-02 14:18:23 UTC, coinciding with that failed Compare test's start. The email carries the production release configured by `.env.production`. This strongly correlates the event with the CI test, not an established production-user failure; the sanitized email alone cannot establish the original exception. CI now explicitly disables real Sentry reporting. The isolated diagnostics suite still overrides that flag using an intercepted fake DSN to validate enabled behavior. This follow-up changes neither production configuration nor issue/alert state and is not published.
+
 Prepared on `codex/weekly-maintenance-2026-11-02` for owner review only. Nothing was merged into `main` or published to Sites; existing access settings were not changed.
 
 1. Repaired the current CI lint failure: [run 41130700236](https://github.com/SilhouetteBS/FicheBaitSchemaReference/actions/runs/41130700236) stops on two unqualified browser `document` references in the diagnostics test. Used `globalThis.document`, matching existing browser-test conventions, without changing diagnostics behavior. Excluded Git-ignored generated `.tmp/`, `outputs/`, and `artifacts/` trees from ESLint so the normal local command also checks source rather than private scratch copies. Once lint/build gates passed, clean CI exposed malformed double-slash URLs in the Compare and Help tests when `APP_URL` ends in `/`. Those tests now use URL parsing rather than concatenation and are checked with both forms of the base URL.
