@@ -47,6 +47,7 @@
     "validate": "npm run lint && npm run test:unit && npm run test:diagram && npm run validate:data && npm run validate:notes && npm run verify:data-parity && npm run generate:ai-export && npm run verify:lockfile && npm run verify:static-security && npm run build && npm run test:static-build && npm run audit:performance && npm run render:check",
     "validate:full": "npm run validate && npm run test:e2e",
     "test:diagnostics": "node --test tools/diagnostics.test.mjs",
+    "pretest:diagnostics:browser": "npm run prepare:data",
     "test:diagnostics:browser": "node tools/diagnostics-browser.mjs"
   },
   "dependencies": {
