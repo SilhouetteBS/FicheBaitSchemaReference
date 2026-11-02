@@ -4,6 +4,8 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Hardened Sentry's build-tool glob dependency, added cancellation/matching/source-map selector and lint compatibility regressions, and documented retained legacy-tool advisory limitations. Clarified local test telemetry isolation; external help URLs remain intentionally pending the owner's WordPress launch. Review-branch changes only, not published.
+
 - Prepared a review-only maintenance branch restoring CI lint, adding existing diagnostics privacy browser checks to CI, and correcting metadata-export instructions with current missing-build requirements. Not merged or published.
 
 - Pointed Help > User Guide to the FicheBait-hosted Schema Reference manual, opening in the same tab. The supplied manual URL currently returns HTTP 404.
