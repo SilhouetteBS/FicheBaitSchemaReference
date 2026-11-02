@@ -7,7 +7,9 @@ try {
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto(`${process.env.APP_URL ?? 'http://127.0.0.1:4177'}/?product=forms&view=compare&from=12.0.2509.20409&to=12.0.2607.40144`, { waitUntil: 'networkidle' });
+  const start = new URL(process.env.APP_URL ?? 'http://127.0.0.1:4177');
+  start.search = new URLSearchParams({ product: 'forms', view: 'compare', from: '12.0.2509.20409', to: '12.0.2607.40144' }).toString();
+  await page.goto(start.href, { waitUntil: 'networkidle' });
   const section = page.locator('.object-comparison-section');
   await section.waitFor();
   assert.equal(await section.getByRole('button', { name: /^Structural changes/ }).getAttribute('aria-pressed'), 'true');

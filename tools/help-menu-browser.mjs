@@ -2,14 +2,14 @@ import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
-const base = process.env.APP_URL ?? 'http://127.0.0.1:4177';
+const base = new URL(process.env.APP_URL ?? 'http://127.0.0.1:4177');
 const browser = await chromium.launch({ headless: true });
 try {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto(`${base}/?product=forms&version=12.0.2607.40144&view=tables&table=dbo.cf_bp_main_instances`, { waitUntil: 'networkidle' });
+  await page.goto(new URL('?product=forms&version=12.0.2607.40144&view=tables&table=dbo.cf_bp_main_instances', base).href, { waitUntil: 'networkidle' });
   assert.equal(await page.locator('.community-disclaimer summary').innerText(), 'Independent database schema reference. Read-only use; validate changes in a test environment.');
   assert.match(await page.locator('.community-disclaimer').textContent(), /not affiliated with or endorsed by\s+Laserfiche/);
   const search = page.getByLabel('Search tables, columns, descriptions');
@@ -112,7 +112,7 @@ try {
     return colors;
   }, tagClasses);
   // Retain local guide coverage separately from the externally hosted manual link.
-  await page.goto(`${base}/user-guide.html?${new URLSearchParams({ return: returnQuery })}`, { waitUntil: 'networkidle' });
+  await page.goto(new URL(`user-guide.html?${new URLSearchParams({ return: returnQuery })}`, base).href, { waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'How it works', exact: true }).waitFor();
   await page.getByRole('heading', { name: 'Tags and legends', exact: true }).waitFor();
   const returnLink = page.getByRole('link', { name: 'Open Schema Reference', exact: true }).first();
@@ -130,7 +130,7 @@ try {
   assert.equal(await page.locator('.table-detail h2').innerText(), selection);
   assert.equal(await search.inputValue(), 'cf_bp_main_instances');
   // Opening About must not clear a focused diagram via the global Escape shortcut.
-  await page.goto(`${base}/?product=forms&version=12.0.2607.40144&view=diagram&diagramMode=focused&diagramFocus=dbo.cf_bp_main_instances`, { waitUntil: 'networkidle' });
+  await page.goto(new URL('?product=forms&version=12.0.2607.40144&view=diagram&diagramMode=focused&diagramFocus=dbo.cf_bp_main_instances', base).href, { waitUntil: 'networkidle' });
   await help.waitFor();
   const beforeAbout = page.url();
   await help.click();
