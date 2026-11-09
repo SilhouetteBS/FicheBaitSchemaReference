@@ -4,6 +4,8 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Prepared November 9 review-branch corrections for Forms date-window/process-ID/test-mode reporting, LFDS sign-in interpretation and older-build column limitations, and the new Forms 12.0.2610.50154 export requirement. Offline/schema validation only; SQL is not live tested. Nothing published.
+
 - Hardened Sentry's build-tool glob dependency, added cancellation/matching/source-map selector and lint compatibility regressions, and documented retained legacy-tool advisory limitations. Clarified local test telemetry isolation; external help URLs remain intentionally pending the owner's WordPress launch. Review-branch changes only, not published.
 
 - Prepared a review-only maintenance branch restoring CI lint, adding existing diagnostics privacy browser checks to CI, and correcting metadata-export instructions with current missing-build requirements. Not merged or published.

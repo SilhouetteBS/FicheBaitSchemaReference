@@ -79,6 +79,26 @@ This is a public product backlog. Do not add private research notes, customer-sp
 
 Items 1-68 have initial implementations in the app or repository documentation. Future passes can refine the interaction design and expand coverage, but these backlog entries should now be treated as shipped baseline functionality rather than pending feature requests.
 
+## Maintenance Review: 2026-11-09
+
+Prepared on `codex/weekly-maintenance-2026-11-09`, based on the still-unmerged November 2 review branch (`5a8c1a8`). No pull request, merge, Sites publication, database connection, or access-policy change was performed.
+
+Completed batch (three scoped items):
+
+1. **Forms reporting correctness:** repaired `forms-submission-volume-summary.sql` so both date bounds apply to one reporting event date, instead of admitting cross-window rows via different timestamps. Submission date is used for submitted rows; instance start is used only for instances without submissions. Grouping now includes business-process `bp_id` so identically named processes are not merged. The test-mode filter also respects the main instance's flag. Invalid bounded ranges are rejected. Documented the exact four compatible imported Forms 12 builds and the missing Forms 11 test-mode columns. Static schema checks and synthetic predicate cases passed; SQL remains **Not live tested**, with stored time-zone semantics unverified.
+2. **LFDS interpretation limits:** clarified `dbo.user_logins.last_login` in all six imported versions without changing Inferred confidence. A missing row/timestamp is not an inactivity finding. Added the existing reviewed [Windows sign-in discussion](https://answers.laserfiche.com/questions/236312/LFDS-database-userlogins-table-not-updated-for-some-Windows-users) to account-state reporting resources and explained login/group join fan-out, row limits, orphaned-login exclusions, and unverified effective-group membership. Column checks expose `target_app` as absent in LFDS 11.0.2403.2474 and 12.0.2506.370; no compatibility is claimed for them or unimported builds.
+3. **Release/export handoff:** the [official release list](https://doc.laserfiche.com/laserfiche.documentation/12/userguide/en-us/content/intro-release-information.htm) now lists Forms **12.0.2610.50154**, released November 5. Updated the export guide; all eleven metadata result sets are needed from that build, plus the still-missing LFDS 12.0.2610.126 and Repository Server 12.0.5.447. Workflow remains listed as 12.0.2605.385. No new schema was fabricated, imported, or relabeled.
+
+Review and validation:
+
+- The last three November 2 branch CI runs are green, including [5a8c1a8](https://github.com/SilhouetteBS/FicheBaitSchemaReference/actions/runs/41464614736); there were no new open GitHub issues at intake. The current branch must obtain its own post-push CI result.
+- Full validation, direct-column compatibility checks, synthetic window cases, browser reporting/SQL/review-note/resource checks, accessibility, and reproducible generated-candidate verification passed locally. No SQL was executed. The 520 existing metadata warnings and all confidence labels remain visible. Browser/build validation used `VITE_SENTRY_ENABLED=false`.
+- Full and production-only npm audits now report **zero vulnerabilities**, with the lockfile unchanged. The upstream [minimatch advisory](https://github.com/advisories/GHSA-g3hv-75wg-m249), updated November 4, narrows the affected range to `>=7.0.0, <11.0.1`, excluding the retained lint dependency `3.1.5`. This supersedes the earlier six-finding risk status; no blanket override, suppression, or dependency churn was needed. Keep the scoped patched Sentry glob override until an upstream-compatible replacement is reviewed.
+- Manual and suggestion URLs still return 404, unchanged from the owner's accepted pre-WordPress-launch state. No workaround or submission was attempted. Recheck availability and product preselection after that launch.
+- Searched across all four product areas and checked the reviewed-post register before choosing sources. Useful hits were already tracked; reused two existing sources to refine existing reporting guidance instead of promoting duplicates. No new SQL candidate or reviewed-post entry was added. The prior [Forms process-usage discussion](https://answers.laserfiche.com/questions/225824/Need-a-way-to-export-list-of-Forms-processes-that-havent-run-recently-for-cleanup-purposes) is context for distinguishing recent completed-instance starts from complete activity or retention decisions, not a new inactivity contract.
+
+Owner follow-up: supply metadata-only exports for Forms 12.0.2610.50154, LFDS 12.0.2610.126, and Repository Server 12.0.5.447 using `docs/sql-server-schema-export.sql`; keep each exact build's eleven JSON results separate and preserve empty arrays. No database/server identities, row data, credentials, or raw source exports belong in Git. Nothing was published.
+
 ## Maintenance Review: 2026-11-02
 
 ### Alert Follow-Up

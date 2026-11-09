@@ -16,6 +16,14 @@ This index explains the public processed-queue documents used by the Reporting S
 
 ## Current Schema Verification Outcome
 
+Maintenance reuse on 2026-11-09: checked the private reviewed-post register before
+research. Search hits were already tracked; no new candidates or ledger entries
+were created. Existing [LFDS sign-in coverage](https://answers.laserfiche.com/questions/236312/LFDS-database-userlogins-table-not-updated-for-some-Windows-users)
+and [Forms process-usage](https://answers.laserfiche.com/questions/225824/Need-a-way-to-export-list-of-Forms-processes-that-havent-run-recently-for-cleanup-purposes)
+sources were reused as caution context for existing scripts, not counted as newly
+reviewed posts. See the dated maintenance record in `docs/backlog.md` for column
+compatibility checks and test limits.
+
 The 2026-07-01 schema verification pass reviewed 236 raw rows and 234 unique Answers posts.
 
 | Product | Schema-matched candidates | No referenced objects captured |
