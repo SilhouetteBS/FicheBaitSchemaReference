@@ -28,7 +28,9 @@ try {
   assert.equal(await feature.getAttribute('href'), 'https://fichebait.com/suggest-a-feature/?feature_product=FicheBait%20Schema%20Reference');
   assert.equal(await feature.getAttribute('target'), '_blank');
   assert.equal(await guide.getAttribute('target'), null);
-  assert.equal(await guide.getAttribute('href'), 'https://fichebait.com/support/manuals/fichebait-schema-reference/');
+  const guideUrl = new URL(await guide.getAttribute('href'), base);
+  assert.equal(guideUrl.pathname, '/user-guide.html');
+  assert.equal(guideUrl.searchParams.get('return'), new URL(page.url()).search);
   assert.equal(await help.evaluate(el => globalThis.getComputedStyle(el).backgroundColor), 'rgba(0, 0, 0, 0)');
   await page.keyboard.press('End');
   assert.equal(await feature.evaluate(el => el === globalThis.document.activeElement), true);
