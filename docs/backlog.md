@@ -4,6 +4,12 @@ This backlog tracks functional, design, coding, performance, security, and produ
 
 This is a public product backlog. Do not add private research notes, customer-specific details, database names, server names, credentials, screenshots of records, or sensitive submission review notes here.
 
+## Completed: Privacy-safe module-load diagnostics (2026-11-14)
+
+- Added a fixed `module_load` failure label for known browser dynamic-import TypeErrors, without sending original exception messages or module URLs. Other network and render errors retain their existing classification.
+- Full validation, positive/negative unit cases, twelve intercepted diagnostics browser scenarios, accessibility and dependency audit passed; the audit reported zero vulnerabilities. Tests did not send events to the production Sentry project.
+- WEB-3 remains open. The new classification improves future evidence and does not establish the cause of the historical event.
+
 ## Functional Improvements
 
 1. Add a "What changed in this version?" summary per product/version, not just raw compare details.

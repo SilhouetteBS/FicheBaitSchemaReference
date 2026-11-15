@@ -34,8 +34,17 @@ function assetLocation(value, origin) {
   } catch { return null; }
 }
 
+function isModuleLoadFailure(exception) {
+  if (exception?.type !== 'TypeError' || typeof exception.value !== 'string') return false;
+  // Inspect browser wording locally; never include the message or module URL in telemetry.
+  return /^(?:Failed to fetch dynamically imported module|error loading dynamically imported module)(?:\s*:|$)/i.test(exception.value)
+    || /^Importing a module script failed\.?$/i.test(exception.value);
+}
+
 export function sanitizeEvent(event, { config, origin, breadcrumbs = [] }) {
   const operation = operations.has(event.tags?.operation) ? event.tags.operation : 'browser.unexpected';
+  const moduleLoadFailure = ['react.render', 'browser.unexpected'].includes(operation)
+    && (event.exception?.values ?? []).some(isModuleLoadFailure);
   const values = (event.exception?.values ?? []).slice(-3).map((exception) => {
     const frames = (exception.stacktrace?.frames ?? []).flatMap((frame) => {
       const filename = assetLocation(frame.filename, origin);
@@ -55,7 +64,7 @@ export function sanitizeEvent(event, { config, origin, breadcrumbs = [] }) {
   // Reconstruct rather than redact: new SDK fields cannot silently expand collection.
   const result = {
     platform: 'javascript', level: 'error', release: config.release, environment: config.environment,
-    tags: { site: 'schema-reference', operation, ...safeContext(event.tags) },
+    tags: { site: 'schema-reference', operation, ...safeContext(event.tags), ...(moduleLoadFailure ? { failure_kind: 'module_load' } : {}) },
     exception: { values: values.length ? values : [{ type: 'Error', value: `Unexpected failure: ${operation}` }] },
     breadcrumbs: breadcrumbs.filter((item) => breadcrumbNames.has(item.message)).slice(-20).map((item) => ({
       category: 'application', message: item.message, level: 'info', data: safeContext(item.data),

@@ -47,10 +47,11 @@ async function scenario({ enabled, failure, blocked = false }) {
     const body = await response.text();
     await route.fulfill({ response, body: body + `\nthrow new Error('${marker}');` });
   });
+  if (failure === 'module') await page.route('**/assets/DatabaseDiagram-*.js', route => route.abort('connectionrefused'));
   if (failure === 'json') await page.route('**/data/forms/versions.json', (route) => route.fulfill({ status: 200, body: marker }));
   if (failure === 'data') await page.route('**/data/forms/versions.json', (route) => route.fulfill({ status: 503, body: marker }));
   await page.goto(`http://127.0.0.1:4189/?q=${marker}`, { waitUntil: 'networkidle' });
-  if (failure === 'react') {
+  if (['react', 'module'].includes(failure)) {
     await page.getByRole('button', { name: 'Diagram', exact: true }).click();
     await page.locator('.error-boundary').waitFor();
   } else if (['global', 'promise'].includes(failure)) {
@@ -67,11 +68,18 @@ async function scenario({ enabled, failure, blocked = false }) {
     const event = JSON.parse(lines[2]);
     assert.equal(event.release, 'schema-reference@pilot-test123');
     assert.equal(event.environment, 'staging');
-    assert.equal(event.tags.operation, { react: 'react.render', data: 'data.load', json: 'data.load', global: 'browser.unexpected', promise: 'browser.unexpected' }[failure]);
+    assert.equal(event.tags.operation, { react: 'react.render', module: 'react.render', data: 'data.load', json: 'data.load', global: 'browser.unexpected', promise: 'browser.unexpected' }[failure]);
     assert.equal(event.user, undefined); assert.equal(event.request, undefined); assert.equal(event.extra, undefined);
     if (failure === 'data') assert.equal(event.tags.http_status, 503);
     else if (failure === 'json') assert.equal(event.tags.failure_kind, 'json');
-    else assert.ok(event.exception.values.some((value) => value.stacktrace?.frames.length), 'Readable asset locations retained');
+    else if (failure === 'module') {
+      assert.equal(event.tags.failure_kind, 'module_load');
+      assert.equal(event.exception.values[0].value, 'Unexpected failure: react.render');
+      assert.doesNotMatch(JSON.stringify(event), /dynamically imported|127\.0\.0\.1:4189/);
+    } else {
+      assert.equal(event.tags.failure_kind, undefined);
+      assert.ok(event.exception.values.some((value) => value.stacktrace?.frames.length), 'Readable asset locations retained');
+    }
     if (failure === 'react') assert.ok(event.debug_meta?.images.length, 'Debug IDs retained for source-map matching');
   }
   if (blocked) {
@@ -92,6 +100,7 @@ try {
     await scenario({ enabled, failure: 'data' });
     await scenario({ enabled, failure: 'json' });
     await scenario({ enabled, failure: 'react', blocked: enabled });
+    await scenario({ enabled, failure: 'module' });
     await new Promise((resolve) => server.httpServer.close(resolve)); server = null;
   }
 } finally {

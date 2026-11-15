@@ -33,6 +33,38 @@ test('unknown labels and paths never become telemetry', () => {
   assert.equal(resourceCategory('PRIVATE'), 'other');
 });
 
+test('classifies browser module-load failures without transmitting original messages or URLs', () => {
+  for (const message of [
+    'Failed to fetch dynamically imported module: https://private.example/assets/PRIVATE.js?secret=PRIVATE',
+    'error loading dynamically imported module: https://private.example/PRIVATE',
+    'Importing a module script failed.',
+    'Importing a module script failed',
+  ]) {
+    for (const operation of ['react.render', 'browser.unexpected']) {
+      const safe = sanitizeEvent({ tags: { operation }, exception: { values: [{ type: 'TypeError', value: message }] } }, { config, origin });
+      assert.equal(safe.tags.failure_kind, 'module_load');
+      assert.equal(safe.tags.operation, operation);
+      assert.equal(safe.exception.values[0].value, `Unexpected failure: ${operation}`);
+      assert.doesNotMatch(JSON.stringify(safe), /PRIVATE|private\.example|dynamically imported|module script failed/);
+      assert.equal(safe.exception.values[0].stacktrace, undefined);
+    }
+  }
+});
+
+test('does not classify ordinary fetch failures, render bugs or caller-supplied labels as module failures', () => {
+  for (const [type, value, operation] of [
+    ['TypeError', 'Failed to fetch', 'react.render'],
+    ['TypeError', 'Cannot read properties of undefined', 'react.render'],
+    ['Error', 'Failed to fetch dynamically imported module: PRIVATE', 'react.render'],
+    ['TypeError', 'Failed to fetch dynamically imported module: PRIVATE', 'data.load'],
+    ['TypeError', 'Importing a module script failed: unrelated PRIVATE', 'react.render'],
+  ]) {
+    const safe = sanitizeEvent({ tags: { operation, failure_kind: 'module_load' }, exception: { values: [{ type, value }] } }, { config, origin });
+    assert.equal(safe.tags.failure_kind, undefined);
+    assert.doesNotMatch(JSON.stringify(safe), /PRIVATE/);
+  }
+});
+
 test('suppresses duplicate errors and rate limits distinct failures', () => {
   let time = 0;
   const gate = createEventGate(() => time);

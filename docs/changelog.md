@@ -4,6 +4,8 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Added privacy-safe `module_load` diagnostics for known browser dynamic-import TypeErrors, with positive, negative and intercepted browser coverage. WEB-3 remains open; no original exception text or module URLs are transmitted.
+
 - Reconciled Sites version 37's guide navigation with the validated November maintenance changes. CI and local validation isolate intentional errors from production Sentry; production error monitoring remains enabled.
 
 - Prepared November 9 review-branch corrections for Forms date-window/process-ID/test-mode reporting, LFDS sign-in interpretation and older-build column limitations, and the new Forms 12.0.2610.50154 export requirement. Offline/schema validation only; SQL is not live tested. Nothing published.
