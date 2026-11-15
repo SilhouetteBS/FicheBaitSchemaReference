@@ -91,6 +91,8 @@ export function DiagramCanvas({
                 aria-label={`${edge.type === 'foreignKey' ? 'Select foreign key' : edge.type === 'triggerParent' ? 'Select trigger parent' : 'Select dependency'} ${edge.label}: ${edge.columnSummary || `${edge.from} to ${edge.to}`}`}
                 aria-pressed={pinnedEdgeId === edge.id}
                 className="diagram-edge-hit-target"
+                data-edge-from={edge.from}
+                data-edge-to={edge.to}
                 d={geometry.path}
                 onBlur={onEdgeBlur}
                 onClick={() => onEdgeClick(edge.id)}

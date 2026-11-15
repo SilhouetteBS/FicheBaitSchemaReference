@@ -470,6 +470,12 @@ button {
   margin: 0;
 }
 
+.loading-product-icon {
+  display: block;
+  width: 64px;
+  height: 64px;
+}
+
 .load-error-details {
   width: min(720px, 100%);
   margin: 10px 0 0;

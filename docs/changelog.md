@@ -4,6 +4,8 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Replaced the generic loading database glyph with the Schema Reference product icon. Routed focused-diagram same-lane branches and self-references through the inner gutter instead of across table cards or beyond the right-hand lane; retained the actual relationships and separated parallel self-loops.
+
 - Added privacy-safe `module_load` diagnostics for known browser dynamic-import TypeErrors, with positive, negative and intercepted browser coverage. WEB-3 remains open; no original exception text or module URLs are transmitted.
 
 - Reconciled Sites version 37's guide navigation with the validated November maintenance changes. CI and local validation isolate intentional errors from production Sentry; production error monitoring remains enabled.

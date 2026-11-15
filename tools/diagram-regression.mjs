@@ -24,6 +24,29 @@ const forms = buildSchemaProduct([
 const lfdsVersion = lfds.versions[0];
 const formsVersion = forms.versions[0];
 
+const neighborhoodFocus = 'dbo.cf_bp_worker_instnc_to_resume';
+const neighborhood = buildDatabaseDiagram(formsVersion, '', 'all', neighborhoodFocus, 'focused', 1,
+  { table: true, view: true, routine: true, trigger: true }, { exploration: true });
+const sameLaneEdges = neighborhood.edges.filter(edge => neighborhood.positionedByKey.get(edge.from).x === neighborhood.positionedByKey.get(edge.to).x);
+assert.ok(sameLaneEdges.some(edge => edge.from === edge.to), 'Real self-references remain present.');
+assert.ok(sameLaneEdges.some(edge => edge.from !== edge.to), 'Connected branches in the same lane remain present.');
+for (const curve of [false, true]) {
+  for (const edge of sameLaneEdges) {
+    const from = neighborhood.positionedByKey.get(edge.from);
+    const to = neighborhood.positionedByKey.get(edge.to);
+    const geometry = getEdgeGeometry(edge, neighborhood, { mode: 'focused', focusKey: neighborhoodFocus, curve });
+    const left = from.lane === 'Outgoing';
+    assert.equal(geometry.startX, left ? from.x : from.x + from.width);
+    assert.equal(geometry.endX, left ? to.x : to.x + to.width);
+    assert.ok(left ? geometry.midX < from.x : geometry.midX > from.x + from.width);
+    assert.ok(geometry.midX >= 0 && geometry.midX <= neighborhood.width);
+    if (edge.from === edge.to) assert.ok(Math.abs(geometry.endY - geometry.startY) >= 12);
+    assert.equal(geometry.path.includes(' C '), curve);
+  }
+}
+const workerSelfEdges = sameLaneEdges.filter(edge => edge.from === 'dbo.cf_bp_worker_instances' && edge.to === edge.from);
+assert.equal(new Set(workerSelfEdges.map(edge => getEdgeGeometry(edge, neighborhood, { mode: 'focused', focusKey: neighborhoodFocus }).midX)).size, workerSelfEdges.length);
+
 const adgsOneHop = buildDatabaseDiagram(lfdsVersion, 'adgs_rules', 'foreignKey', 'dbo.adgs_rules', 'focused', 1);
 assert.equal(adgsOneHop.nodes.length, 3);
 assert.equal(adgsOneHop.edges.length, 2);

@@ -10,6 +10,12 @@ This is a public product backlog. Do not add private research notes, customer-sp
 - Full validation, positive/negative unit cases, twelve intercepted diagnostics browser scenarios, accessibility and dependency audit passed; the audit reported zero vulnerabilities. Tests did not send events to the production Sentry project.
 - WEB-3 remains open. The new classification improves future evidence and does not establish the cause of the historical event.
 
+## Completed: Loading identity and focused connector routing (2026-11-14)
+
+- Loading now displays the existing Schema Reference icon rather than a generic database glyph.
+- Same-lane focused relationships use a shared, inward-facing card side. Self-references remain visible, use column anchors and separate loop tracks, and no longer extend from the right side of outgoing cards.
+- Added real Forms geometry checks for straight/curved paths, delayed-loading icon coverage and rendered endpoint checks for `dbo.cf_bp_worker_instnc_to_resume`. Full validation and the targeted browser regression passed.
+
 ## Functional Improvements
 
 1. Add a "What changed in this version?" summary per product/version, not just raw compare details.

@@ -125,14 +125,30 @@ export function getEdgeGeometry(edge, diagram, { curve = false, mode, focusKey }
     return null;
   }
 
-  if (diagram.exploration && edge.from === edge.to) {
+  if (diagram.exploration && from.x === to.x) {
+    // Same-lane relationships must enter and leave the same card side, not cross its body.
+    const useLeftSide = from.lane === 'Outgoing';
+    const startX = useLeftSide ? from.x : from.x + from.width;
+    const endX = useLeftSide ? to.x : to.x + to.width;
+    const firstColumn = edge.columns?.[0];
+    const source = getColumnAnchorState(from, firstColumn?.sourceColumnName);
+    const target = getColumnAnchorState(to, firstColumn?.referencedColumnName);
     const offset = getParallelOffset(edge, diagram);
-    const startX = from.x + from.width;
-    const endX = startX;
-    const startY = from.y + 42;
-    const endY = from.y + Math.min(from.height - 20, 80);
-    const midX = startX + 38 + Math.abs(offset);
-    return {startX,startY,endX,endY,midX,path:`M ${startX} ${startY} L ${midX} ${startY} L ${midX} ${endY} L ${endX} ${endY}`};
+    const startY = getNodeSafeY(from, source.y, offset);
+    let endY = getNodeSafeY(to, target.y, offset);
+    const selfEdges = edge.from === edge.to ? diagram.edges.filter(item => item.from === edge.from && item.to === edge.to) : [];
+    const selfIndex = Math.max(0, selfEdges.findIndex(item => item.id === edge.id));
+    if (edge.from === edge.to && Math.abs(endY - startY) < 12) {
+      endY = startY + 16 <= from.y + from.height - 16 ? startY + 16 : startY - 16;
+    }
+    const distance = Math.min(90, edge.from === edge.to ? 26 + selfIndex * 12 : 38 + Math.abs(offset));
+    const midX = startX + (useLeftSide ? -distance : distance);
+    return {
+      startX, startY, endX, endY, midX, curve,
+      path: buildConnectorPath({ curve, startX, startY, endX, endY, midX }),
+      sourceColumnHidden: source.isHidden, targetColumnHidden: target.isHidden,
+      usesBundling: offset !== 0,
+    };
   }
 
   if (mode === 'focused' && focusKey && (edge.from === focusKey || edge.to === focusKey)) {
