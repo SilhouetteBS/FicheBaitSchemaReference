@@ -124,6 +124,23 @@ try {
   assert.match(await page.locator('.reporting-markdown').innerText(), /repository-scoped/);
   await page.getByRole('tab', { name: 'Links to Resources', exact: true }).click();
   assert.ok(await page.getByRole('link', { name: /Duplicate entry IDs saving/ }).count() > 0);
+  await page.getByLabel('Find scripts').fill('Forms submission volume');
+  await page.locator('.reporting-nav').getByRole('button', { name: /Forms submission volume summary/ }).click();
+  await page.getByRole('tab', { name: 'SQL', exact: true }).click();
+  await page.waitForFunction(() => globalThis.document.querySelector('.reporting-sql-viewer')?.textContent.includes('reporting_event_date'));
+  assert.match(await page.locator('.reporting-section-full').innerText(), /Not live tested/i);
+  await page.getByRole('tab', { name: 'Review notes', exact: true }).click();
+  await page.waitForFunction(() => globalThis.document.querySelector('.reporting-markdown')?.textContent.includes('cross-timestamp admission'));
+  await page.getByLabel('Product', { exact: true }).selectOption('lfds');
+  await page.getByLabel('Version', { exact: true }).selectOption('12.0.2607.421');
+  await page.getByRole('button', { name: 'Reporting', exact: true }).click();
+  await page.getByRole('heading', { name: 'Reporting guide', exact: true }).waitFor();
+  await page.getByLabel('Find scripts').fill('LFDS directory account state');
+  await page.locator('.reporting-nav').getByRole('button', { name: /LFDS directory account state/ }).click();
+  await page.getByRole('tab', { name: 'Review notes', exact: true }).click();
+  await page.waitForFunction(() => globalThis.document.querySelector('.reporting-markdown')?.textContent.includes('not proof of account inactivity'));
+  await page.getByRole('tab', { name: 'Links to Resources', exact: true }).click();
+  assert.equal(await page.getByRole('link', { name: 'LFDS database user_logins table not updated for some Windows users', exact: true }).count(), 1);
   assert.deepEqual(errors, []);
   console.log('Browser review regressions passed: history, persistence, object navigation, corrections, script search, Markdown, tabs, and unavailable storage.');
 } finally { await browser.close(); }

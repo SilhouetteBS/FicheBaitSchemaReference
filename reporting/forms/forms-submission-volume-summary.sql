@@ -2,7 +2,12 @@
 Forms submission volume summary reporting pattern.
 
 Target: reporting database, not the Forms product database.
-Product schema evidence: Forms 12.0.2509.20409 AI export.
+Column compatibility: imported Forms 12 builds 12.0.2503.10378 through
+12.0.2607.40144; not live tested. Forms 11 lacks the required test-mode columns.
+
+Date window: submission date when a submission exists; instance start only for
+instances without submissions. From is inclusive; To is exclusive. Counts are
+for rows in that window, not lifetime instance totals. Do not infer inactivity.
 
 Usage:
   1. Open in SQL Server Management Studio with SQLCMD Mode enabled.
@@ -47,7 +52,10 @@ SELECT
     s.action AS submission_action,
     s.status AS submission_status,
     s.priority AS submission_priority,
-    s.is_test_mode,
+    CASE WHEN m.is_test_mode = 1 OR s.is_test_mode = 1
+        THEN CAST(1 AS bit) ELSE CAST(0 AS bit) END AS is_test_mode,
+    CASE WHEN s.submission_id IS NULL THEN m.start_date
+        ELSE s.date_created END AS reporting_event_date,
     SYSUTCDATETIME() AS reporting_read_utc
 FROM [$(FormsDatabase)].dbo.cf_bp_main_instances AS m
 LEFT JOIN [$(FormsDatabase)].dbo.cf_bp_processes AS p
@@ -66,9 +74,12 @@ CREATE OR ALTER PROCEDURE rpt.usp_FormsSubmissionCounts
 AS
 BEGIN
     SET NOCOUNT ON;
+    IF @FromDate IS NOT NULL AND @ToDate IS NOT NULL AND @FromDate >= @ToDate
+        THROW 50001, 'FromDate must precede the exclusive ToDate.', 1;
     DECLARE @EffectiveTop int = CASE WHEN @Top BETWEEN 1 AND 1000 THEN @Top ELSE 25 END;
 
     SELECT TOP (@EffectiveTop)
+        bp_id,
         process_name,
         process_friendly_name,
         instance_status,
@@ -79,14 +90,15 @@ BEGIN
         MAX(submission_date_created) AS last_submission_date
     FROM rpt.vw_FormsSubmissionVolume
     WHERE
-        (@FromDate IS NULL OR submission_date_created >= @FromDate OR instance_start_date >= @FromDate)
-        AND (@ToDate IS NULL OR submission_date_created < @ToDate OR instance_start_date < @ToDate)
+        (@FromDate IS NULL OR reporting_event_date >= @FromDate)
+        AND (@ToDate IS NULL OR reporting_event_date < @ToDate)
         AND (@IncludeTestMode = 1 OR ISNULL(is_test_mode, 0) = 0)
     GROUP BY
+        bp_id,
         process_name,
         process_friendly_name,
         instance_status,
         instance_status_name
-    ORDER BY submission_count DESC, instance_count DESC, process_name;
+    ORDER BY submission_count DESC, instance_count DESC, process_name, bp_id;
 END;
 GO

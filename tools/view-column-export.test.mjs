@@ -10,6 +10,19 @@ const fixture = columns => ({
   schemas:[],tables:[],columns:[],keys:[],foreignKeys:[],indexes:[],routines:[],triggers:[],dependencies:[],
   views:[{schemaName:'dbo',viewName:'v_sample',viewKey:'dbo.v_sample',...(columns === undefined ? {} : {columns})}],
 });
+
+test('export guide only documents settings supported by the canonical metadata script', () => {
+  const sql = fs.readFileSync('docs/sql-server-schema-export.sql', 'utf8');
+  const guide = fs.readFileSync('docs/schema-export-guide.md', 'utf8');
+  const supported = new Set([...sql.matchAll(/DECLARE\s+(@\w+)/gi)].map(match => match[1]));
+  const documented = [...guide.matchAll(/DECLARE\s+(@\w+)/gi)].map(match => match[1]);
+  assert.ok(documented.length >= 4, 'Product/version setup remains documented');
+  for (const setting of documented) assert.ok(supported.has(setting), `Unsupported export setting: ${setting}`);
+  assert.match(guide, /not SQL module definition text/);
+  assert.match(guide, /nested output columns/);
+  assert.match(guide, /never combine it with another build/);
+  assert.equal([...sql.matchAll(/Result set \d+:/g)].length, 11);
+});
 test('view output metadata survives normalization with correct order and nullability', () => {
   const result = normalizeSchema(fixture([
     {columnName:'label',ordinal:2,dataType:'nvarchar',typeDefinition:'nvarchar(80)',maxLength:80,isNullable:true},
@@ -54,10 +67,13 @@ test('malformed view columns fail snapshot validation', () => {
   assert.ok(validateSchemaSnapshot(result).some(e=>e.includes('duplicate ordinal')));
 });
 test('standalone recovery and canonical view SELECT stay identical and metadata-only', () => {
-  const canonical = fs.readFileSync('docs/sql-server-schema-export.sql','utf8');
-  const recovery = fs.readFileSync('docs/view-columns-export.sql','utf8');
+  const canonical = fs.readFileSync('docs/sql-server-schema-export.sql','utf8').replaceAll('\r\n','\n');
+  const recovery = fs.readFileSync('docs/view-columns-export.sql','utf8').replaceAll('\r\n','\n');
   const query = canonical.split('/* Result set 8: views */')[1].split('/* Result set 9:')[0].trim();
-  assert.equal(recovery.slice(recovery.indexOf('SELECT\n')).trim(),query.replaceAll('\r\n','\n'));
+  for (const content of [recovery, recovery.replaceAll('\n','\r\n')]) {
+    const normalized = content.replaceAll('\r\n','\n');
+    assert.equal(normalized.slice(normalized.indexOf('SELECT\n')).trim(),query);
+  }
   assert.match(query,/WHERE c.object_id = v.object_id/);
   assert.match(query,/JSON_QUERY/);
   assert.doesNotMatch(query,/\b(INSERT|UPDATE|DELETE|ALTER|DROP|EXEC)\b/i);

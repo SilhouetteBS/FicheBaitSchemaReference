@@ -306,11 +306,11 @@ export const communityReportingPatterns = {
     {
       title: 'Forms submission volume summary',
       summary:
-        'Creates reporting-database objects for submission and instance counts by process, status, and date range.',
+        'Counts submissions and represented instances by business-process ID, status, and one inclusive/exclusive event-date window. Requires documented Forms 12 columns; not an inactivity report.',
       scriptPath: 'reporting/forms/forms-submission-volume-summary.sql',
       evidencePath: 'reporting/forms/forms-submission-volume-summary-evidence.md',
-      sourceCount: 2,
-      tables: ['dbo.cf_bp_main_instances', 'dbo.cf_business_processes', 'dbo.cf_submissions'],
+      sourceCount: 3,
+      tables: ['dbo.cf_bp_main_instances', 'dbo.cf_bp_processes', 'dbo.cf_business_processes', 'dbo.cf_submissions'],
       tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
         {
@@ -320,6 +320,10 @@ export const communityReportingPatterns = {
         {
           title: 'Report to use for Active Forms',
           url: 'https://answers.laserfiche.com/questions/216937/Report-to-use-for-Active-Forms',
+        },
+        {
+          title: 'Forms process usage and its reporting limits',
+          url: 'https://answers.laserfiche.com/questions/225824/Need-a-way-to-export-list-of-Forms-processes-that-havent-run-recently-for-cleanup-purposes',
         },
       ],
     },
@@ -620,10 +624,10 @@ export const communityReportingPatterns = {
     {
       title: 'LFDS directory account state',
       summary:
-        'Creates read-only account-state and group-membership views for directory objects, login failures, and identity providers.',
+        'Shows directory-object, login, and group context, not one row per user. Missing LFDS login data does not establish inactivity; check the documented build requirements.',
       scriptPath: 'reporting/lfds/lfds-directory-account-state.sql',
       evidencePath: 'reporting/lfds/lfds-directory-account-state-evidence.md',
-      sourceCount: 3,
+      sourceCount: 4,
       tables: ['dbo.directory_objects', 'dbo.identity_providers', 'dbo.user_logins', 'dbo.group_membership'],
       tags: ['Community sourced', 'Object names matched', 'Not live tested', 'Read-only'],
       answersLinks: [
@@ -638,6 +642,10 @@ export const communityReportingPatterns = {
         {
           title: 'LFDS User filter',
           url: 'https://answers.laserfiche.com/questions/165621/LFDS-User-filter',
+        },
+        {
+          title: 'LFDS database user_logins table not updated for some Windows users',
+          url: 'https://answers.laserfiche.com/questions/236312/LFDS-database-userlogins-table-not-updated-for-some-Windows-users',
         },
       ],
     },

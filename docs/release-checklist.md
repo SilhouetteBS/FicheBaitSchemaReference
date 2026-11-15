@@ -10,6 +10,7 @@
 6. Install with `npm ci` if dependencies are not current. Build, then start a separate local preview terminal before checks that fetch the app:
 
 ```powershell
+$env:VITE_SENTRY_ENABLED='false'
 npm run build
 npm run preview -- --port 4177 --strictPort
 ```
@@ -17,12 +18,15 @@ npm run preview -- --port 4177 --strictPort
 In another terminal, run:
 
 ```powershell
+$env:VITE_SENTRY_ENABLED='false'
 $env:APP_URL='http://127.0.0.1:4177'
 npm run validate:full
 npm run test:visual
 npm run audit:accessibility
 npm run verify:public-build
 ```
+
+Keep real Sentry reporting disabled in both validation terminals. Regression tests may intentionally trigger render/load failures; the isolated diagnostics suite uses an intercepted fake DSN when exercising enabled behavior. CI applies this override automatically. These checks produce a telemetry-disabled validation artifact, not an approved production-monitoring artifact. If production monitoring is required for a later authorized release, build the final exact artifact through `tools/build-sentry-production.ps1` and follow `docs/sentry-production.md`; verify any synthetic errors only with ingestion intercepted. Do not publish an earlier test artifact or reuse its release identifier for changed source.
 
 7. Inspect the diff, commit only the reviewed work, push GitHub, and require its checks to pass. Read `.openai/hosting.json` and reuse its Sites project ID. Use the Sites source workflow to push the same commit and package the verified static build; never persist or expose its short-lived credential.
 8. Save a Sites version with that exact source commit and artifact, then deploy that saved version. A saved version or successful GitHub push is not a successful publication. Wait for a terminal successful deployment and record its version, commit, and URL privately.

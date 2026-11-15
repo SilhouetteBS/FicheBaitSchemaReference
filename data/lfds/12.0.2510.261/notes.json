@@ -3390,7 +3390,7 @@
         },
         "last_login": {
           "confidence": "inferred",
-          "purpose": "Timestamp for the most recent login."
+          "purpose": "Timestamp recorded by LFDS for this login row, not a complete cross-client activity record. A missing row or timestamp does not establish account inactivity; time-zone semantics remain unverified."
         },
         "id": {
           "confidence": "inferred",

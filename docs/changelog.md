@@ -4,6 +4,14 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Reconciled Sites version 37's guide navigation with the validated November maintenance changes. CI and local validation isolate intentional errors from production Sentry; production error monitoring remains enabled.
+
+- Prepared November 9 review-branch corrections for Forms date-window/process-ID/test-mode reporting, LFDS sign-in interpretation and older-build column limitations, and the new Forms 12.0.2610.50154 export requirement. Offline/schema validation only; SQL is not live tested. Nothing published.
+
+- Hardened Sentry's build-tool glob dependency, added cancellation/matching/source-map selector and lint compatibility regressions, and documented retained legacy-tool advisory limitations. Clarified local test telemetry isolation; external help URLs remain intentionally pending the owner's WordPress launch. Review-branch changes only, not published.
+
+- Prepared a review-only maintenance branch restoring CI lint, adding existing diagnostics privacy browser checks to CI, and correcting metadata-export instructions with current missing-build requirements. Not merged or published.
+
 - Pointed Help > User Guide to the FicheBait-hosted Schema Reference manual, opening in the same tab. The supplied manual URL currently returns HTTP 404.
 
 - Moved Keyboard shortcuts from the header into Help, retaining the shortcut dialog, question-mark shortcut, and focus restoration to Help.

@@ -4,6 +4,12 @@ LFDS directory account state reporting pattern.
 Target: reporting database, not the LFDS product database.
 Product schema evidence: LFDS 12.0.2603.369 AI export.
 
+Not live tested. The target_app column exists in imported LFDS 12.0.2510.261
+through 12.0.2607.421, but not in LFDS 11.0.2403.2474 or 12.0.2506.370.
+Rows can multiply by login target and group membership; TOP limits rows, not users.
+LFDS login observations are not complete cross-client activity. A missing login
+row or timestamp does not establish inactivity and must not trigger account disabling.
+
 Usage:
   1. Open in SQL Server Management Studio with SQLCMD Mode enabled.
   2. Set LfdsDatabase to the LFDS product database name.

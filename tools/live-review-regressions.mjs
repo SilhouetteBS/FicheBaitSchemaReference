@@ -8,6 +8,75 @@ const version = '12.0.2605.385';
 const notes = json(`data/workflow/${version}/notes.json`);
 const schema = json(`data/workflow/${version}/schema.json`);
 
+// Match the existing direct-alias checks below; this is not a T-SQL compiler.
+function directColumnGaps(sql, snapshot) {
+  const tables = new Map(snapshot.tables.map(table => [table.key.toLowerCase(), table]));
+  const aliases = new Map();
+  const gaps = new Set();
+  for (const match of sql.matchAll(/(?:FROM|JOIN)\s+\[\$\(\w+\)\]\.dbo\.(\w+)\s+AS\s+(\w+)/gi)) {
+    const table = tables.get(`dbo.${match[1]}`.toLowerCase());
+    if (!table) gaps.add(`dbo.${match[1]}`);
+    aliases.set(match[2].toLowerCase(), new Set(table?.columns.map(column => column.name.toLowerCase()) ?? []));
+  }
+  for (const match of sql.matchAll(/\b(\w+)\.(\w+)\b/g)) {
+    const columns = aliases.get(match[1].toLowerCase());
+    if (columns && !columns.has(match[2].toLowerCase())) gaps.add(match[0].toLowerCase());
+  }
+  return [...gaps].sort();
+}
+
+test('Forms volume script has compatible columns only in the documented imported builds', () => {
+  const sql = read('reporting/forms/forms-submission-volume-summary.sql');
+  const versions = json('data/forms/versions.json').versions;
+  for (const { version: build } of versions) {
+    const gaps = directColumnGaps(sql, json(`data/forms/${build}/schema.json`));
+    assert.deepEqual(gaps, build.startsWith('11.') ? ['m.is_test_mode', 's.is_test_mode'] : [], build);
+  }
+  assert.match(read('reporting/forms/forms-submission-volume-summary-evidence.md'), /Forms `11\.0\.2311\.50564` is not compatible/);
+});
+
+test('Forms volume windows use a single event date and keep distinct process IDs', () => {
+  const sql = read('reporting/forms/forms-submission-volume-summary.sql');
+  assert.match(sql, /CASE WHEN s\.submission_id IS NULL THEN m\.start_date\s+ELSE s\.date_created END AS reporting_event_date/);
+  assert.match(sql, /reporting_event_date >= @FromDate/);
+  assert.match(sql, /reporting_event_date < @ToDate/);
+  assert.doesNotMatch(sql, /OR instance_start_date [<>]/);
+  assert.match(sql, /@FromDate >= @ToDate\s+THROW/);
+  assert.match(sql, /GROUP BY\s+bp_id,/);
+  assert.match(sql, /CASE WHEN m\.is_test_mode = 1 OR s\.is_test_mode = 1/);
+  assert.match(sql, /COUNT_BIG\(DISTINCT bp_instance_id\)/);
+});
+
+test('synthetic window examples distinguish cross-window and missing-date cases', () => {
+  // Semantic fixtures for the predicates asserted above, not executed T-SQL.
+  const from = '2026-01-01';
+  const to = '2026-02-01';
+  const included = ({ submissionId, submissionDate, instanceStart }) => {
+    const date = submissionId == null ? instanceStart : submissionDate;
+    return date != null && date >= from && date < to;
+  };
+  assert.equal(included({ submissionId: 1, submissionDate: '2026-02-03', instanceStart: '2025-12-01' }), false);
+  assert.equal(included({ submissionId: 1, submissionDate: '2026-01-01', instanceStart: '2025-12-01' }), true);
+  assert.equal(included({ submissionId: 1, submissionDate: '2026-02-01', instanceStart: '2026-01-01' }), false);
+  assert.equal(included({ submissionId: null, submissionDate: null, instanceStart: '2026-01-15' }), true);
+  assert.equal(included({ submissionId: 1, submissionDate: null, instanceStart: '2026-01-15' }), false);
+});
+
+test('LFDS account script exposes older-build gaps without claiming live validation', () => {
+  const sql = read('reporting/lfds/lfds-directory-account-state.sql');
+  const legacy = new Set(['11.0.2403.2474', '12.0.2506.370']);
+  for (const { version: build } of json('data/lfds/versions.json').versions) {
+    const gaps = directColumnGaps(sql, json(`data/lfds/${build}/schema.json`));
+    assert.deepEqual(gaps, legacy.has(build) ? ['l.target_app'] : [], build);
+    const column = json(`data/lfds/${build}/notes.json`).tables['dbo.user_logins'].columns.last_login;
+    assert.equal(column.confidence, 'inferred');
+    assert.match(column.purpose, /does not establish account inactivity/);
+    assert.match(column.purpose, /time-zone semantics remain unverified/);
+  }
+  assert.match(sql, /TOP limits rows, not users/);
+  assert.match(sql, /does not establish inactivity/);
+});
+
 test('Forms entry-association diagnostic references columns in every claimed build', () => {
   const required = {
     'dbo.cf_bp_attachment_data': ['attachment_id', 'lfentry_id', 'bp_id', 'is_deleted'],
