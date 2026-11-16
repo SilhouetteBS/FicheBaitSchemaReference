@@ -16,6 +16,13 @@ This is a public product backlog. Do not add private research notes, customer-sp
 - Same-lane focused relationships use a shared, inward-facing card side. Self-references remain visible, use column anchors and separate loop tracks, and no longer extend from the right side of outgoing cards.
 - Added real Forms geometry checks for straight/curved paths, delayed-loading icon coverage and rendered endpoint checks for `dbo.cf_bp_worker_instnc_to_resume`. Full validation and the targeted browser regression passed.
 
+## Weekly Maintenance 2026-11-16 (Branch Only)
+
+- Recent CI runs are green. Addressed two confirmed reliability gaps: the Sentry upload plugin previously logged upload failures while returning build success; the lazy Compare summary sat outside the view error boundary and could blank the entire app after a module-fetch failure. Added fail-closed upload handling and extended the existing view boundary to cover the summary, plus unit/browser regression coverage. No credentials or production telemetry are used by the tests.
+- Rechecked the [official release list](https://doc.laserfiche.com/laserfiche.documentation/12/userguide/en-us/content/intro-release-information.htm): still need full metadata exports for Forms 12.0.2610.50154, LFDS 12.0.2610.126 and Repository Server 12.0.5.447. Workflow 12.0.2605.385 remains current. No schemas or confidence labels were changed.
+- Read the existing ignored reviewed-post register from the primary checkout and the public processed index. No new Answers candidates were researched or published; reliability work took priority and no duplicate review entries were created. WEB-3 remains open and its historical cause remains unproven. This batch is not a production fix until separately reviewed and published.
+- Validation passed: full local suite, final unit/lint checks, fourteen intercepted diagnostics browser scenarios, accessibility and dependency audit (zero vulnerabilities). Existing 520 metadata quality warnings remain visible. The source-map failure hook is tested without creating releases or uploading source files; no live upload or customer SQL execution was performed. Nothing was published, merged into main, or submitted as a pull request.
+
 ## Functional Improvements
 
 1. Add a "What changed in this version?" summary per product/version, not just raw compare details.

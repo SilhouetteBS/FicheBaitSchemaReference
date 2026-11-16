@@ -1208,25 +1208,25 @@ function App() {
           </div>
         )}
 
-        {activeView === 'compare' && (
-          <Suspense fallback={<div className="loading-state-inline">Loading comparison...</div>}>
-            <ComparisonSummary
-            comparison={comparison}
-            versions={product.versions}
-            fromVersion={comparisonFromVersion}
-            toVersion={comparisonToVersion}
-            onFromVersionChange={setComparisonFromVersion}
-            onToVersionChange={setComparisonToVersion}
-            onOpen={() => setActiveView('compare')}
-            onDownloadJson={() => downloadJson(`${selectedProductKey}-version-comparison.json`, comparison)}
-            onDownloadCsv={() =>
-              downloadText(`${selectedProductKey}-version-comparison.csv`, comparisonToCsv(comparison), 'text/csv')
-            }
-            />
-          </Suspense>
-        )}
-
         <ErrorBoundary key={`${activeView}:${selectedProductKey}:${selectedVersion}`}>
+          {activeView === 'compare' && (
+            <Suspense fallback={<div className="loading-state-inline">Loading comparison...</div>}>
+              <ComparisonSummary
+                comparison={comparison}
+                versions={product.versions}
+                fromVersion={comparisonFromVersion}
+                toVersion={comparisonToVersion}
+                onFromVersionChange={setComparisonFromVersion}
+                onToVersionChange={setComparisonToVersion}
+                onOpen={() => setActiveView('compare')}
+                onDownloadJson={() => downloadJson(`${selectedProductKey}-version-comparison.json`, comparison)}
+                onDownloadCsv={() =>
+                  downloadText(`${selectedProductKey}-version-comparison.csv`, comparisonToCsv(comparison), 'text/csv')
+                }
+              />
+            </Suspense>
+          )}
+
           <Suspense fallback={<div className="loading-state-inline">Loading view...</div>}>
             {activeView === 'compare' ? (
             <ComparisonDetail

@@ -4,6 +4,10 @@ import { sentryVitePlugin } from '@sentry/vite-plugin';
 import process from 'node:process';
 import { getDiagnosticsConfig } from './src/diagnostics/config.js';
 
+export function failSourceMapUpload(error) {
+  throw error;
+}
+
 export default defineConfig(({ mode }) => {
   const env = { ...loadEnv(mode, process.cwd(), 'VITE_'), ...process.env };
   const diagnostics = getDiagnosticsConfig(env);
@@ -23,6 +27,7 @@ export default defineConfig(({ mode }) => {
       },
     }, ...(diagnostics ? [sentryVitePlugin({
       telemetry: false,
+      errorHandler: upload ? failSourceMapUpload : undefined,
       org: env.SENTRY_ORG, project: env.SENTRY_PROJECT, authToken: env.SENTRY_AUTH_TOKEN,
       release: { name: diagnostics.release, create: upload, finalize: upload },
       sourcemaps: { disable: upload ? false : 'disable-upload', assets: './dist/assets/**', filesToDeleteAfterUpload: './dist/assets/**/*.map' },

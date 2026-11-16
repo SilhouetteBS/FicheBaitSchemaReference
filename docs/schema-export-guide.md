@@ -23,7 +23,7 @@ The canonical script exports SHA-256 definition fingerprints, not SQL module def
 
 The `views` result includes nested output columns (names, ordinals, types, lengths, precision, scale, collation, and nullability). New full exports do not need a separate `view-columns-export.sql` run. That recovery script is only for an existing snapshot whose view-column metadata is missing; never combine it with another build's export.
 
-## Missing Latest-Build Exports: Checked 2026-11-09
+## Missing Latest-Build Exports: Checked 2026-11-16
 
 The [official Laserfiche 12 release list](https://doc.laserfiche.com/laserfiche.documentation/12/userguide/en-us/content/intro-release-information.htm) lists Forms 12.0.2610.50154 released November 5, plus the two October 28 LFDS and Repository releases, newer than this catalog. A new application build does not prove its schema changed; fresh exports are required to determine that.
 
@@ -35,6 +35,8 @@ The [official Laserfiche 12 release list](https://doc.laserfiche.com/laserfiche.
 | Workflow | 12.0.2605.385 | 12.0.2605.385 | No newer listed target build identified in this check. |
 
 For each requested build, use the current script and save all eleven result sets listed below, including `views` with output columns. Preserve empty results as `[]`, or explicitly confirm that no views/triggers exist for that export. Keep the source files outside Git for private intake. Do not send row data, database/server names, connection details, or credentials. Do not relabel an older snapshot as a new build even if the schemas might be identical.
+
+The November 16 recheck found no newer listed builds for these four products. The November 9/11 additions concern Snapshot and Office Integration, outside this catalog's product scope; they do not justify relabeling product schemas.
 
 ## Result Sets
 

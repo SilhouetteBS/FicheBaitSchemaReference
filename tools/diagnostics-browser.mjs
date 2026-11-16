@@ -48,12 +48,17 @@ async function scenario({ enabled, failure, blocked = false }) {
     await route.fulfill({ response, body: body + `\nthrow new Error('${marker}');` });
   });
   if (failure === 'module') await page.route('**/assets/DatabaseDiagram-*.js', route => route.abort('connectionrefused'));
+  if (failure === 'compare-module') await page.route('**/assets/ComparisonViews-*.js', route => route.abort('connectionrefused'));
   if (failure === 'json') await page.route('**/data/forms/versions.json', (route) => route.fulfill({ status: 200, body: marker }));
   if (failure === 'data') await page.route('**/data/forms/versions.json', (route) => route.fulfill({ status: 503, body: marker }));
   await page.goto(`http://127.0.0.1:4189/?q=${marker}`, { waitUntil: 'networkidle' });
-  if (['react', 'module'].includes(failure)) {
-    await page.getByRole('button', { name: 'Diagram', exact: true }).click();
-    await page.locator('.error-boundary').waitFor();
+  if (['react', 'module', 'compare-module'].includes(failure)) {
+    await page.getByRole('button', { name: failure === 'compare-module' ? 'Compare' : 'Diagram', exact: true }).click();
+    await page.locator('.error-boundary').first().waitFor();
+    if (failure === 'compare-module') {
+      await page.getByRole('button', { name: 'Tables', exact: true }).waitFor();
+      await page.getByLabel('Product', { exact: true }).waitFor();
+    }
   } else if (['global', 'promise'].includes(failure)) {
     await page.route('**/assets/pilot-check.js', (route) => route.fulfill({ contentType: 'text/javascript', body: failure === 'promise' ? `Promise.reject(new TypeError('${marker}'));` : `setTimeout(() => { throw new TypeError('${marker}'); }, 0);` }));
     await page.evaluate(() => { const script = globalThis.document.createElement('script'); script.src = '/assets/pilot-check.js'; globalThis.document.head.append(script); });
@@ -68,11 +73,11 @@ async function scenario({ enabled, failure, blocked = false }) {
     const event = JSON.parse(lines[2]);
     assert.equal(event.release, 'schema-reference@pilot-test123');
     assert.equal(event.environment, 'staging');
-    assert.equal(event.tags.operation, { react: 'react.render', module: 'react.render', data: 'data.load', json: 'data.load', global: 'browser.unexpected', promise: 'browser.unexpected' }[failure]);
+    assert.equal(event.tags.operation, { react: 'react.render', module: 'react.render', 'compare-module': 'react.render', data: 'data.load', json: 'data.load', global: 'browser.unexpected', promise: 'browser.unexpected' }[failure]);
     assert.equal(event.user, undefined); assert.equal(event.request, undefined); assert.equal(event.extra, undefined);
     if (failure === 'data') assert.equal(event.tags.http_status, 503);
     else if (failure === 'json') assert.equal(event.tags.failure_kind, 'json');
-    else if (failure === 'module') {
+    else if (['module', 'compare-module'].includes(failure)) {
       assert.equal(event.tags.failure_kind, 'module_load');
       assert.equal(event.exception.values[0].value, 'Unexpected failure: react.render');
       assert.doesNotMatch(JSON.stringify(event), /dynamically imported|127\.0\.0\.1:4189/);
@@ -82,7 +87,7 @@ async function scenario({ enabled, failure, blocked = false }) {
     }
     if (failure === 'react') assert.ok(event.debug_meta?.images.length, 'Debug IDs retained for source-map matching');
   }
-  if (blocked) {
+  if (blocked || failure === 'compare-module') {
     await page.getByRole('button', { name: 'Tables', exact: true }).click();
     await page.locator('.table-list').waitFor();
   }
@@ -101,6 +106,7 @@ try {
     await scenario({ enabled, failure: 'json' });
     await scenario({ enabled, failure: 'react', blocked: enabled });
     await scenario({ enabled, failure: 'module' });
+    await scenario({ enabled, failure: 'compare-module' });
     await new Promise((resolve) => server.httpServer.close(resolve)); server = null;
   }
 } finally {
