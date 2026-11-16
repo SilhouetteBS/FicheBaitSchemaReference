@@ -1005,7 +1005,7 @@ function App() {
   if (!product || !version || !selectedTable) {
     return (
       <main className="loading-state">
-        <img className="loading-product-icon" src={`${import.meta.env.BASE_URL}schema-reference-favicon.svg`} alt="FicheBait Schema Reference" width="64" height="64" />
+        <img className="loading-product-icon" src={`${import.meta.env.BASE_URL}schema-reference-icon.png`} alt="FicheBait Schema Reference" width="64" height="64" />
         <h1>FicheBait Schema Reference</h1>
         <p>Loading schema snapshots...</p>
       </main>

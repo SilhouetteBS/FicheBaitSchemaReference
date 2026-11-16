@@ -18,9 +18,9 @@ try {
   await page.goto(url.toString(), { waitUntil: 'domcontentloaded' });
   const loadingIcon = page.getByRole('img', { name: 'FicheBait Schema Reference', exact: true });
   await loadingIcon.waitFor();
-  assert.match(await loadingIcon.getAttribute('src'), /schema-reference-favicon\.svg$/);
+  assert.match(await loadingIcon.getAttribute('src'), /schema-reference-icon\.png$/);
   await loadingIcon.evaluate(image => image.decode());
-  assert.equal(await loadingIcon.evaluate(image => image.naturalWidth), 64);
+  assert.equal(await loadingIcon.evaluate(image => image.naturalWidth), 256);
   releaseProducts();
   await productsFinished;
   await page.unroute('**/data/products.json');
