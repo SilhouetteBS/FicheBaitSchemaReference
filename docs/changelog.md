@@ -4,6 +4,8 @@ This changelog tracks public data and application changes for FicheBait Schema R
 
 ## Unreleased
 
+- Branch-only maintenance (2026-11-23): corrected direction-specific column foreign-key attribution and self-reference Health counts, reconciled the prior maintenance publication status, and rechecked missing exact-build exports. No schema or confidence changes.
+
 - Adopted the approved Connected Tables artwork for the browser favicon and loading icon, with transparent size-specific PNG assets. WEB-3 remains open.
 
 - Weekly maintenance (2026-11-16, branch only): made requested source-map uploads fail the build on errors, contained lazy Compare summary failures without losing site navigation, and rechecked outstanding exact-build export requirements.

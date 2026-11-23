@@ -67,6 +67,15 @@ export function classifyDependency(dependency) {
   return { constraint, pseudoTable };
 }
 
+function getTableForeignKeys(table) {
+  // Per-table metadata omits the local endpoint, so restore it before identifying constraints.
+  const keys = [
+    ...(table.source.outgoingForeignKeys ?? []).map(key => ({ ...key, sourceTableKey: key.sourceTableKey ?? table.id })),
+    ...(table.source.incomingForeignKeys ?? []).map(key => ({ ...key, referencedTableKey: key.referencedTableKey ?? table.id })),
+  ];
+  return [...new Map(keys.map(key => [JSON.stringify([key.sourceTableKey, key.name, key.referencedTableKey]), key])).values()];
+}
+
 export function getColumnUsages(version, query) {
   const needle = normalize(query);
   if (!needle) {
@@ -75,19 +84,17 @@ export function getColumnUsages(version, query) {
 
   const results = [];
   version.tables.forEach((table) => {
+    const tableForeignKeys = getTableForeignKeys(table);
     table.columns.forEach((column) => {
       if (normalize(`${column.name} ${column.dataType} ${column.purpose}`).includes(needle)) {
         const indexedBy = table.indexes
           .filter((index) => index.columns.some((indexedColumn) => indexedColumn.columnName === column.name))
           .map((index) => index.name);
-        const foreignKeys = [
-          ...(table.source.outgoingForeignKeys ?? []),
-          ...(table.source.incomingForeignKeys ?? []),
-        ].filter((foreignKey) =>
+        const foreignKeys = tableForeignKeys.filter((foreignKey) =>
           foreignKey.columns.some(
             (foreignKeyColumn) =>
-              foreignKeyColumn.sourceColumnName === column.name ||
-              foreignKeyColumn.referencedColumnName === column.name,
+              (foreignKey.sourceTableKey === table.id && foreignKeyColumn.sourceColumnName === column.name) ||
+              (foreignKey.referencedTableKey === table.id && foreignKeyColumn.referencedColumnName === column.name),
           ),
         );
 
@@ -273,10 +280,8 @@ export function getSchemaHealthItems(version) {
   return version.tables
     .map((table) => {
       const primaryKeys = table.keys.filter((key) => key.type === 'PK');
-      const untrustedForeignKeys = [
-        ...(table.source.outgoingForeignKeys ?? []),
-        ...(table.source.incomingForeignKeys ?? []),
-      ].filter((foreignKey) => foreignKey.isNotTrusted || foreignKey.isDisabled);
+      const untrustedForeignKeys = getTableForeignKeys(table)
+        .filter((foreignKey) => foreignKey.isNotTrusted || foreignKey.isDisabled);
       const computedColumns = table.columns.filter((column) => column.source.isComputed);
       const identityColumns = table.columns.filter((column) => column.source.isIdentity);
       const riskFlags = [
